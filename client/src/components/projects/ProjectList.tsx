@@ -42,7 +42,7 @@ export const ProjectList = () => {
             <CardDescription className='text-md text-palette-teal opacity-80'>Select a project to view on the TV</CardDescription>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="pr-4 h-[352px]">
+            <ScrollArea className="pr-4 h-[350px]">
               <div className="space-y-4">
                 {projects.map((project: Project) => (
                   <motion.div

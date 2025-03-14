@@ -2,10 +2,10 @@ export interface Skill {
   name: string;
   level: string;
   icon: string;
-  category?: string;
+  category: string;
 }
 
-export type AnimationStyle = 'linear' | 'easeInOut' | 'bounce' | 'spring' | 'none';
+export type AnimationStyle = 'linear' | 'easeInOut' | 'bounce';
 
 export const levelToPercentage = (level: string): number => {
   switch (level.toLowerCase()) {
@@ -15,4 +15,9 @@ export const levelToPercentage = (level: string): number => {
     case 'expert': return 95;
     default: return 50;
   }
+};
+
+export const getVerticalOffset = (index: number): number => {
+  const position = index % 2;
+  return position * 140;
 };

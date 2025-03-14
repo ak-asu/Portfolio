@@ -2,46 +2,21 @@ import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
-interface Skill {
-  name: string;
-  level: string;
-  icon: string;
-  category?: string;
-}
+import { getVerticalOffset, levelToPercentage, Skill } from './utils';
 
 interface SkillIconProps {
   skill: Skill;
   index: number;
   isDarkMode: boolean;
-  isTechnicalMode: boolean;
   hoveredIcon: string | null;
   setHoveredIcon: (value: string | null) => void;
   isPaused?: boolean;
 }
 
-const levelToPercentage = (level: string): number => {
-  switch (level.toLowerCase()) {
-    case 'beginner': return 25;
-    case 'intermediate': return 60;
-    case 'advanced': return 85;
-    case 'expert': return 95;
-    default: return 50;
-  }
-};
-
-// Function to determine vertical position for icons
-const getVerticalOffset = (index: number): number => {
-  // Create a 3-row pattern: -40px, 0px, +40px
-  const position = index % 3;
-  return position === 0 ? -20 : position === 1 ? 80 : 160;
-};
-
 const SkillIcon: React.FC<SkillIconProps> = ({
   skill,
   index,
   isDarkMode,
-  isTechnicalMode,
   hoveredIcon,
   setHoveredIcon,
   isPaused = false
@@ -51,20 +26,18 @@ const SkillIcon: React.FC<SkillIconProps> = ({
   const isHovered = hoveredIcon === `${skill.name}-${index}`;
   const controls = useAnimation();
 
-  // Set up vertical jiggle animation
   useEffect(() => {
     if (isHovered || isPaused) {
       controls.stop();
       return;
     }
-
-    // Generate unique animation parameters based on index to create varied movement
-    const amplitude = 5 + (index % 3) * 2; // Varies between 5-9px
-    const duration = 2 + (index % 5) * 0.4; // Varies between 2-3.6s
-    const delay = (index % 7) * 0.15; // Varied delay for more natural movement
-
+    // Updated animation to be more subtle and varied for each icon
+    // This helps create a more natural floating effect as icons move horizontally
+    const amplitude = 3 + (index % 4) * 1.5; // Smaller amplitude: 3-7.5px
+    const duration = 1.8 + (index % 5) * 0.3; // Slightly faster: 1.8-3.3s
+    const delay = (index % 6) * 0.1; // Varied delay to avoid synchronization
     controls.start({
-      y: [0, amplitude, 0, -amplitude, 0],
+      y: [yOffset, yOffset + amplitude, yOffset, yOffset - amplitude, yOffset],
       transition: {
         duration: duration,
         repeat: Infinity,
@@ -73,11 +46,10 @@ const SkillIcon: React.FC<SkillIconProps> = ({
         delay: delay
       }
     });
-
     return () => {
       controls.stop();
     };
-  }, [controls, index, isHovered, isPaused]);
+  }, [controls, index, isHovered, isPaused, yOffset]);
 
   return (
     <motion.div
@@ -107,31 +79,29 @@ const SkillIcon: React.FC<SkillIconProps> = ({
                     cy="50"
                     r="45"
                     fill="none"
-                    stroke={isTechnicalMode ? "#3ddc84" : isDarkMode ? "#73d3e7" : "#1791a3"}
+                    stroke={isDarkMode ? "#73d3e7" : "#1791a3"}
                     strokeWidth="10"
                     strokeDasharray={`${proficiency * 2.83} ${283 - proficiency * 2.83}`}
-                    strokeDashoffset="70" // Start from top
+                    strokeDashoffset="70"
                     transform="rotate(-90 50 50)"
                   />
                 </svg>
               </div>
-
-              {/* Skill icon */}
               <div className="absolute inset-0 flex items-center justify-center p-3">
                 {/* {<Image 
-                                    src={`/icons/${skill.icon}`} 
-                                    alt={skill.name}
-                                    width={40}
-                                    height={40}
-                                    priority={index < 10} // Prioritize loading for first few icons
-                                />} */}
+                      src={`/icons/${skill.icon}`} 
+                      alt={skill.name}
+                      width={40}
+                      height={40}
+                      priority={index < 10} // Prioritize loading for first few icons
+                  />} */}
               </div>
             </div>
           </TooltipTrigger>
           <TooltipContent
             className={`cyberpunk-tooltip rounded-lg ${isDarkMode
-                ? 'bg-gray-900 border-palette-teal-light text-palette-teal-light'
-                : 'bg-gray-100 border-palette-teal-DEFAULT text-palette-teal-DEFAULT'
+              ? 'bg-gray-900 border-palette-teal-light text-palette-teal-light'
+              : 'bg-gray-100 border-palette-teal-DEFAULT text-palette-teal-DEFAULT'
               } border-2`}
             sideOffset={12}
             side="right"
@@ -140,37 +110,29 @@ const SkillIcon: React.FC<SkillIconProps> = ({
             avoidCollisions={true}
           >
             <div className="relative px-5 py-3">
-              {/* Corner decorations - now with rounded corners */}
               <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-current rounded-tl-md"></div>
               <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-current rounded-tr-md"></div>
               <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-current rounded-bl-md"></div>
               <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-current rounded-br-md"></div>
-
-              {/* Content */}
               <div className="flex flex-col items-center">
                 <div className="flex items-center gap-1">
-                  <ChevronRight size={14} className={isTechnicalMode ? 'text-green-400' : 'text-palette-teal-DEFAULT'} />
+                  <ChevronRight size={14} className='text-palette-teal-DEFAULT' />
                   <span className="font-bold tracking-wider uppercase">{skill.name}</span>
-                  <ChevronRight size={14} className={isTechnicalMode ? 'text-green-400' : 'text-palette-teal-DEFAULT'} />
+                  <ChevronRight size={14} className='text-palette-teal-DEFAULT' />
                 </div>
-
                 <div className="mt-2 w-full bg-gray-800 h-1.5 rounded-sm overflow-hidden">
                   <div
-                    className={`h-full ${isTechnicalMode ? 'bg-green-400' : 'bg-palette-teal-DEFAULT'}`}
+                    className={`h-full ${'bg-palette-teal-DEFAULT'}`}
                     style={{ width: `${proficiency}%` }}
                   ></div>
                 </div>
-
                 <div className="mt-1 flex justify-between w-full text-xs opacity-90">
                   <span className="tracking-wider">{skill.level}</span>
                   <span className="font-mono">{proficiency}%</span>
                 </div>
-
-                {skill.category && (
-                  <span className="mt-1 text-xs opacity-75 px-2 py-0.5 rounded-sm bg-current bg-opacity-10">
-                    {skill.category.toUpperCase()}
-                  </span>
-                )}
+                <span className="mt-1 text-xs opacity-75 px-2 py-0.5 rounded-sm bg-current bg-opacity-10">
+                  {skill.category.toUpperCase()}
+                </span>
               </div>
             </div>
           </TooltipContent>

@@ -124,10 +124,18 @@ export const Terminal = () => {
           'For more details on a specific education, visit the education directory'
         ];
       case 'skills':
-        const lines: string[] = ['My Skills:'];
-        for (const [category, items] of Object.entries(skills)) {
-          lines.push(`${category}: ${items.map((i) => `${i.name} (${i.level})`).join(', ')}`);
-        }
+        const lines: string[] = [];
+        const skillsByCategory: Record<string, string[]> = {};
+        skills.forEach(skill => {
+          if (!skillsByCategory[skill.category]) {
+            skillsByCategory[skill.category] = [];
+          }
+          skillsByCategory[skill.category].push(skill.name);
+        });
+
+        Object.entries(skillsByCategory).forEach(([category, skillNames]) => {
+          lines.push(`${category}: ${skillNames.join(', ')}`);
+        });
         return [
           'My Skills:',
           ...lines,
@@ -161,7 +169,7 @@ export const Terminal = () => {
         } else if (currentPath === '~/portfolio/projects') {
           return projects.map((p, i) => `${i + 1}-${p.name.toLowerCase().replace(/\s+/g, '-')}.json`);
         } else if (currentPath === '~/portfolio/skills') {
-          return Object.keys(skills).map(category => `${category.toLowerCase().replace(/\s+/g, '-')}.json`);
+          return Array.from(new Set(skills.map(s => `${s.category.toLowerCase().replace(/\s+/g, '-')}.json`)));
         } else if (currentPath === '~/portfolio/work') {
           return work.map((j, i) => `${i + 1}-${j.company.toLowerCase().replace(/\s+/g, '-')}.json`);
         }
@@ -195,70 +203,72 @@ export const Terminal = () => {
         return [`Directory ${args[1]} not found`];
       case 'cat':
         if (!args[1]) return ['Usage: cat <filename>'];
-        if (args[1].match(/^\d+-.*\.json$/)) {
-          if (currentPath === '~/portfolio/achievements') {
-            const achievementIndex = achievements.findIndex(a => a.title.toLowerCase().replace(/\s+/g, '-') === args[1]);
-            if (achievementIndex >= 0) {
-              const achievement = achievements[achievementIndex];
-              return [
-                `{`,
-                `  "title": "${achievement.title}",`,
-                `  "date": "${achievement.date}",`,
-                `  "description": "${achievement.description}",`,
-                `}`
-              ];
-            }
-          } else if (currentPath === '~/portfolio/education') {
-            const educationIndex = education.findIndex(edu => edu.institution.toLowerCase().replace(/\s+/g, '-') === args[1]);
-            if (educationIndex >= 0) {
-              const edu = education[educationIndex];
-              return [
-                `{`,
-                `  "institution": "${edu.institution}",`,
-                `  "date": "${edu.startDate} - ${edu.endDate || 'Present'}",`,
-                `  "degree": "${edu.degree}",`,
-                `  "field": "${edu.field}",`,
-                `  "gpa": "${edu.gpa}",`,
-                `  "courses": [${edu.subjects.map(s => `"${s}"`).join(', ')}],`,
-                `}`
-              ];
-            }
-          } else if (currentPath === '~/portfolio/projects') {
-            const projectIndex = parseInt(args[1].split('-')[0]) - 1;
-            if (projectIndex >= 0 && projectIndex < projects.length) {
-              const project = projects[projectIndex];
-              return [
-                `{`,
-                `  "name": "${project.name}",`,
-                `  "description": "${project.description}",`,
-                `  "technologies": [${project.technologies.map(t => `"${t}"`).join(', ')}],`,
-                `  "duration": "${project.duration}",`,
-                `  "link": "${project.url || ''}",`,
-                `}`
-              ];
-            }
-          } else if (currentPath === '~/portfolio/work') {
-            const jobIndex = parseInt(args[1].split('-')[0]) - 1;
-            if (jobIndex >= 0 && jobIndex < work.length) {
-              const job = work[jobIndex];
-              return [
-                `{`,
-                `  "position": "${job.position}",`,
-                `  "company": "${job.company}",`,
-                `  "date": "${job.startDate} - ${job.endDate || 'Present'}",`,
-                `  "description": "${job.description}",`,
-                `}`
-              ];
-            }
-          } else if (currentPath === '~/portfolio/skills') {
-            const category = args[1].replace('.json', '') as keyof typeof skills;
-            if (Object.keys(skills).includes(category)) {
-              return [
-                `{`,
-                `  "${category}": [${skills[category].map(i => `"${i}"`).join(', ')}],`,
-                `}`
-              ];
-            }
+        if (currentPath === '~/portfolio/achievements') {
+          const achievementIndex = achievements.findIndex(a => a.title.toLowerCase().replace(/\s+/g, '-') === args[1]);
+          if (achievementIndex >= 0) {
+            const achievement = achievements[achievementIndex];
+            return [
+              `{`,
+              `  "title": "${achievement.title}",`,
+              `  "date": "${achievement.date}",`,
+              `  "description": "${achievement.description}",`,
+              `}`
+            ];
+          }
+        } else if (currentPath === '~/portfolio/education') {
+          const educationIndex = education.findIndex(edu => edu.institution.toLowerCase().replace(/\s+/g, '-') === args[1]);
+          if (educationIndex >= 0) {
+            const edu = education[educationIndex];
+            return [
+              `{`,
+              `  "institution": "${edu.institution}",`,
+              `  "date": "${edu.startDate} - ${edu.endDate || 'Present'}",`,
+              `  "degree": "${edu.degree}",`,
+              `  "field": "${edu.field}",`,
+              `  "gpa": "${edu.gpa}",`,
+              `  "courses": [${edu.subjects.map(s => `"${s}"`).join(', ')}],`,
+              `}`
+            ];
+          }
+        } else if (currentPath === '~/portfolio/projects') {
+          const projectIndex = parseInt(args[1].split('-')[0]) - 1;
+          if (projectIndex >= 0 && projectIndex < projects.length) {
+            const project = projects[projectIndex];
+            return [
+              `{`,
+              `  "name": "${project.name}",`,
+              `  "description": "${project.description}",`,
+              `  "technologies": [${project.technologies.map(t => `"${t}"`).join(', ')}],`,
+              `  "duration": "${project.duration}",`,
+              `  "link": "${project.url || ''}",`,
+              `}`
+            ];
+          }
+        } else if (currentPath === '~/portfolio/work') {
+          const jobIndex = parseInt(args[1].split('-')[0]) - 1;
+          if (jobIndex >= 0 && jobIndex < work.length) {
+            const job = work[jobIndex];
+            return [
+              `{`,
+              `  "position": "${job.position}",`,
+              `  "company": "${job.company}",`,
+              `  "date": "${job.startDate} - ${job.endDate || 'Present'}",`,
+              `  "description": "${job.description}",`,
+              `}`
+            ];
+          }
+        } else if (currentPath === '~/portfolio/skills') {
+          const category = args[1].replace('.json', '');
+          const specificSkills = skills.filter(s => s.category.toLowerCase().replace(/\s+/g, '-') === category);
+          if (specificSkills.length > 0) {
+            return [
+              `{`,
+              `  "category": "${category}",`,
+              `  "skills": [${specificSkills.map(s => `"${s.name}"`).join(', ')}]`,
+              `}`
+            ];
+          } else {
+            return [`File ${args[1]} not found or cannot be displayed`];
           }
         }
         return [`File ${args[1]} not found or cannot be displayed`];
@@ -425,7 +435,7 @@ export const Terminal = () => {
         onClick={handleTerminalClick}
         aria-hidden="true"
       />
-      
+
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -448,7 +458,7 @@ export const Terminal = () => {
         role="log"
         aria-live="polite"
         aria-label="Terminal Output"
-        // Remove onClick handler from here too to prevent conflicts
+      // Remove onClick handler from here too to prevent conflicts
       >
         <AnimatePresence mode="popLayout">
           {history.map((cmd, i) => (
