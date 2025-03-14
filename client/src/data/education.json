@@ -2,7 +2,8 @@
     {
         "degree": "Master of Science",
         "field": "Computer Science",
-        "institution": "University of California, Berkeley",
+        "institution": "Arizona State University",
+        "image": "/images/education/asu.jpg",
         "subjects": [
             {
                 "name": "Data Structures",
@@ -14,9 +15,10 @@
         "endDate": 2023
     },
     {
-        "degree": "Bachelor of Science",
-        "field": "Computer Science",
-        "institution": "University of California, Berkeley",
+        "degree": "Bachelor in Technology",
+        "field": "Engineering Physics",
+        "institution": "Indian Institute of Technology, Roorkee",
+        "image": "/images/education/iitr.jpg",
         "subjects": [
             {
                 "name": "Data Structures",
