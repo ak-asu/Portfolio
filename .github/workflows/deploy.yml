@@ -10,7 +10,7 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment
+# Prevent concurrent deployments to avoid conflicts
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for proper versioning
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -30,17 +32,39 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
+        
       - name: Build website
         run: npm run build
+        env:
+          NODE_ENV: production # Ensure production build
+      
+      - name: Check build output
+        run: |
+          if [ ! -d "./dist" ]; then
+            echo "::error::Build output directory './dist' not found. Please check your build configuration."
+            exit 1
+      
+      - name: Create .nojekyll file
+        run: touch ./dist/.nojekyll
+      
+      - name: Debug information
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "Build directory contents:"
+          ls -la ./dist
+        continue-on-error: true
       
       - name: Setup Pages
+        id: pages
         uses: actions/configure-pages@v4
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist' # Adjust this to match your build output directory
+          retention-days: 7 # Specify retention period for better resource management
 
   deploy:
     environment:
@@ -52,3 +76,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          token: ${{ github.token }} # Explicitly provide token for clarity
