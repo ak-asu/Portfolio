@@ -9,7 +9,7 @@ export default function SphericalContainer() {
 
   return (
     <mesh name="sphere">
-      <sphereGeometry args={[SPHERE_RADIUS, 64, 64]} />
+      <sphereGeometry args={[SPHERE_RADIUS, 44, 44]} />
       <meshStandardMaterial color={wallColor} transparent opacity={0.1} side={2} />
     </mesh>
   );

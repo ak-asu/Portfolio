@@ -1,17 +1,20 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Physics } from '@react-three/cannon';
 import { socialLinks, SPHERE_RADIUS, BALL_RADIUS } from './utils';
 import SphericalContainer from './SphericalContainer';
 import Face from './Face';
 import { Ball } from './Ball';
 import CameraControls from './CameraControls';
+import { Vector3 } from 'three';
 
-
-export default function Scene() {
-  const ballsRef = useRef<any[]>([]);
-
+export default function Scene({containerCenter}: {containerCenter?: Vector3}) {
+  // Use the correct type for the refs
+  const [ballRefs, setBallRefs] = useState<React.MutableRefObject<any>[]>([]);
+  
   useEffect(() => {
-    ballsRef.current = socialLinks.map(() => ({ ref: React.createRef() }));
+    // Initialize array of proper React refs
+    const refs = socialLinks.map(() => React.createRef<any>());
+    setBallRefs(refs);
   }, []);
 
   function randomSphericalPosition(): [number, number, number] {
@@ -25,6 +28,11 @@ export default function Scene() {
     ];
   }
 
+  // Wait until refs are initialized
+  if (ballRefs.length === 0) {
+    return null;
+  }
+
   return (
     <group>
       <ambientLight intensity={0.5} />
@@ -35,7 +43,7 @@ export default function Scene() {
         stepSize={1 / 120}
       >
         <SphericalContainer />
-        <Face ballsRef={ballsRef} />
+        <Face ballsRef={ballRefs} />
         {socialLinks.map((link, i) => (
           <Ball
             key={link.name}
@@ -45,7 +53,8 @@ export default function Scene() {
             color={link.color}
             icon={link.icon}
             ballIndex={i}
-            ref={ballsRef.current[i]}
+            ref={ballRefs[i]}
+            containerCenter={containerCenter}
           />
         ))}
       </Physics>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -23,19 +23,21 @@ const SkillIcon: React.FC<SkillIconProps> = ({
 }) => {
   const proficiency = levelToPercentage(skill.level);
   const yOffset = getVerticalOffset(index);
-  const isHovered = hoveredIcon === `${skill.name}-${index}`;
+  const iconId = `${skill.name}-${index}`;
+  const isHovered = hoveredIcon === iconId;
   const controls = useAnimation();
+  const iconRef = useRef<HTMLDivElement>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
-    if (isHovered || isPaused) {
+    if (isPaused) {
       controls.stop();
       return;
     }
     // Updated animation to be more subtle and varied for each icon
-    // This helps create a more natural floating effect as icons move horizontally
-    const amplitude = 3 + (index % 4) * 1.5; // Smaller amplitude: 3-7.5px
-    const duration = 1.8 + (index % 5) * 0.3; // Slightly faster: 1.8-3.3s
-    const delay = (index % 6) * 0.1; // Varied delay to avoid synchronization
+    const amplitude = 3 + (index % 4) * 1.5;
+    const duration = 1.8 + (index % 5) * 0.3;
+    const delay = (index % 6) * 0.1;
     controls.start({
       y: [yOffset, yOffset + amplitude, yOffset, yOffset - amplitude, yOffset],
       transition: {
@@ -49,54 +51,68 @@ const SkillIcon: React.FC<SkillIconProps> = ({
     return () => {
       controls.stop();
     };
-  }, [controls, index, isHovered, isPaused, yOffset]);
+  }, [controls, index, isPaused, yOffset]);
+
+  // Handle hover state separately from animation state
+  const handlePointerEnter = () => {
+    setHoveredIcon(iconId);
+    setShowTooltip(true);
+  };
+
+  const handlePointerLeave = () => {
+    setHoveredIcon(null);
+    setShowTooltip(false);
+  };
 
   return (
-    <motion.div
-      className="relative mx-8 my-4"
-      initial={{ y: yOffset }}
-      animate={controls}
-      style={{ y: yOffset }}
-      whileHover={{
-        scale: 1.3,
-        filter: "brightness(1.3)",
-        transition: { duration: 0.2 }
-      }}
-      onHoverStart={() => setHoveredIcon(`${skill.name}-${index}`)}
-      onHoverEnd={() => setHoveredIcon(null)}
-    >
+    <div className="relative mx-8 my-4">
       <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <div className={`relative w-16 h-16 transition-all duration-300 ${isHovered ? `ring-2 ring-offset-2 ${isDarkMode ? 'ring-offset-gray-900' : 'ring-offset-white'} ring-palette-teal-DEFAULT` : ''
-              }`}>
-              <div className={`absolute inset-0 rounded-full overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'
+        <Tooltip open={showTooltip}>
+          <TooltipTrigger asChild>
+            <motion.div
+              ref={iconRef}
+              initial={{ y: yOffset }}
+              animate={controls}
+              style={{ y: yOffset }}
+              whileHover={{
+                scale: 1.3,
+                filter: "brightness(1.3)",
+                transition: { duration: 0.2 }
+              }}
+              onPointerEnter={handlePointerEnter}
+              onPointerLeave={handlePointerLeave}
+              className="cursor-pointer"
+            >
+              <div className={`relative w-16 h-16 transition-all duration-300 ${isHovered ? `ring-2 ring-offset-2 ${isDarkMode ? 'ring-offset-gray-900' : 'ring-offset-white'} ring-palette-teal-DEFAULT` : ''
                 }`}>
-                {/* Colored progress circle */}
-                <svg className="w-full h-full" viewBox="0 0 100 100">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="45"
-                    fill="none"
-                    stroke={isDarkMode ? "#73d3e7" : "#1791a3"}
-                    strokeWidth="10"
-                    strokeDasharray={`${proficiency * 2.83} ${283 - proficiency * 2.83}`}
-                    strokeDashoffset="70"
-                    transform="rotate(-90 50 50)"
-                  />
-                </svg>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center p-3">
-                {/* {<Image 
+                <div className={`absolute inset-0 rounded-full overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'
+                  }`}>
+                  {/* Colored progress circle */}
+                  <svg className="w-full h-full" viewBox="0 0 100 100">
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke={isDarkMode ? "#73d3e7" : "#1791a3"}
+                      strokeWidth="10"
+                      strokeDasharray={`${proficiency * 2.83} ${283 - proficiency * 2.83}`}
+                      strokeDashoffset="70"
+                      transform="rotate(-90 50 50)"
+                    />
+                  </svg>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center p-3">
+                  {/* {<Image 
                       src={`/icons/${skill.icon}`} 
                       alt={skill.name}
                       width={40}
                       height={40}
                       priority={index < 10} // Prioritize loading for first few icons
                   />} */}
+                </div>
               </div>
-            </div>
+            </motion.div>
           </TooltipTrigger>
           <TooltipContent
             className={`cyberpunk-tooltip rounded-lg ${isDarkMode
@@ -138,7 +154,7 @@ const SkillIcon: React.FC<SkillIconProps> = ({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-    </motion.div>
+    </div>
   );
 };
 

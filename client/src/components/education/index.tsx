@@ -3,9 +3,9 @@ import { useAnimation } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveEducation } from '@/store/features/educationSlice';
 import education from '@/data/education.json';
-import BookPage from './Page';
+import BookPage from './BookPage';
 import NavigationButtons from './NavigationButtons';
-import BookBinding from './Binding';
+import BookBinding from './BookBinding';
 import PageContent from './PageContent';
 import { getAnimationLevel } from '@/lib/types';
 

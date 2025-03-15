@@ -15,9 +15,11 @@ const Skills: React.FC = () => {
   const themeMode = useSelector((state: RootState) => state.mode.themeMode);
   const containerRef = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
+  const isMounted = useRef(true); // Add this ref to track mounted state
   const [isPaused, setIsPaused] = useState(false);
   const x = useMotionValue(0);
   const dragging = useRef(false);
+  const dragStartX = useRef(0);
   const [speed, setSpeed] = useState(getAnimationLevel(animationLevel, { min: 30, max: 60 }));
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [animationStyle, setAnimationStyle] = useState<AnimationStyle>('linear');
@@ -59,47 +61,57 @@ const Skills: React.FC = () => {
 
   // Main animation effect
   useEffect(() => {
-    if (isPaused || hoveredIcon !== null) {
-      controls.stop();
+    // Set mounted flag to true when the effect runs
+    isMounted.current = true;
+    
+    if (isPaused) {
+      // Store the current position when pausing
+      currentPositionRef.current = x.get();
       return;
     }
-
     if (containerWidth <= 0 || contentWidth <= 0) {
       return; // Don't animate if we don't have valid measurements
     }
-
     // Get current x position if animation is already running
     const currentX = x.get();
     if (currentX !== 0) {
       currentPositionRef.current = currentX;
     }
-
     // Calculate total distance and remaining distance
     const totalDistance = contentWidth + containerWidth;
     const remainingDistance = currentPositionRef.current <= 0 
       ? Math.abs(currentPositionRef.current) + contentWidth
       : totalDistance - (currentPositionRef.current - containerWidth);
-    
     // Adjust duration based on remaining distance
     const fullDuration = 15 + (60 - speed) / 3; // Full animation duration in seconds
     const remainingDuration = (remainingDistance / totalDistance) * fullDuration;
-
     // Calculate the end position (should be -contentWidth)
     const animateToPosition = -contentWidth;
     
-    // Create animation sequence
-    const sequence = async () => {
-      // First animate remaining portion of current cycle
-      await controls.start({
+    // Handle animation with proper mounting checks
+    const animateFirstCycle = () => {
+      if (!isMounted.current) return;
+      
+      controls.start({
         x: animateToPosition,
         transition: {
           duration: remainingDuration,
           ease: getAnimationEasing(),
         }
+      }).then(() => {
+        if (isMounted.current && !dragging.current && !isPaused) {
+          animateInfiniteCycle();
+        }
+      }).catch(err => {
+        // Handle potential animation errors
+        console.error("Animation error:", err);
       });
+    };
+    
+    const animateInfiniteCycle = () => {
+      if (!isMounted.current) return;
       
-      // Then continue with infinite cycles from right to left
-      await controls.start({
+      controls.start({
         x: [containerWidth, animateToPosition],
         transition: {
           duration: fullDuration,
@@ -109,14 +121,16 @@ const Skills: React.FC = () => {
       });
     };
     
-    sequence();
-
+    // Start the animation sequence
+    animateFirstCycle();
+    
+    // Cleanup function - mark component as unmounted and stop animations
     return () => {
-      // Save current position before stopping
+      isMounted.current = false;
       currentPositionRef.current = x.get();
       controls.stop();
     };
-  }, [isPaused, hoveredIcon, containerWidth, contentWidth, speed, animationStyle, filteredSkills.length]);
+  }, [isPaused, containerWidth, contentWidth, speed, animationStyle, filteredSkills.length]);
 
   // Update container width on window resize with debounce
   useEffect(() => {
@@ -128,15 +142,12 @@ const Skills: React.FC = () => {
         if (containerRef.current) {
           setContainerWidth(containerRef.current.offsetWidth);
         }
-        
         if (contentRef.current) {
           setContentWidth(contentRef.current.scrollWidth);
         }
       }, 100);
     };
-
     window.addEventListener('resize', handleResize);
-    
     return () => {
       window.removeEventListener('resize', handleResize);
       clearTimeout(resizeTimeout);
@@ -147,7 +158,6 @@ const Skills: React.FC = () => {
   useEffect(() => {
     // Reset position reference when filters change
     currentPositionRef.current = containerWidth;
-    
     // Allow a frame for the DOM to update with new content
     requestAnimationFrame(() => {
       if (contentRef.current) {
@@ -156,14 +166,19 @@ const Skills: React.FC = () => {
     });
   }, [filteredSkills]);
 
-  const handleDragStart = () => {
+  const handleDragStart = (event: any, info: any) => {
+    dragStartX.current = x.get();
     setIsPaused(true);
     dragging.current = true;
+    // Store current position to resume from later
+    currentPositionRef.current = x.get();
   };
 
-  const handleDragEnd = () => {
-    setIsPaused(false);
+  const handleDragEnd = (event: any, info: any) => {
+    // Calculate the new position after dragging
+    currentPositionRef.current = x.get();
     dragging.current = false;
+    setIsPaused(false);
   };
 
   const handleMouseDown = () => {
@@ -229,7 +244,7 @@ const Skills: React.FC = () => {
                 isDarkMode={themeMode !== ThemeMode.Light}
                 hoveredIcon={hoveredIcon}
                 setHoveredIcon={setHoveredIcon}
-                isPaused={isPaused}
+                isPaused={dragging.current || isPaused}
               />
             ))}
           </div>
