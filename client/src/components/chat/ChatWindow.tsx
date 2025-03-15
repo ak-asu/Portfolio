@@ -14,7 +14,7 @@ import TypingIndicator from './TypingIndicator';
 const initialMessages: Message[] = [
   {
     id: '1',
-    content: "Hello! I'm Aakash's portfolio assistant. Ask me about his skills, projects, or experience! Currently I am in experimental mode.",
+    content: "Hello! I'm Aakash's portfolio assistant. Ask me about his skills, projects, or experience! Currently I am in experimental mode with no AI integration.",
     sender: 'bot',
     timestamp: new Date(),
   },

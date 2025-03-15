@@ -6,15 +6,13 @@ interface ModeState {
   animationLevel: AnimationLevel;
   themeMode: ThemeMode;
   soundEnabled: boolean;
-  physicsEnabled: boolean;
 }
 
 const initialState: ModeState = {
-  isTechnicalMode: false,
+  isTechnicalMode: true,
   animationLevel: AnimationLevel.Medium,
   themeMode: ThemeMode.System,
-  soundEnabled: true,
-  physicsEnabled: true,
+  soundEnabled: false,
 };
 
 const modeSlice = createSlice({
@@ -33,18 +31,14 @@ const modeSlice = createSlice({
     toggleSound: (state) => {
       state.soundEnabled = !state.soundEnabled;
     },
-    togglePhysics: (state) => {
-      state.physicsEnabled = !state.physicsEnabled;
-    },
   },
 });
 
-export const { 
-  toggleMode, 
-  setAnimationLevel, 
+export const {
+  toggleMode,
+  setAnimationLevel,
   setThemeMode,
-  toggleSound,
-  togglePhysics 
+  toggleSound
 } = modeSlice.actions;
 
 export default modeSlice.reducer;

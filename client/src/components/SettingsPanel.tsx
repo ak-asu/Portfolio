@@ -16,8 +16,7 @@ export const SettingsPanel = () => {
   const {
     animationLevel,
     themeMode,
-    soundEnabled,
-    physicsEnabled,
+    soundEnabled
   } = useSelector((state: RootState) => state.mode);
 
   const handleSRAnnouncement = (message: string) => {

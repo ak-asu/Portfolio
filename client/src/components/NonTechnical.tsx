@@ -157,14 +157,7 @@ export const NonTechnical = () => {
 
   return (
     <AnimatePresence>
-      <motion.main
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="min-h-screen snap-y snap-mandatory"
-        id="main-content"
-        role="main"
-      >
+      <div className="min-h-screen">
         <div className="container mx-auto px-4">
           {sections.map((section, index) => (
             <Section
@@ -178,7 +171,7 @@ export const NonTechnical = () => {
             </Section>
           ))}
         </div>
-      </motion.main>
+      </div>
     </AnimatePresence>
   );
 };
