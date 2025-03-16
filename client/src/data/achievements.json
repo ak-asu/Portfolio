@@ -1,34 +1,26 @@
 [
     {
-        "title": "First Reward",
-        "description": "This is the first reward you can get.",
-        "date": "2023-01-01",
-        "image": "/images/achievements/reward1.png",
-        "points": 10,
-        "type": "reward"
-    },
-    {
-        "title": "First Recognition",
-        "description": "This is the first recognition you can get.",
-        "date": "2023-01-01",
-        "image": "/images/achievements/recognition1.png",
-        "points": 10,
+        "title": "SoDA LLM Workshop Winner",
+        "description": "Winner of the SoDA LLM workshop for creating note summarizer AI web application at ASU.",
+        "date": "2025-02-15",
+        "image": "/images/achievements/soda_llm_workshop.png",
+        "points": 30,
         "type": "recognition"
     },
     {
-        "title": "First Participation",
-        "description": "This is the first participation you can get.",
-        "date": "2023-01-01",
-        "image": "/images/achievements/participation1.png",
-        "points": 10,
-        "type": "participation"
+        "title": "AI Model Development Credential",
+        "description": "Earned intermediate-level credential for AI Model Development by Voxel 51 at ASU.",
+        "date": "2025-02-01",
+        "image": "/images/achievements/voxel51_credential.png",
+        "points": 20,
+        "type": "certification"
     },
     {
-        "title": "First Certification",
-        "description": "This is the first certification you can get.",
-        "date": "2023-01-01",
-        "image": "/images/achievements/certification1.png",
-        "points": 10,
+        "title": "Microcontroller Programming Basics",
+        "description": "Earned credential for Microcontroller Programming Basics by ASU Engineering SWAP Hub.",
+        "date": "2024-12-15",
+        "image": "/images/achievements/microcontroller_credential.png",
+        "points": 15,
         "type": "certification"
     }
 ]

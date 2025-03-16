@@ -6,13 +6,21 @@
         "image": "/images/education/asu.jpg",
         "subjects": [
             {
-                "name": "Data Structures",
-                "grade": "A"
+                "name": "CSE 507: Image Processing and Analysis",
+                "grade": "A+"
+            },
+            {
+                "name": "CSE 535: Mobile Computing",
+                "grade": "A+"
+            },
+            {
+                "name": "CSE 330: Operating Systems",
+                "grade": "A+"
             }
         ],
-        "gpa": 3.8,
-        "startDate": 2021,
-        "endDate": 2023
+        "gpa": 4.33,
+        "startDate": 2024,
+        "endDate": 2026
     },
     {
         "degree": "Bachelor in Technology",
@@ -21,12 +29,16 @@
         "image": "/images/education/iitr.jpg",
         "subjects": [
             {
-                "name": "Data Structures",
+                "name": "Database Management Systems",
+                "grade": "A+"
+            },
+            {
+                "name": "Machine Learning",
                 "grade": "A"
             }
         ],
-        "gpa": 3.8,
-        "startDate": 2021,
-        "endDate": 2023
+        "gpa": 3.12,
+        "startDate": 2017,
+        "endDate": 2021
     }
 ]

@@ -1,41 +1,63 @@
 [
-    {
-        "position": "Volunteer Developer",
-        "company": "Open Source Project",
-        "location": "Remote",
-        "startDate": "2023-01-01",
-        "endDate": null,
-        "description": [
-            "Contributed to an open-source project by fixing bugs and adding new features.",
-            "Collaborated with other developers on GitHub to review and merge pull requests.",
-            "Participated in community discussions and provided support to other contributors."
-        ],
-        "type": "volunteer"
-    },
-    {
-        "position": "Software Engineer",
-        "company": "Google",
-        "location": "Mountain View, CA",
-        "startDate": "2022-01-01",
-        "endDate": null,
-        "description": [
-            "Developed and maintained web applications using React and Node.js.",
-            "Collaborated with cross-functional teams to design and implement new features.",
-            "Optimized application performance and improved user experience."
-        ],
-        "type": "professional"
-    },
-    {
-        "position": "Software Engineer Intern",
-        "company": "Facebook",
-        "location": "Menlo Park, CA",
-        "startDate": "2021-06-01",
-        "endDate": "2021-12-31",
-        "description": [
-            "Assisted in the development of a new feature for the Facebook app.",
-            "Conducted code reviews and provided feedback to other team members.",
-            "Participated in daily stand-up meetings and sprint planning sessions."
-        ],
-        "type": "professional"
-    }
+  {
+    "position": "Backend Developer",
+    "company": "Fractal",
+    "location": "Mumbai, Maharashtra, India",
+    "startDate": "2021-07-22",
+    "endDate": "2022-03-31",
+    "description": [
+      "Added Model drift support and worked with distributed file systems to run jobs on EMR cluster with Spark in Streamflux",
+      "Developed functionality to allow users to perform EDA and create/deploy python models and pipelines"
+    ],
+    "type": "professional"
+  },
+  {
+    "position": "Guest Lecturer",
+    "company": "IIT Roorkee",
+    "location": "Roorkee, Uttarakhand, India",
+    "startDate": "2020-06-01",
+    "endDate": "2020-06-30",
+    "description": [
+      "Conducted a lecture for Ph.D. scholars on algorithms used in numerical analysis"
+    ],
+    "type": "volunteer"
+  },
+  {
+    "position": "Data Engineer",
+    "company": "Fractal",
+    "location": "Mumbai, Maharashtra, India",
+    "startDate": "2022-04-01",
+    "endDate": "2022-09-30",
+    "description": [
+      "Set up CI/CD pipelines for AbInBev codebase leveraging Azure DevOps",
+      "Programmed data ingestion, cloud connections to read/write data in Azure blobs"
+    ],
+    "type": "professional"
+  },
+  {
+    "position": "Full-stack Developer",
+    "company": "Fractal",
+    "location": "Gurgaon, Haryana, India",
+    "startDate": "2023-03-01",
+    "endDate": "2024-07-31",
+    "description": [
+      "Engineered end-to-end software feature creation, deployment and management in TrialRun",
+      "Performed vulnerability fixes, and handled user privileges and requests",
+      "Implemented automated scripts for data ingestion and migration"
+    ],
+    "type": "professional"
+  },
+  {
+    "position": "Mentor",
+    "company": "SoDA ASU",
+    "location": "Tempe, Arizona, USA",
+    "startDate": "2025-03-01",
+    "endDate": null,
+    "description": [
+      "Mentored two undergraduate students on development of a Book Recommendation System project and Local Image Finder application",
+      "Provided technical guidance, code reviews, and architectural design support for student projects",
+      "Helped with the complete project lifecycle, from ideation to deployment"
+    ],
+    "type": "volunteer"
+  }
 ]

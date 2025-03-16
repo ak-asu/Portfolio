@@ -1,50 +1,158 @@
 [
   {
-    "name": "JavaScript",
-    "level": "Intermediate",
-    "icon": "javascript.svg",
-    "category": "Languages"
-  },
-  {
-    "name": "TypeScript",
-    "level": "Intermediate",
-    "icon": "typescript.svg",
-    "category": "Languages"
-  },
-  {
     "name": "Python",
-    "level": "Intermediate",
-    "icon": "python.svg",
+    "level": "Advanced",
+    "icon": "/images/skills/python.svg",
     "category": "Languages"
   },
   {
-    "name": "AWS",
+    "name": "Dart",
     "level": "Intermediate",
-    "icon": "aws.svg",
-    "category": "Cloud"
+    "icon": "/images/skills/dart.svg",
+    "category": "Languages"
   },
   {
-    "name": "GCP",
+    "name": "JavaScript",
+    "level": "Advanced",
+    "icon": "/images/skills/javascript.svg",
+    "category": "Languages"
+  },
+  {
+    "name": "HTML",
     "level": "Intermediate",
-    "icon": "gcp.svg",
-    "category": "Cloud"
+    "icon": "/images/skills/html.svg",
+    "category": "Front-End"
+  },
+  {
+    "name": "CSS",
+    "level": "Intermediate",
+    "icon": "/images/skills/css.svg",
+    "category": "Front-End"
+  },
+  {
+    "name": "React.JS",
+    "level": "Intermediate",
+    "icon": "/images/skills/react.svg",
+    "category": "Front-End"
+  },
+  {
+    "name": "NextJS",
+    "level": "Intermediate",
+    "icon": "/images/skills/nextjs.svg",
+    "category": "Frameworks"
+  },
+  {
+    "name": "Flutter",
+    "level": "Intermediate",
+    "icon": "/images/skills/flutter.svg",
+    "category": "Frameworks"
+  },
+  {
+    "name": "Django",
+    "level": "Intermediate",
+    "icon": "/images/skills/django.svg",
+    "category": "Frameworks"
+  },
+  {
+    "name": "Node.JS",
+    "level": "Intermediate",
+    "icon": "/images/skills/nodejs.svg",
+    "category": "Frameworks"
+  },
+  {
+    "name": "Express.JS",
+    "level": "Intermediate",
+    "icon": "/images/skills/expressjs.svg",
+    "category": "Frameworks"
+  },
+  {
+    "name": "Streamlit",
+    "level": "Beginner",
+    "icon": "/images/skills/streamlit.svg",
+    "category": "Frameworks"
   },
   {
     "name": "MongoDB",
     "level": "Intermediate",
-    "icon": "mongodb.svg",
+    "icon": "/images/skills/mongodb.svg",
     "category": "Databases"
   },
   {
-    "name": "Git",
+    "name": "PostgreSQL",
+    "level": "Beginner",
+    "icon": "/images/skills/postgresql.svg",
+    "category": "Databases"
+  },
+  {
+    "name": "Redis",
     "level": "Intermediate",
-    "icon": "git.svg",
+    "icon": "/images/skills/redis.svg",
+    "category": "Databases"
+  },
+  {
+    "name": "GitHub",
+    "level": "Advanced",
+    "icon": "/images/skills/github.svg",
     "category": "Tools"
   },
   {
-    "name": "React",
+    "name": "Docker",
     "level": "Intermediate",
-    "icon": "react.svg",
-    "category": "Frameworks"
+    "icon": "/images/skills/docker.svg",
+    "category": "Tools"
+  },
+  {
+    "name": "Kubernetes",
+    "level": "Intermediate",
+    "icon": "/images/skills/kubernetes.svg",
+    "category": "Tools"
+  },
+  {
+    "name": "Jenkins",
+    "level": "Intermediate",
+    "icon": "/images/skills/jenkins.svg",
+    "category": "Tools"
+  },
+  {
+    "name": "PyTest",
+    "level": "Beginner",
+    "icon": "/images/skills/pytest.svg",
+    "category": "Tools"
+  },
+  {
+    "name": "Celery",
+    "level": "Intermediate",
+    "icon": "/images/skills/celery.svg",
+    "category": "Tools"
+  },
+  {
+    "name": "RabbitMQ",
+    "level": "Intermediate",
+    "icon": "/images/skills/rabbitmq.svg",
+    "category": "Tools"
+  },
+  {
+    "name": "Windows",
+    "level": "Advanced",
+    "icon": "/images/skills/windows.svg",
+    "category": "OS"
+  },
+  {
+    "name": "Ubuntu",
+    "level": "Intermediate",
+    "icon": "/images/skills/ubuntu.svg",
+    "category": "OS"
+  },
+  {
+    "name": "Azure",
+    "level": "Beginner",
+    "icon": "/images/skills/azure.svg",
+    "category": "Cloud"
+  },
+  {
+    "name": "Firebase",
+    "level": "Intermediate",
+    "icon": "/images/skills/firebase.svg",
+    "category": "Cloud"
   }
 ]

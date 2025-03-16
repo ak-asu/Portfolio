@@ -103,13 +103,11 @@ const SkillIcon: React.FC<SkillIconProps> = ({
                   </svg>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center p-3">
-                  {/* {<Image 
-                      src={`/icons/${skill.icon}`} 
-                      alt={skill.name}
-                      width={40}
-                      height={40}
-                      priority={index < 10} // Prioritize loading for first few icons
-                  />} */}
+                  <img
+                    src={`${skill.icon}`}
+                    alt={skill.name}
+                    className="w-10 h-10 object-contain"
+                  />
                 </div>
               </div>
             </motion.div>

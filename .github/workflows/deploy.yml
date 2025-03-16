@@ -43,6 +43,7 @@ jobs:
           if [ ! -d "./dist" ]; then
             echo "::error::Build output directory './dist' not found. Please check your build configuration."
             exit 1
+          fi
       
       - name: Create .nojekyll file
         run: touch ./dist/.nojekyll
