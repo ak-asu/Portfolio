@@ -89,16 +89,30 @@ const CursorArrow = ({ from = [0, 0, 0], to, visible = false }: {
     to
   ];
   
+  // Create direction vector for arrow
+  const dir = new THREE.Vector3().subVectors(to, new THREE.Vector3(...from)).normalize();
+  
   return (
-    <Line
-      points={points}
-      color="white"
-      lineWidth={1}
-      dashed
-      dashSize={0.2}
-      dashScale={1}
-      dashOffset={0}
-    />
+    <>
+      <Line
+        points={points}
+        color="white"
+        lineWidth={1}
+        dashed
+        dashSize={0.2}
+        dashScale={1}
+        dashOffset={0}
+      />
+      {/* Add arrowhead */}
+      <mesh position={to.toArray()} rotation={[0, 0, 0]}>
+        <mesh rotation={[0, 0, 0]} quaternion={new THREE.Quaternion().setFromUnitVectors(
+          new THREE.Vector3(0, 1, 0), dir
+        )}>
+          <coneGeometry args={[0.2, 0.5, 8]} />
+          <meshBasicMaterial color="white" />
+        </mesh>
+      </mesh>
+    </>
   );
 };
 
@@ -126,7 +140,7 @@ const CircularBoundary = ({ radius }: { radius: number }) => {
 const Bullet = ({ 
   initialPosition = [0, 0, 0], 
   direction, 
-  speed = 0.2, 
+  speed = 0.5, // Increased speed for bullets
   onHit 
 }: { 
   initialPosition?: [number, number, number], 
@@ -139,7 +153,7 @@ const Bullet = ({
   
   useFrame(() => {
     if (meshRef.current) {
-      // Move bullet in its direction
+      // Move bullet in its direction with increased velocity
       meshRef.current.position.add(normalizedDirection.clone().multiplyScalar(speed));
     }
   });
@@ -400,9 +414,9 @@ const SphereScene: React.FC<SphereSceneProps> = ({
           }
         }
         
-        // Update bullet position
+        // Update bullet position with faster movement
         const newPos = new THREE.Vector3(...bullet.position);
-        newPos.add(bullet.direction.clone().multiplyScalar(0.2));
+        newPos.add(bullet.direction.clone().multiplyScalar(0.5)); // Increased movement speed
         bullet.position = [newPos.x, newPos.y, newPos.z];
         
         return true; // Keep bullet
