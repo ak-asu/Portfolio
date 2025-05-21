@@ -7,16 +7,16 @@ import type { RootState } from '@/store/store';
 import { AnimationLevel } from '@/lib/types';
 import { NavItems } from '@/lib/constants';
 import { GameCarousel } from './games';
-import EducationCard from './education';
+import BookExample from './education2/BookExample';
 import WorkScene from './work';
 import Achievements from './achievements';
 import SkillsShowcase from './skills';
 import { ProjectShow } from './projects';
-import SphereWithBoard from './intro2/SphereWithBoard';
+import SphereWithBoard from './intro';
 
 const sectionComponents = {
   intro: SphereWithBoard,
-  education: EducationCard,
+  education: BookExample,
   skills: SkillsShowcase,
   projects: ProjectShow,
   work: WorkScene,
