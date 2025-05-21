@@ -197,7 +197,7 @@ const SphereScene: React.FC<SphereSceneProps> = ({
   ballsData 
 }) => {
   const groupRef = useRef<THREE.Group>(null);
-  const sphereRadius = 8.5; // Slightly larger than the ball positions
+  const sphereRadius = 7; // Slightly larger than the ball positions
   const { isInside, intersection, sphereRef } = useMouseInSphere(sphereRadius);
   const { mouse, camera } = useThree();
   const [bullets, setBullets] = useState<Array<{
@@ -385,7 +385,7 @@ const SphereScene: React.FC<SphereSceneProps> = ({
         // Check if bullet has reached or crossed the sphere boundary
         // Use squared distance for performance and exact boundary checking
         const distanceSquared = bulletPos.lengthSq();
-        const radiusSquared = sphereRadius * sphereRadius;
+        const radiusSquared = sphereRadius**4;
         
         if (distanceSquared >= radiusSquared) {
           return false; // Remove bullet exactly at the boundary
@@ -567,17 +567,33 @@ const RotatableSphere: React.FC = () => {
     <ThreeErrorBoundary>
       <div 
         style={{ 
-          width: '100%', 
+          width: '100%',
           height: '100%',
-          position: 'relative'
+          position: 'relative',
+          aspectRatio: '1 / 1', // Force a square aspect ratio
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         onPointerMove={handlePointerMove}
         onContextMenu={handleContextMenu}
       >
-        <Canvas>
+        <Canvas 
+          style={{ 
+            width: '100%', 
+            height: '100%',
+            display: 'block' // Prevents extra space below the canvas
+          }}
+        >
           <Suspense fallback={<Loader />}>
+            {/* Invisible sphere for mouse pointer visibility */}
+            <mesh visible={false} position={[0, 0, 0]}>
+              <sphereGeometry args={[25, 32, 32]} />
+              <meshBasicMaterial transparent opacity={0} visible={false} />
+            </mesh>
+            
             <SphereScene 
               isDragging={isDragging}
               onGroupRef={handleGroupRef}
