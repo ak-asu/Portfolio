@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { audioManager } from '@/lib/audio';
-import { useSelector, useDispatch } from 'react-redux';
-import { setScrollSection } from '@/store/features/navigationSlice';
+import { useSelector } from 'react-redux';
+// import { setScrollSection } from '@/store/features/navigationSlice';
 import type { RootState } from '@/store/store';
 import { AnimationLevel } from '@/lib/types';
 import { NavItems } from '@/lib/constants';
@@ -25,7 +25,8 @@ const sectionComponents = {
 };
 type SectionKey = keyof typeof sectionComponents;
 const sections = NavItems.filter((item) => Object.prototype.hasOwnProperty.call(sectionComponents, item.href.slice(1))).map((item) => ({
-  id: item.href,
+  id: item.href.slice(1), // Remove the # from the ID
+  href: item.href,
   label: item.label,
   component: sectionComponents[item.href.slice(1) as SectionKey],
 }));
@@ -34,9 +35,8 @@ export const NonTechnical = () => {
   const [isLoading, setIsLoading] = useState(true);
   //const [activeSection, setActiveSection] = useState('intro');
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
-  const dispatch = useDispatch();
   const { soundEnabled, animationLevel } = useSelector((state: RootState) => state.mode);
-  const currentScrollSection = useSelector((state: RootState) => state.navigation.scrollSection);
+  // const currentScrollSection = useSelector((state: RootState) => state.navigation.scrollSection);
   useEffect(() => {
     if (soundEnabled) {
       audioManager.playBackgroundMusic();
@@ -49,28 +49,53 @@ export const NonTechnical = () => {
     };
   }, [soundEnabled, animationLevel]);
 
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const scrollPosition = window.scrollY + 100;
+  //     let currentSection = sections[0].id;
+  //     for (const section of sections) {
+  //       const element = sectionRefs.current[section.id];
+  //       if (element && scrollPosition >= element.offsetTop) {
+  //         currentSection = section.id;
+  //       }
+  //     }
+  //     if (currentSection !== currentScrollSection) {
+  //       dispatch(setScrollSection(currentSection));
+  //       if (soundEnabled) {
+  //         // audioManager.playUISound('sectionChange');
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, [currentScrollSection, soundEnabled, dispatch]);
+
+  // Add effect to handle hash-based navigation on initial load
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 100;
-      let currentSection = sections[0].id;
-      for (const section of sections) {
-        const element = sectionRefs.current[section.id];
-        if (element && scrollPosition >= element.offsetTop) {
-          currentSection = section.id;
-        }
-      }
-      if (currentSection !== currentScrollSection) {
-        dispatch(setScrollSection(currentSection));
-        if (soundEnabled) {
-          // audioManager.playUISound('sectionChange');
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        // Remove # to get the ID
+        const targetId = hash.slice(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          // Add a small delay to ensure elements are fully rendered
+          setTimeout(() => {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
         }
       }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [currentScrollSection, soundEnabled, dispatch]);
+
+    // Handle hash on initial load
+    handleHashChange();
+
+    // Also listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [isLoading]); // Only run after loading is complete
 
   const setSectionRef = (id: string) => (el: HTMLElement | null) => {
     sectionRefs.current[id] = el;
@@ -86,7 +111,7 @@ export const NonTechnical = () => {
     children: React.ReactNode
   }) => {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: false, amount: 0.3 });
+    // const isInView = useInView(ref, { once: false, amount: 0.3 });
     useEffect(() => {
       if (ref.current) {
         setSectionRef(id)(ref.current as HTMLElement);
@@ -95,7 +120,7 @@ export const NonTechnical = () => {
     return (
       <section
         ref={ref}
-        id={id}
+        id={id} // This ID now doesn't include the # character
         className="py-16 min-h-screen flex flex-col justify-center snap-start"
         aria-label={title}
       >
@@ -159,11 +184,13 @@ export const NonTechnical = () => {
         {sections.map((section, index) => (
           <Section
             key={index}
-            id={section.id}
+            id={section.id} // Using the ID without #
             title={section.label}
           >
             <div className="max-w-6xl mx-auto">
-              {React.createElement(section.component)}
+              <AnimatePresence>
+                {React.createElement(section.component)}
+              </AnimatePresence>
             </div>
           </Section>
         ))}

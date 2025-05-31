@@ -75,5 +75,93 @@
     "url": "",
     "media": "",
     "type": "personal"
+  },
+  {
+    "id": "project8",
+    "name": "dAIgrammatic",
+    "shortDescription": "Agentic AI powered application for creating diagrams",
+    "description": "Developed an agentic AI application that allows users to create diagrams by simply describing them in natural language. The app uses advanced natural language processing to interpret user input and generate corresponding visual diagrams.",
+    "technologies": ["Python", "Flask", "React", "Typescript", "Tailwind CSS", "Gemini API"],
+    "duration": "1 month",
+    "url": "https://devpost.com/software/daigrammatic?ref_content=my-projects-tab&ref_feature=my_projects",
+    "media": "",
+    "type": "collaborative"
+  },
+  {
+    "id": "project9",
+    "name": "BookTrack",
+    "shortDescription": "AI-powered book recommendation web app",
+    "description": "An AI-powered book recommendation web app that personalizes suggestions based on user-defined prompts. The app delivers a rich discovery experience with enhanced metadata and visual presentation.",
+    "technologies": ["Next.js", "React", "Typescript", "Tailwind CSS", "Perplexity API"],
+    "duration": "2 months",
+    "url": "https://www.linkedin.com/posts/jesus-aguilar-2657a8205_two-highlights-of-this-semester-a-few-weeks-activity-7326813641192751104-aIhQ",
+    "media": "",
+    "type": "collaborative"
+  },
+  {
+    "id": "project10",
+    "name": "Local Image Finder (LIF)",
+    "shortDescription": "Cross-platform desktop image search application",
+    "description": "A privacy-first, cross-platform desktop image search application that performs on-device semantic search using natural language or image queries to organize and retrieve local images efficiently.",
+    "technologies": ["Python", "Flask", "Electron.js", "Chromadb"],
+    "duration": "2 months",
+    "url": "https://www.linkedin.com/posts/quy-hoang-nguyen_semanticsearch-ai-productivity-activity-7323267080001069056-cbhr",
+    "media": "",
+    "type": "collaborative"
+  },
+  {
+    "id": "project11",
+    "name": "Web development course",
+    "shortDescription": "Created a web development course for beginners using Github actions",
+    "description": "Developed a comprehensive web development course for beginners, focusing on key concepts and practical skills using GitHub actions.",
+    "technologies": ["GitHub", "Markdown"],
+    "duration": "1 month",
+    "url": "https://github.com/ak-asu/web-dev-skill",
+    "media": "",
+    "type": "personal"
+  },
+  {
+    "id": "project12",
+    "name": "Cards Of Conscience",
+    "shortDescription": "A flutter AI powered game for teaching refugee education",
+    "description": "Developed a Flutter simulation card game for policymaking, where players select policy options across different domains while managing budget constraints. The game includes AI agents that participate in the decision-making process.",
+    "technologies": ["Flutter", "Dart", "Gemini API"],
+    "duration": "1 week",
+    "url": "https://github.com/ak-asu/cards_of_conscience",
+    "media": "",
+    "type": "personal"
+  },
+  {
+    "id": "project13",
+    "name": "Cryptogak",
+    "shortDescription": "Cross-platform command-line utility for string encryption",
+    "description": "Cryptogak is a lightweight and efficient cross-platform command-line utility for encrypting and decrypting strings using common hash algorithms. It works on Linux and Windows.",
+    "technologies": ["C"],
+    "duration": "2 weeks",
+    "url": "https://github.com/ak-asu/public-releases/tree/main/releases/v1.1.0",
+    "media": "",
+    "type": "personal"
+  },
+  {
+    "id": "project14",
+    "name": "SEO analyzer",
+    "shortDescription": "Web application for analyzing SEO performance",
+    "description": "Developed a web application that analyzes the SEO performance of websites, providing insights and recommendations for improvement. The app includes features for keyword analysis, backlink tracking, and on-page optimization.",
+    "technologies": ["React", "Typescript", "Tailwind CSS"],
+    "duration": "1 week",
+    "url": "https://seoanalyzerpro.netlify.app/",
+    "media": "",
+    "type": "personal"
+  },
+  {
+    "id": "project15",
+    "name": "Flutter games",
+    "shortDescription": "Collection of games built with Flutter",
+    "description": "Developed a collection of games using the Flutter framework, showcasing its capabilities for building interactive and visually appealing applications.",
+    "technologies": ["Flutter", "Dart", "Firebase"],
+    "duration": "2 months",
+    "url": "https://play.google.com/store/apps/dev?id=7580092972636663435",
+    "media": "https://www.youtube.com/watch?v=dTi1PRMUCjQ",
+    "type": "personal"
   }
 ]

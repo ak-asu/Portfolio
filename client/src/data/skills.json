@@ -54,6 +54,18 @@
     "category": "Frameworks"
   },
   {
+    "name": "Flask",
+    "level": "Beginner",
+    "icon": "/images/skills/flask.svg",
+    "category": "Frameworks"
+  },
+  {
+    "name": "FastAPI",
+    "level": "Intermediate",
+    "icon": "/images/skills/fastapi.svg",
+    "category": "Frameworks"
+  },
+  {
     "name": "Node.JS",
     "level": "Intermediate",
     "icon": "/images/skills/nodejs.svg",

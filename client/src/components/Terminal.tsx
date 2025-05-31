@@ -109,7 +109,9 @@ export const Terminal = () => {
         return [
           `Email: ${contact.email}`,
           `GitHub: ${contact.github}`,
-          `LinkedIn: ${contact.linkedin}`
+          `LinkedIn: ${contact.linkedin}`,
+          `Website: ${contact.website}`,
+          `Devpost: ${contact.devpost}`
         ];
       case 'achievements':
         return [
@@ -123,24 +125,25 @@ export const Terminal = () => {
           ...education.map(edu => `${edu.degree} at ${edu.institution} (${edu.startDate} - ${edu.endDate || 'Present'})`),
           'For more details on a specific education, visit the education directory'
         ];
-      case 'skills':
-        const lines: string[] = [];
-        const skillsByCategory: Record<string, string[]> = {};
-        skills.forEach(skill => {
-          if (!skillsByCategory[skill.category]) {
-            skillsByCategory[skill.category] = [];
-          }
-          skillsByCategory[skill.category].push(skill.name);
-        });
+      case 'skills': {
+          const lines: string[] = [];
+          const skillsByCategory: Record<string, string[]> = {};
+          skills.forEach(skill => {
+            if (!skillsByCategory[skill.category]) {
+              skillsByCategory[skill.category] = [];
+            }
+            skillsByCategory[skill.category].push(skill.name);
+          });
 
-        Object.entries(skillsByCategory).forEach(([category, skillNames]) => {
-          lines.push(`${category}: ${skillNames.join(', ')}`);
-        });
-        return [
-          'My Skills:',
-          ...lines,
-          'For more details on a specific skill category, visit the skills directory.'
-        ];
+          Object.entries(skillsByCategory).forEach(([category, skillNames]) => {
+            lines.push(`${category}: ${skillNames.join(', ')}`);
+          });
+          return [
+            'My Skills:',
+            ...lines,
+            'For more details on a specific skill category, visit the skills directory.'
+          ];
+        }
       case 'projects':
         return [
           'My Projects:',
@@ -153,10 +156,11 @@ export const Terminal = () => {
           ...work.map(job => `${job.position} at ${job.company} (${job.startDate} - ${job.endDate || 'Present'})`),
           'For more details on a specific job, visit the work directory.'
         ];
-      case 'theme':
+      case 'theme': {
         const newTheme = themeMode === ThemeMode.Dark ? 'light' : 'dark';
         dispatch(setThemeMode(themeMode === ThemeMode.Dark ? ThemeMode.Light : ThemeMode.Dark));
         return [`Switched to ${newTheme} theme`];
+      }
       case 'whoami':
         return ['You are a visitor exploring my portfolio in technical mode. Welcome!', 'Type "help" to see available commands.'];
       case 'ls':
@@ -447,7 +451,7 @@ export const Terminal = () => {
               <ul className="text-sm space-y-1">
                 <li>↑↓ Navigate command history</li>
                 <li>Tab for auto-completion</li>
-                <li>Type 'help' for commands</li>
+                <li>Type &apos;help&apos; for commands</li>
               </ul>
             </div>
           </TooltipContent>

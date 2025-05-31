@@ -26,7 +26,7 @@ const WorkScene: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [userInteracting, setUserInteracting] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
-  const scrollAnimationRef = useRef<number | null>(null);
+  const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sort work entries by date (most recent first)
@@ -34,116 +34,89 @@ const WorkScene: React.FC = () => {
     const dateA = new Date(a.startDate).getTime();
     const dateB = new Date(b.startDate).getTime();
     return dateB - dateA;
-  });  // Auto-scroll timeline
+  });
+
+  // Function to scroll to a specific work item
+  const scrollToIndex = useCallback((index: number) => {
+    if (!timelineRef.current) return;
+    
+    const container = timelineRef.current;
+    const itemSize = isMobile ? 120 : 140; // Width for mobile, height for desktop
+    const containerSize = isMobile ? container.clientWidth : container.clientHeight;
+    const targetScrollPosition = Math.max(0, index * itemSize - containerSize / 2 + itemSize / 2);
+    
+    if (isMobile) {
+      container.scrollTo({
+        left: targetScrollPosition,
+        behavior: 'smooth'
+      });
+    } else {
+      container.scrollTo({
+        top: targetScrollPosition,
+        behavior: 'smooth'
+      });
+    }
+  }, [isMobile]);
+
+  // Setup auto-scrolling
   useEffect(() => {
-    if (isPaused || userInteracting) return;
+    // Don't auto-scroll if user is interacting or it's paused
+    if (isPaused || userInteracting) {
+      if (autoScrollIntervalRef.current) {
+        clearInterval(autoScrollIntervalRef.current);
+        autoScrollIntervalRef.current = null;
+      }
+      return;
+    }
 
-    const scrollTimeline = () => {
-      if (!timelineRef.current) return;
-
-      const container = timelineRef.current;
-      const itemSize = isMobile ? 120 : 140; // Width for mobile, height for desktop
-      const containerSize = isMobile ? container.clientWidth : container.clientHeight;
-
-      let animationId: number;
-      let startTime: number;
-
-      const animate = (timestamp: number) => {
-        if (!startTime) startTime = timestamp;
-
-        const elapsed = timestamp - startTime;
-        const duration = getAnimationLevel(animationLevel, { min: 3000, max: 8000 }); // 3-8 seconds per item
-
-        if (elapsed < duration) {
-          const progress = elapsed / duration;
-          const easeInOut = 0.5 - 0.5 * Math.cos(progress * Math.PI);
-
-          // Calculate target scroll position to center the current item
-          const targetScrollPosition = Math.max(0, currentWorkIndex * itemSize - containerSize / 2 + itemSize / 2);
-          const currentScrollPosition = isMobile ? container.scrollLeft : container.scrollTop;
-          const scrollDiff = targetScrollPosition - currentScrollPosition;
-
-          if (isMobile) {
-            container.scrollLeft = currentScrollPosition + scrollDiff * easeInOut;
-          } else {
-            container.scrollTop = currentScrollPosition + scrollDiff * easeInOut;
-          }
-
-          animationId = requestAnimationFrame(animate);
-        } else {
-          // Scroll complete, ensure item is centered and pause for 5 seconds
-          const targetScrollPosition = Math.max(0, currentWorkIndex * itemSize - containerSize / 2 + itemSize / 2);
-          if (isMobile) {
-            container.scrollLeft = targetScrollPosition;
-          } else {
-            container.scrollTop = targetScrollPosition;
-          }
-          setIsPaused(true);
-
-          pauseTimeoutRef.current = setTimeout(() => {
-            setIsPaused(false);
-            setCurrentWorkIndex((prev) => (prev + 1) % sortedWorkData.length);
-          }, 5000);
-        }
-      };
-
-      animationId = requestAnimationFrame(animate);
-      scrollAnimationRef.current = animationId;
-    };
-
-    const timeoutId = setTimeout(scrollTimeline, 500);
-
+    // Start auto-scrolling
+    const scrollInterval = getAnimationLevel(animationLevel, { min: 5000, max: 7000 });
+    
+    // Clear any existing interval
+    if (autoScrollIntervalRef.current) {
+      clearInterval(autoScrollIntervalRef.current);
+    }
+    
+    // Set up new interval for auto-scrolling
+    autoScrollIntervalRef.current = setInterval(() => {
+      // Move to the next work item
+      const nextIndex = (currentWorkIndex + 1) % sortedWorkData.length;
+      setCurrentWorkIndex(nextIndex);
+      scrollToIndex(nextIndex);
+      setSelectedWork(sortedWorkData[nextIndex]);
+    }, scrollInterval);
+    
+    // Scroll to the current index initially
+    scrollToIndex(currentWorkIndex);
+    
     return () => {
-      clearTimeout(timeoutId);
-      if (scrollAnimationRef.current) {
-        cancelAnimationFrame(scrollAnimationRef.current);
-      }
-      if (pauseTimeoutRef.current) {
-        clearTimeout(pauseTimeoutRef.current);
+      if (autoScrollIntervalRef.current) {
+        clearInterval(autoScrollIntervalRef.current);
+        autoScrollIntervalRef.current = null;
       }
     };
-  }, [currentWorkIndex, isPaused, userInteracting, animationLevel, sortedWorkData.length, isMobile]);  const handleCircleClick = useCallback((index: number, work: WorkEntry) => {
+  }, [currentWorkIndex, isPaused, userInteracting, animationLevel, sortedWorkData.length, scrollToIndex]);
+
+  const handleCircleClick = useCallback((index: number, work: WorkEntry) => {
+    // Stop auto-scrolling when user interacts
     setUserInteracting(true);
     setCurrentWorkIndex(index);
     setSelectedWork(work);
     setIsPaused(true);
-
-    // Cancel any ongoing scroll animation
-    if (scrollAnimationRef.current) {
-      cancelAnimationFrame(scrollAnimationRef.current);
-      scrollAnimationRef.current = null;
-    }
-
-    // Manually scroll to the selected item to center it
-    if (timelineRef.current) {
-      const container = timelineRef.current;
-      const itemSize = isMobile ? 120 : 140;
-      const containerSize = isMobile ? container.clientWidth : container.clientHeight;
-      const targetScrollPosition = Math.max(0, index * itemSize - containerSize / 2 + itemSize / 2);
-      
-      if (isMobile) {
-        container.scrollTo({
-          left: targetScrollPosition,
-          behavior: 'smooth'
-        });
-      } else {
-        container.scrollTo({
-          top: targetScrollPosition,
-          behavior: 'smooth'
-        });
-      }
-    }
-
-    // Resume auto-scrolling after 10 seconds of user interaction
+    scrollToIndex(index);
+    
+    // Clear existing timeout
     if (pauseTimeoutRef.current) {
       clearTimeout(pauseTimeoutRef.current);
     }
-
+    
+    // Resume auto-scrolling after 10 seconds of user interaction
     pauseTimeoutRef.current = setTimeout(() => {
       setUserInteracting(false);
       setIsPaused(false);
     }, 10000);
-  }, [isMobile]);
+  }, [scrollToIndex]);
+
   const handleMinimizeDetails = useCallback(() => {
     setSelectedWork(null);
   }, []);
@@ -152,21 +125,22 @@ const WorkScene: React.FC = () => {
     if (!userInteracting) {
       setUserInteracting(true);
       setIsPaused(true);
-
+      
       // Resume auto-scrolling after 5 seconds of no interaction
       if (pauseTimeoutRef.current) {
         clearTimeout(pauseTimeoutRef.current);
       }
-
+      
       pauseTimeoutRef.current = setTimeout(() => {
         setUserInteracting(false);
         setIsPaused(false);
-      }, 5000);
+      }, 3000);
     }
-  }, [userInteracting]);
+  }, []);
+
+  // Set initial selected work when component mounts or current index changes
   useEffect(() => {
-    // Set initial selected work when component mounts or current index changes
-    if (!selectedWork && sortedWorkData[currentWorkIndex]) {
+    if (sortedWorkData.length > 0 && (!selectedWork || currentWorkIndex !== sortedWorkData.indexOf(selectedWork))) {
       setSelectedWork(sortedWorkData[currentWorkIndex]);
     }
   }, [currentWorkIndex, sortedWorkData, selectedWork]);
@@ -174,8 +148,8 @@ const WorkScene: React.FC = () => {
   // Cleanup effect
   useEffect(() => {
     return () => {
-      if (scrollAnimationRef.current) {
-        cancelAnimationFrame(scrollAnimationRef.current);
+      if (autoScrollIntervalRef.current) {
+        clearInterval(autoScrollIntervalRef.current);
       }
       if (pauseTimeoutRef.current) {
         clearTimeout(pauseTimeoutRef.current);
@@ -196,9 +170,14 @@ const WorkScene: React.FC = () => {
             style={{ scrollBehavior: 'smooth' }}
             onWheel={handleTimelineScroll}
             onTouchMove={handleTimelineScroll}
-          >
-            {/* Timeline Line */}
-            <div className={`absolute ${isMobile ? 'top-1/2 left-0 right-0 h-0.5 -translate-y-1/2' : 'left-3/4 top-0 bottom-0 w-0.5'} bg-palette-teal/30 z-0`} />
+          >            {/* Timeline Line */}
+            <div 
+              className={`absolute ${isMobile ? 'top-1/2 h-0.5 -translate-y-1/2' : 'left-3/4 w-0.5'} bg-palette-teal/30 z-0`}
+              style={isMobile 
+                ? { left: '40px', width: `${sortedWorkData.length * 120 - 40}px` }
+                : { top: '40px', height: `${sortedWorkData.length * 140 - 40}px` }
+              }
+            />
 
             {/* Timeline Items */}
             <div className={`z-10 ${isMobile ? 'flex items-center h-full py-4' : 'pt-8 pb-8'}`} style={isMobile ? { width: `${sortedWorkData.length * 120}px` } : { height: `${sortedWorkData.length * 140}px` }}>

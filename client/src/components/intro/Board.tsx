@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import contact from '../../data/contact.json';
+import contact from '@/data/contact.json';
 import { Github, Linkedin, Mail, Globe } from 'lucide-react';
 
 type SocialLink = {
@@ -43,6 +43,14 @@ const DEFAULT_SOCIALS: SocialLink[] = [
     icon: <Globe size={18} />,
     color: '#9C27B0',
     darkColor: '#b388ff'
+  },
+  {
+    id: 'devpost',
+    name: 'Devpost',
+    url: contact.devpost,
+    icon: <Globe size={18} />,
+    color: '#FF6F00',
+    darkColor: '#ff9800'
   }
 ];
 
