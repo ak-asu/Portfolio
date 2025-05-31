@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, useAnimation } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { getVerticalOffset, levelToPercentage, Skill } from './utils';
+
+const BASE_URL = process.env.PUBLIC_URL || '/Portfolio';
 
 interface SkillIconProps {
   skill: Skill;
@@ -98,7 +98,7 @@ const SkillIcon: React.FC<SkillIconProps> = ({
           </div>
           <div className="absolute inset-0 flex items-center justify-center p-3">
             <img
-              src={`${skill.icon}`}
+              src={`${BASE_URL}${skill.icon}`}
               alt={skill.name}
               className="w-10 h-10 object-contain"
             />

@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion, AnimationControls } from 'framer-motion';
-import { Pencil, GraduationCap, BookOpen, Award } from 'lucide-react';
+import { Pencil } from 'lucide-react';
+
+const BASE_URL = process.env.PUBLIC_URL || '/Portfolio';
 
 interface PageContentProps {
   pageIndex: number;
@@ -70,7 +72,7 @@ const PageContent: React.FC<PageContentProps> = ({
           >
             {entry.image ? (
               <img
-                src={entry.image}
+                src={`${BASE_URL}${entry.image}`}
                 alt={entry.institution}
                 className="max-h-[80%] max-w-[80%] object-contain mb-4 border border-palette-teal/30 dark:border-palette-teal-light/20 rounded-md shadow-sm"
               />

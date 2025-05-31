@@ -30,7 +30,7 @@ const WorkScene: React.FC = () => {
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sort work entries by date (most recent first)
-  const sortedWorkData = [...workData].sort((a, b) => {
+  const sortedWorkData: WorkEntry[] = [...workData].sort((a, b) => {
     const dateA = new Date(a.startDate).getTime();
     const dateB = new Date(b.startDate).getTime();
     return dateB - dateA;
@@ -205,7 +205,7 @@ const WorkScene: React.FC = () => {
               company={selectedWork.company}
               project={{
                 title: selectedWork.position,
-                description: selectedWork.description.join(' • '),
+                description: selectedWork.description,
                 startDate: selectedWork.startDate,
                 endDate: selectedWork.endDate || 'Present',
                 type: selectedWork.type

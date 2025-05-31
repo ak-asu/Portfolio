@@ -9,7 +9,7 @@ interface WorkDetailsProps {
   company: string;
   project: {
     title: string;
-    description: string;
+    description: string[];
     startDate: string;
     endDate: string;
     type: string;
@@ -126,7 +126,11 @@ const WorkDetails: React.FC<WorkDetailsProps> = ({
                         exit={{ opacity: 0, y: -10 }}
                         className={`${isMobile ? 'text-xs' : 'text-sm'} text-slate-700 dark:text-slate-200`}
                       >
-                        <p>{project.description}</p>
+                        <ul>
+                          {project.description.map((desc, index) => (
+                            <li key={index}>{desc}</li>
+                          ))}
+                        </ul>
                       </motion.div>
                     ) : (
                       <motion.div
@@ -135,7 +139,8 @@ const WorkDetails: React.FC<WorkDetailsProps> = ({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         className={`${isMobile ? 'space-y-2' : 'space-y-3'}`}
-                      >                      <div>
+                      >
+                        <div>
                           <div className={`${isMobile ? 'text-xs' : 'text-xs'} font-medium text-slate-500 dark:text-slate-400`}>
                             Position
                           </div>
