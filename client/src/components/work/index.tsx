@@ -200,7 +200,7 @@ const WorkScene: React.FC = () => {
 
   return (
     <div
-      className={`relative w-full ${isMobile ? "h-[90vh] flex-col" : "h-[72vh] flex"} bg-card rounded-2xl shadow-xl border border-palette-teal/20 dark:border-palette-teal/10 overflow-hidden`}
+      className={`relative w-full ${isMobile ? "h-[90vh] flex-col" : "h-[72vh] flex min-w-[820px]"} bg-card rounded-2xl shadow-xl border border-palette-teal/20 dark:border-palette-teal/10 overflow-hidden`}
       onMouseEnter={handleWorkSectionMouseEnter}
       onMouseLeave={handleWorkSectionMouseLeave}
     >
@@ -226,7 +226,7 @@ const WorkScene: React.FC = () => {
             {" "}
             {/* Timeline Line */}
             <div
-              className={`absolute ${isMobile ? "top-1/3 h-0.5" : "right-10 w-0.5"} bg-palette-teal/30 z-0`}
+              className={`absolute ${isMobile ? "top-1/3 h-0.5" : "right-4 w-0.5"} bg-palette-teal/30 z-0`}
               style={
                 isMobile
                   ? {
@@ -242,11 +242,11 @@ const WorkScene: React.FC = () => {
             {/* Timeline Items */}
             <div
               className={`relative z-10 ${isMobile ? "h-full" : "h-full"}`}
-              style={
-                isMobile
-                  ? { width: `${sortedWorkData.length * 120 + 120}px` }
-                  : { height: `${sortedWorkData.length * 140 + 140}px` }
-              }
+              // style={
+              //   isMobile
+              //     ? { width: `${sortedWorkData.length * 120 + 120}px` }
+              //     : { height: `${sortedWorkData.length * 140 + 140}px` }
+              // }
             >
               {sortedWorkData.map((work, index) => (
                 <TimelineItem

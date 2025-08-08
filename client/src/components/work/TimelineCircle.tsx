@@ -55,11 +55,11 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
   };
 
   // Position calculations
-  const itemSpacing = isMobile ? 172 : 140;
-  const cardWidth = 148;
+  const itemSpacing = isMobile ? 172 : 128;
+  const cardWidth = 140;
   const cardHeight = 54;
   const dotSize = 8;
-  const connectorLength = isMobile ? 30 : 50;
+  const connectorLength = 50;
 
   return (
     <div
@@ -73,7 +73,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
             }
           : {
               top: `${index * itemSpacing + itemSpacing / 2}px`,
-              right: "37px",
+              right: "13px",
               transform: "translateY(-50%)",
             }
       }
@@ -90,7 +90,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
           width: `${cardWidth}px`,
           height: `${cardHeight}px`,
           [isMobile ? "marginBottom" : "marginRight"]:
-            `${connectorLength - 50}px`,
+            `${connectorLength - 56}px`,
           order: isMobile && index % 2 === 1 ? 2 : 0,
           ...(isMobile && {
             transform: `translateY(-30%)`,

@@ -29,6 +29,8 @@
   transform-style: preserve-3d;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
   margin-bottom: 50px; /* Add space for navigation buttons */
+  /* CSS custom property for adaptive page turn angle */
+  --page-turn-angle: 180deg;
 }
 
 /* Paper styling */
@@ -110,7 +112,40 @@
 /* Paper flip effect with enhanced timing */
 .flipped .front,
 .flipped .back {
-  transform: rotateY(-180deg);
+  transform: rotateY(calc(-1 * var(--page-turn-angle)));
+}
+
+/* Mobile book behavior - 360 degree turn without displacement */
+.mobile-book .flipped .front,
+.mobile-book .flipped .back {
+  transform: rotateY(-360deg);
+}
+
+/* Smooth transition for page turn angle changes */
+.book .front,
+.book .back {
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Additional smooth transitions for responsive behavior changes */
+.book {
+  transition: transform 0.5s ease-in-out, width 0.3s ease, height 0.3s ease;
+}
+
+/* Ensure consistent behavior across different screen sizes */
+.book.mobile-book {
+  --page-turn-angle: 360deg;
+}
+
+.book:not(.mobile-book) {
+  --page-turn-angle: 180deg;
+}
+
+/* Handle dynamic screen size changes smoothly */
+@media (prefers-reduced-motion: no-preference) {
+  .book * {
+    transition: transform 0.5s ease-in-out;
+  }
 }
 
 /* Controller Buttons - Enhanced styling */
@@ -233,7 +268,7 @@
 @media (max-width: 768px) {
   .book {
     width: 245px;
-    height: 140px;
+    height: 400px;
   }
 
   i {
@@ -264,12 +299,22 @@
   .back-content p {
     font-size: 0.85rem;
   }
+
+  /* Mobile book behavior adjustments */
+  .mobile-book {
+    transform: translateX(0%) !important;
+  }
+  
+  .mobile-book .flipped .front,
+  .mobile-book .flipped .back {
+    transform: rotateY(-360deg);
+  }
 }
 
 @media (max-width: 480px) {
   .book {
     width: 210px;
-    height: 120px;
+    height: 360px;
   }
 
   i {
@@ -284,6 +329,16 @@
 
   .book-container i {
     font-size: 20px;
+  }
+
+  /* Ensure mobile behavior on very small screens */
+  .book {
+    --page-turn-angle: 360deg;
+  }
+  
+  .book .flipped .front,
+  .book .flipped .back {
+    transform: rotateY(-360deg);
   }
 }
 
