@@ -46,7 +46,8 @@ const Curtain: React.FC<CurtainProps> = ({ side, controls }) => {
       `}
     >
       <CurtainSprite side={side} />
-      <div className='absolute inset-0 bg-[url("/curtain-pattern.png")] bg-repeat'></div>
+      {/* Background pattern - uncomment if pattern file is added */}
+      {/* <div className='absolute inset-0 bg-[url("/curtain-pattern.png")] bg-repeat'></div> */}
       <div
         className={`absolute inset-y-0 ${side === "left" ? "right-0" : "left-0"} w-8 shadow-[inset_${side === "left" ? "-" : ""}15px_0_10px_rgba(0,0,0,0.3)] dark:shadow-[inset_${side === "left" ? "-" : ""}15px_0_10px_rgba(0,0,0,0.5)]`}
       ></div>

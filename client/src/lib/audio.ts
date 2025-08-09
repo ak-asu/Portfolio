@@ -1,4 +1,5 @@
 import { Howl } from "howler";
+import { getAudioPath } from "./utils";
 
 class AudioManager {
   private backgroundMusic: Howl | null = null;
@@ -11,24 +12,24 @@ class AudioManager {
 
   private initializeAudio() {
     this.backgroundMusic = new Howl({
-      src: ["/audio/background.mp3"],
+      src: [getAudioPath("background.mp3")],
       loop: true,
       volume: this.volume,
     });
 
     // Initialize common sound effects
     const effects = {
-      hover: "/audio/hover.mp3",
-      click: "/audio/click.mp3",
-      success: "/audio/success.mp3",
-      transition: "/audio/transition.mp3",
+      hover: "hover.mp3",
+      click: "click.mp3",
+      success: "success.mp3",
+      transition: "transition.mp3",
     };
 
     Object.entries(effects).forEach(([key, src]) => {
       this.soundEffects.set(
         key,
         new Howl({
-          src: [src],
+          src: [getAudioPath(src)],
           volume: this.volume,
         }),
       );

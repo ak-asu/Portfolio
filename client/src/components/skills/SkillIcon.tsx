@@ -2,8 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { getVerticalOffset, levelToPercentage, Skill } from "./utils";
 import { AnimationLevel } from "@/lib/types";
-
-const BASE_URL = import.meta.env.VITE_PUBLIC_URL || "/Portfolio";
+import { getAssetPath } from "@/lib/utils";
 
 interface SkillIconProps {
   skill: Skill;
@@ -119,7 +118,7 @@ const SkillIcon: React.FC<SkillIconProps> = ({
           </div>
           <div className="absolute inset-0 flex items-center justify-center p-3">
             <img
-              src={`${BASE_URL}${skill.icon}`}
+              src={getAssetPath(skill.icon)}
               alt={skill.name}
               className="w-10 h-10 object-contain"
             />

@@ -200,7 +200,7 @@ const WorkScene: React.FC = () => {
 
   return (
     <div
-      className={`relative w-full ${isMobile ? "h-[90vh] flex-col" : "h-[72vh] flex min-w-[820px]"} bg-card rounded-2xl shadow-xl border border-palette-teal/20 dark:border-palette-teal/10 overflow-hidden`}
+      className={`relative w-full ${isMobile ? "h-[90vh] flex-col" : "h-[72vh] flex max-w-full"} bg-card rounded-2xl shadow-xl border border-palette-teal/20 dark:border-palette-teal/10 overflow-hidden`}
       onMouseEnter={handleWorkSectionMouseEnter}
       onMouseLeave={handleWorkSectionMouseLeave}
     >

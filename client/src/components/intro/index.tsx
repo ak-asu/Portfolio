@@ -5,6 +5,7 @@ import RotatableSphere from "./Sphere";
 import Board from "./Board";
 import type { RootState } from "@/store/store";
 import { AnimationLevel } from "@/lib/types";
+import { getAssetPath } from "@/lib/utils";
 import about from "@/data/about.json";
 
 const SphereWithBoard: React.FC = () => {
@@ -28,7 +29,7 @@ const SphereWithBoard: React.FC = () => {
                 {/* Circular Profile Photo */}
                 <div className="mb-6">
                   <img
-                    src="/aakash.jpg"
+                    src={getAssetPath("aakash.jpg")}
                     alt={about.name}
                     className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-palette-teal/20 shadow-lg"
                   />

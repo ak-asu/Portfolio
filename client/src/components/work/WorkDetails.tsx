@@ -29,6 +29,22 @@ const WorkDetails: React.FC<WorkDetailsProps> = ({
   const [activeTab, setActiveTab] = useState<
     "description" | "technologies" | "links"
   >("description");
+  const [previousTab, setPreviousTab] = useState<
+    "description" | "technologies" | "links"
+  >("description");
+
+  const tabs = ["description", "technologies", "links"] as const;
+
+  const getTabDirection = (current: string, previous: string) => {
+    const currentIndex = tabs.indexOf(current as (typeof tabs)[number]);
+    const previousIndex = tabs.indexOf(previous as (typeof tabs)[number]);
+    return currentIndex > previousIndex ? 1 : -1; // 1 for right, -1 for left
+  };
+
+  const handleTabChange = (newTab: typeof activeTab) => {
+    setPreviousTab(activeTab);
+    setActiveTab(newTab);
+  };
 
   return (
     <motion.div
@@ -144,7 +160,7 @@ const WorkDetails: React.FC<WorkDetailsProps> = ({
                 ? "bg-palette-teal/10 text-palette-teal border-b-2 border-palette-teal"
                 : "text-muted-foreground hover:text-foreground"
             }`}
-            onClick={() => setActiveTab(tab as typeof activeTab)}
+            onClick={() => handleTabChange(tab as typeof activeTab)}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
@@ -157,9 +173,16 @@ const WorkDetails: React.FC<WorkDetailsProps> = ({
           {activeTab === "description" && (
             <motion.div
               key="description"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              initial={{
+                opacity: 0,
+                x: getTabDirection("description", previousTab) * 20,
+              }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{
+                opacity: 0,
+                x: getTabDirection("description", previousTab) * -20,
+              }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
             >
               <h4 className="text-lg font-semibold text-foreground mb-3">
                 Key Responsibilities & Achievements
@@ -183,9 +206,16 @@ const WorkDetails: React.FC<WorkDetailsProps> = ({
           {activeTab === "technologies" && (
             <motion.div
               key="technologies"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              initial={{
+                opacity: 0,
+                x: getTabDirection("technologies", previousTab) * 20,
+              }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{
+                opacity: 0,
+                x: getTabDirection("technologies", previousTab) * -20,
+              }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
             >
               <h4 className="text-lg font-semibold text-foreground mb-3">
                 Technologies & Tools
@@ -213,9 +243,16 @@ const WorkDetails: React.FC<WorkDetailsProps> = ({
           {activeTab === "links" && (
             <motion.div
               key="links"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              initial={{
+                opacity: 0,
+                x: getTabDirection("links", previousTab) * 20,
+              }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{
+                opacity: 0,
+                x: getTabDirection("links", previousTab) * -20,
+              }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
             >
               <h4 className="text-lg font-semibold text-foreground mb-3">
                 Related Links

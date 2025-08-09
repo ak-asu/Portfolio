@@ -50,12 +50,9 @@ jobs:
         run: npm ci
 
       - name: Build website
-        run: npm run build
+        run: npm run build:github
         env:
           NODE_ENV: production
-          # Environment variables for Vite build
-          BASE_URL: "/${{ github.event.repository.name }}"
-          VITE_PUBLIC_URL: "/${{ github.event.repository.name }}"
 
       - name: Verify build output
         run: |

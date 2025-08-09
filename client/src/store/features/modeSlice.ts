@@ -12,7 +12,7 @@ const initialState: ModeState = {
   isTechnicalMode: false,
   animationLevel: AnimationLevel.Medium,
   themeMode: ThemeMode.System,
-  soundEnabled: false,
+  soundEnabled: true,
 };
 
 const modeSlice = createSlice({

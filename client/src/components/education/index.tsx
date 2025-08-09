@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { getAssetPath } from "@/lib/utils";
 import eduData from "@/data/education.json";
 
 const Education = () => {
@@ -17,10 +18,18 @@ const Education = () => {
   // Generate content from education data
   const frontTitle = `${eduData[0].degree} in ${eduData[0].field}`;
   const frontContent = `${eduData[0].institution}\n${eduData[0].startDate} - ${eduData[0].endDate}\nGPA: ${eduData[0].gpa}\n\nSubjects:\n${eduData[0].subjects.map((subject) => `• ${subject.name} (${subject.grade})`).join("\n")}`;
-  const frontImage = eduData[0].image;
+  const frontImage = getAssetPath(
+    eduData[0].image.startsWith("/")
+      ? eduData[0].image.slice(1)
+      : eduData[0].image,
+  );
   const backTitle = `${eduData[1].degree} in ${eduData[1].field}`;
   const backContent = `${eduData[1].institution}\n${eduData[1].startDate} - ${eduData[1].endDate}\nGPA: ${eduData[1].gpa}\n\nSubjects:\n${eduData[1].subjects.map((subject) => `• ${subject.name} (${subject.grade})`).join("\n")}`;
-  const backImage = eduData[1].image;
+  const backImage = getAssetPath(
+    eduData[1].image.startsWith("/")
+      ? eduData[1].image.slice(1)
+      : eduData[1].image,
+  );
 
   // Handle drag start
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
