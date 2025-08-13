@@ -6,12 +6,19 @@ import type { RootState } from "@/store/store";
 import { audioManager } from "@/lib/audio";
 import { getSimulatedResponse, Message } from "./utils";
 import { isApiKeySet, setGeminiApiKey, sendMessageToGemini } from "@/lib/genai";
+import {
+  sendMessageToLLM,
+  isWebGPUSupported,
+  ensureLocalLLMReady,
+  probeWebGPU,
+} from "@/lib/webllm";
+import { useToast } from "@/hooks/use-toast";
 import ChatHeader from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import ChatToggleButton from "./ChatToggleButton";
 import TypingIndicator from "./TypingIndicator";
-import ApiKeyDialog from "./ApiKeyDialog";
+import GenaiDialog from "./GenaiDialog";
 
 const initialMessages: Message[] = [
   {
@@ -31,14 +38,60 @@ export const ChatWindow: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
   const [aiEnabled, setAiEnabled] = useState(false);
+  const [provider, setProvider] = useState<"gemini" | "local" | "none">("none");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { soundEnabled } = useSelector((state: RootState) => state.mode);
+  const { toast } = useToast();
 
   // Check if API key is set on component mount
   useEffect(() => {
-    setAiEnabled(isApiKeySet());
+    const keySet = isApiKeySet();
+    setAiEnabled(keySet || isWebGPUSupported());
+    setProvider(keySet ? "gemini" : isWebGPUSupported() ? "local" : "none");
+    // Auto-attempt local LLM load if WebGPU seems available and no Gemini key
+    (async () => {
+      if (!keySet && isWebGPUSupported()) {
+        const canUse = await probeWebGPU();
+        if (!canUse) {
+          toast({
+            title: "WebGPU Not Available",
+            description:
+              "WebGPU is detected but no adapter is available. Enable GPU acceleration in browser settings and restart your browser.",
+            variant: "destructive",
+          });
+          return;
+        }
+        toast({
+          title: "Preparing Local AI",
+          description:
+            "Downloading and initializing the local model. This may take a few minutes on first load.",
+        });
+        const ok = await ensureLocalLLMReady(undefined);
+        if (ok) {
+          setAiEnabled(true);
+          setProvider("local");
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: generateUniqueId(),
+              content:
+                "Local AI ready. Running a model in your browser with WebGPU.",
+              sender: "bot",
+              timestamp: new Date(),
+            },
+          ]);
+        } else {
+          toast({
+            title: "Local AI Not Ready",
+            description:
+              "Model did not load. Enable GPU acceleration, ensure a compatible browser, or use Gemini.",
+            variant: "destructive",
+          });
+        }
+      }
+    })();
   }, []);
 
   // Scroll to bottom when messages change
@@ -81,25 +134,38 @@ export const ChatWindow: React.FC = () => {
 
   const handleToggleAI = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!aiEnabled) {
-      setShowApiKeyDialog(true);
-    }
+    setShowApiKeyDialog(true);
   };
 
   const handleApiKeySubmit = (apiKey: string) => {
     setGeminiApiKey(apiKey);
     setAiEnabled(true);
+    setProvider("gemini");
     setShowApiKeyDialog(false);
 
     // Add confirmation message
     const confirmationMessage: Message = {
       id: generateUniqueId(),
-      content:
-        "✅ API key set! I'm now powered by Gemini AI and can provide more intelligent responses about Aakash's portfolio. Ask me anything!",
+      content: "API key set. Using Gemini for AI responses.",
       sender: "bot",
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, confirmationMessage]);
+  };
+
+  const handleUseLocal = async () => {
+    const ok = await ensureLocalLLMReady();
+    if (ok) {
+      setAiEnabled(true);
+      setProvider("local");
+      const confirmationMessage: Message = {
+        id: generateUniqueId(),
+        content: "Local AI ready. Running a model in your browser with WebGPU.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, confirmationMessage]);
+    }
   };
 
   const handleSendMessage = async () => {
@@ -124,9 +190,19 @@ export const ChatWindow: React.FC = () => {
     try {
       let botResponse: Message;
 
-      if (aiEnabled) {
-        // Use Gemini AI
+      if (aiEnabled && provider === "gemini") {
         const response = await sendMessageToGemini(userMessageText);
+        botResponse = {
+          id: generateUniqueId(),
+          content: response.success
+            ? response.content
+            : `⚠️ ${response.content}`,
+          sender: "bot",
+          timestamp: new Date(),
+        };
+      } else if (aiEnabled && provider === "local") {
+        // Prefer local when enabled and no Gemini key provided
+        const response = await sendMessageToLLM(userMessageText);
         botResponse = {
           id: generateUniqueId(),
           content: response.success
@@ -170,9 +246,10 @@ export const ChatWindow: React.FC = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      <ApiKeyDialog
+      <GenaiDialog
         isOpen={showApiKeyDialog}
-        onSubmit={handleApiKeySubmit}
+        onSubmitApiKey={handleApiKeySubmit}
+        onUseLocal={handleUseLocal}
         onClose={() => setShowApiKeyDialog(false)}
       />
       <AnimatePresence>
@@ -192,6 +269,7 @@ export const ChatWindow: React.FC = () => {
               isTyping={isTyping}
               isMinimized={isMinimized}
               aiEnabled={aiEnabled}
+              provider={provider}
               minimizeChat={minimizeChat}
               closeChat={toggleChat}
               onToggleAI={handleToggleAI}

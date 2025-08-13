@@ -7,6 +7,8 @@ interface ChatHeaderProps {
   isTyping: boolean;
   isMinimized: boolean;
   aiEnabled: boolean;
+  // display which provider powers AI
+  provider?: "gemini" | "local" | "none";
   minimizeChat: (e: React.MouseEvent) => void;
   closeChat: (e: React.MouseEvent) => void;
   onToggleAI: (e: React.MouseEvent) => void;
@@ -16,6 +18,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   isTyping,
   isMinimized,
   aiEnabled,
+  provider = "none",
   minimizeChat,
   closeChat,
   onToggleAI,
@@ -33,9 +36,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         <h3 className="font-medium text-sm">
           {isTyping ? "Bot is typing..." : "Portfolio Assistant"}
         </h3>
-        {aiEnabled && (
+        {aiEnabled && (provider === "gemini" || provider === "local") && (
           <div className="text-xs bg-palette-teal-DEFAULT dark:bg-palette-teal-dark text-white px-1.5 py-0.5 rounded-full">
-            AI
+            {provider === "gemini" ? "Gemini" : "Local"}
           </div>
         )}
       </div>
@@ -51,7 +54,13 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
                 onToggleAI(e);
               }}
               aria-label={aiEnabled ? "AI enabled" : "Enable AI"}
-              title={aiEnabled ? "AI powered by Gemini" : "Click to enable AI"}
+              title={
+                aiEnabled
+                  ? provider === "gemini"
+                    ? "AI powered by Gemini"
+                    : "AI powered by Local LLM"
+                  : "Click to enable AI"
+              }
             >
               <Brain className="h-4 w-4" />
             </Button>

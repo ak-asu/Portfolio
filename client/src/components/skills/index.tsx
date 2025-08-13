@@ -55,13 +55,6 @@ const Skills: React.FC = () => {
     });
   }, [selectedCategory]);
 
-  // Debug count of filtered skills
-  useEffect(() => {
-    console.log(
-      `Filtered skills count: ${filteredSkills.length} for category: ${selectedCategory || "ALL"}`,
-    );
-  }, [filteredSkills, selectedCategory]);
-
   // Create a wrapper ref to measure the actual content width
   const contentRef = useRef<HTMLDivElement>(null);
   // const animationProgressRef = useRef(0);
@@ -88,9 +81,6 @@ const Skills: React.FC = () => {
           const shouldScroll =
             singleSetWidth > containerRef.current.offsetWidth;
           setNeedsScrolling(shouldScroll);
-          console.log(
-            `Content width: ${singleSetWidth}, Container width: ${containerRef.current.offsetWidth}, Needs scrolling: ${shouldScroll}`,
-          );
         }
       }, 50);
     });
@@ -148,10 +138,6 @@ const Skills: React.FC = () => {
         remainingDuration = duration;
       }
     }
-
-    console.log(
-      `Speed: ${pixelsPerSecond.toFixed(1)} px/s, Duration: ${duration.toFixed(1)}s, Content width: ${contentWidth}px`,
-    );
 
     // Rest of animation code remains the same
     controls
