@@ -69,7 +69,7 @@ export const GenaiDialog: React.FC<GenaiDialogProps> = ({
         onClose();
       } else {
         setLocalStatus("error");
-        setLocalMessage("Failed to prepare the local AI model.");
+        setLocalMessage("Failed to prepare the local AI model. Check your network connection, browser cache, and available disk space.");
       }
     } catch {
       setLocalStatus("error");

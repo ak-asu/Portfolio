@@ -163,5 +163,48 @@
     ],
     "links": [],
     "type": "volunteer"
+  },
+  {
+    "position": "Software Engineer Intern",
+    "company": "Opportunity Hack",
+    "location": "United States",
+    "startDate": "2025-06-01",
+    "endDate": "2025-07-31",
+    "description": [
+      "Led a team to achieve 3rd place in the Summer Volunteer Internship Hackathon 2025 out of a total of 18 participating teams, developing an innovative drive management solution with a collaborative chat interface and agentic AI integration.",
+      "Designed the complete system architecture and technical workflow, including frontend, backend, AI, and database layers.",
+      "Implemented 80% of the codebase, ensuring scalability, maintainability, and high performance across the application.",
+      "Integrated advanced technologies including TypeScript, React, Python, LangChain, Google Gemini, and Supabase to deliver AI-driven functionalities and real-time collaboration features.",
+      "Engineered drive integration for seamless file management and designed a robust database schema for efficient data handling.",
+      "Organized and led weekly team meetings, assigning tasks, tracking progress, and ensuring alignment with project goals.",
+      "Established GitHub workflows with structured branching strategies, PR reviews, coding guidelines, and version control best practices.",
+      "Acted as a mentor and technical guide, helping teammates solve complex issues, optimize code, and adopt best development practices."
+    ],
+    "technologies": [
+      "Chromadb",
+      "Fastapi",
+      "Gemini",
+      "Langchain",
+      "Nextjs",
+      "Pydantic",
+      "Python",
+      "React",
+      "Supabase",
+      "Tailwindcss",
+      "Typescript"
+    ],
+    "links": [
+      {
+        "title": "GitHub Repository",
+        "url": "https://github.com/2025-Arizona-Opportunity-Hack-Summer/GenZents-HeritageSquareFounda",
+        "type": "github"
+      },
+      {
+        "title": "Demo",
+        "url": "https://devpost.com/software/archyx-ai?_gl=1*ipuhrf*_gcl_au*MzMyNDQwOTkyLjE3NTUxMTIwNjE.*_ga*NTk3NDAwNDE1LjE3MzkyMzYxNjA.*_ga_0YHJK3Y10M*czE3NTUxMTIwNjEkbzk3JGcxJHQxNzU1MTEzMDQxJGoyOSRsMCRoMA..",
+        "type": "other"
+      }
+    ],
+    "type": "internship"
   }
 ]

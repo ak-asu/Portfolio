@@ -66,6 +66,12 @@
     "category": "Frameworks"
   },
   {
+    "name": "Langchain",
+    "level": "Beginner",
+    "icon": "/images/skills/langchain.svg",
+    "category": "Frameworks"
+  },
+  {
     "name": "Node.JS",
     "level": "Intermediate",
     "icon": "/images/skills/nodejs.svg",
@@ -93,6 +99,12 @@
     "name": "PostgreSQL",
     "level": "Beginner",
     "icon": "/images/skills/postgresql.svg",
+    "category": "Databases"
+  },
+  {
+    "name": "Supabase",
+    "level": "Beginner",
+    "icon": "/images/skills/supabase.svg",
     "category": "Databases"
   },
   {

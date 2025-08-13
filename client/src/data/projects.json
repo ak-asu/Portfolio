@@ -1,46 +1,94 @@
 [
   {
+    "id": "project21",
+    "name": "ResumeBotX",
+    "shortDescription": "An AI-powered resume assistant",
+    "description": "Agentic AI-powered resume building, job tracking, and smart career planning. Scrape jobs, identify skill gaps, enrich resumes, and get personalized learning plans—all seamlessly integrated for success.",
+    "technologies": ["Python", "FastAPI", "React", "Gemini API", "Autogen", "Next.js", "Typescript"],
+    "duration": "2 months",
+    "url": "https://github.com/ak-asu/ResumeBotX",
+    "media": "https://www.youtube.com/watch?v=Nwpbhr7jecU",
+    "type": "personal"
+  },
+  {
+    "id": "project18",
+    "name": "Archyx AI",
+    "shortDescription": "A chat interface for summarizing and managing Google drive files",
+    "description": "A web application that utilizes the Gemini API, Vector embeddings, Langchain to summarize and manage Google Drive files efficiently using an agentic AI approach.",
+    "technologies": ["React", "Typescript", "Tailwind CSS", "Python", "Gemini API", "Langchain", "FastAPI", "Supabase", "Chromadb", "Pydantic", "Next.js"],
+    "duration": "2 months",
+    "url": "https://gen-zents-heritage-square-foundatio-tau.vercel.app/",
+    "media": "https://www.youtube.com/watch?v=8onJQ87hVlE",
+    "type": "collaborative"
+  },
+  {
+    "id": "project10",
+    "name": "Local Image Finder (LIF)",
+    "shortDescription": "Cross-platform desktop image search application",
+    "description": "A privacy-first, cross-platform desktop image search application that performs on-device semantic search using natural language or image queries to organize and retrieve local images efficiently.",
+    "technologies": ["Python", "Flask", "Electron.js", "Chromadb", "React", "Heroui"],
+    "duration": "2 months",
+    "url": "https://github.com/ak-asu/Local-Image-Finder",
+    "media": "https://www.linkedin.com/posts/quy-hoang-nguyen_semanticsearch-ai-productivity-activity-7323267080001069056-cbhr",
+    "type": "collaborative"
+  },
+  {
+    "id": "project17",
+    "name": "ResumeClarity",
+    "shortDescription": "A tool for improving resume ats scores",
+    "description": "Developed a Chrome extension with Courtney Ngai to help students optimize resumes for ATS systems. The extension automatically analyzes the job content and provides suggestions for improvement.",
+    "technologies": ["React", "Typescript", "Tailwind CSS", "Python", "Gemini API", "Chrome extension API"],
+    "duration": "1 month",
+    "url": "https://chromewebstore.google.com/detail/resume-clarity/alfjajgmkbibmhlklbjhjcnnlnophhnb?hl=en",
+    "media": "https://www.linkedin.com/posts/iamcourtneyngai_ive-been-quietly-building-resumeclarity-activity-7350532110803251200-ypcL",
+    "type": "collaborative"
+  },
+  {
+    "id": "project9",
+    "name": "BookTrack",
+    "shortDescription": "AI-powered book recommendation web app",
+    "description": "An AI-powered book recommendation web app that personalizes suggestions based on user-defined prompts. The app delivers a rich discovery experience with enhanced metadata and visual presentation.",
+    "technologies": [
+      "Next.js",
+      "React",
+      "Typescript",
+      "Tailwind CSS",
+      "Perplexity API",
+      "Vercel"
+    ],
+    "duration": "2 months",
+    "url": "https://github.com/ak-asu/book-recommender",
+    "media": "https://www.linkedin.com/posts/jesus-aguilar-2657a8205_two-highlights-of-this-semester-a-few-weeks-activity-7326813641192751104-aIhQ",
+    "type": "collaborative"
+  },
+  {
+    "id": "project8",
+    "name": "dAIgrammatic",
+    "shortDescription": "Agentic AI powered application for creating diagrams",
+    "description": "Developed an agentic AI application that allows users to create diagrams by simply describing them in natural language. The app uses advanced natural language processing to interpret user input and generate corresponding visual diagrams.",
+    "technologies": [
+      "Python",
+      "Flask",
+      "React",
+      "Typescript",
+      "HTML",
+      "Tailwind CSS",
+      "Gemini API"
+    ],
+    "duration": "1 month",
+    "url": "https://devpost.com/software/daigrammatic?ref_content=my-projects-tab&ref_feature=my_projects",
+    "media": "",
+    "type": "collaborative"
+  },
+  {
     "id": "project1",
     "name": "Note summarizer",
     "shortDescription": "Web application for summarizing notes using AI",
     "description": "Created a web application that leverages AI to summarize lengthy notes into concise, easy-to-read formats. The app supports multiple languages and includes features for saving, sharing, and exporting summaries.",
-    "technologies": ["Streamlit", "Python"],
+    "technologies": ["Streamlit", "Python", "Gemini API"],
     "duration": "1 day",
     "url": "https://github.com/ak-asu/notesummarizer",
     "media": "https://www.youtube.com/watch?v=LCSOp7c1UOI",
-    "type": "personal"
-  },
-  {
-    "id": "project2",
-    "name": "Multiplayer Bluetooth Tic-Tac-Toe game",
-    "shortDescription": "Multiplayer Tic-Tac-Toe game over Bluetooth",
-    "description": "Led a team to create a Bluetooth-enabled Tic Tac Toe application using Android Jetpack Compose, exceeding requirements and achieving an exceptional score of 125/120. The app features a simple and intuitive UI, score tracking, and the ability to play multiple rounds.",
-    "technologies": ["Kotlin", "Jetpack Compose"],
-    "duration": "2 months",
-    "url": "https://github.com/ak-asu/Tic-Tac-Toe",
-    "media": "https://www.youtube.com/watch?v=HLWJYrPlGiY",
-    "type": "collaborative"
-  },
-  {
-    "id": "project3",
-    "name": "Context Monitor",
-    "shortDescription": "Heartbeat and respiration rate monitoring android app",
-    "description": "Created an Android app that monitors and displays the user's heartbeat and respiration rate in real-time. The app uses the device's camera and sensors to provide accurate readings and includes features for tracking health metrics over time.",
-    "technologies": ["Kotlin", "Jetpack"],
-    "duration": "15 days",
-    "url": "https://github.com/ak-asu/Context-Monitor",
-    "media": "https://www.youtube.com/watch?v=jxaa_TT-dZI",
-    "type": "personal"
-  },
-  {
-    "id": "project4",
-    "name": "Basic language parser",
-    "shortDescription": "Simple language parser for basic syntax",
-    "description": "Developed a basic language parser that can interpret and execute simple commands in a custom scripting language. The parser supports variable assignments, arithmetic operations, and conditional statements.",
-    "technologies": ["C++"],
-    "duration": "1 month",
-    "url": "https://github.com/ak-asu/basicparser",
-    "media": "",
     "type": "personal"
   },
   {
@@ -66,70 +114,24 @@
     "type": "personal"
   },
   {
-    "id": "project7",
-    "name": "Gesture Controlled Hologram Pong",
-    "shortDescription": "Pong game with 3D hologram display and gesture controls",
-    "description": "Created an innovative pong game using Unity, with OpenCV Python code to detect player hand gestures for control. Formed a 3D hologram display using an upside-down truncated acrylic square prism placed on an LED screen, creating an immersive gaming experience.",
-    "technologies": ["Unity", "Python", "OpenCV", "C#"],
-    "duration": "2 months",
-    "url": "",
-    "media": "",
+    "id": "project3",
+    "name": "Context Monitor",
+    "shortDescription": "Heartbeat and respiration rate monitoring android app",
+    "description": "Created an Android app that monitors and displays the user's heartbeat and respiration rate in real-time. The app uses the device's camera and sensors to provide accurate readings and includes features for tracking health metrics over time.",
+    "technologies": ["Kotlin", "Jetpack Compose"],
+    "duration": "15 days",
+    "url": "https://github.com/ak-asu/Context-Monitor",
+    "media": "https://www.youtube.com/watch?v=jxaa_TT-dZI",
     "type": "personal"
   },
   {
-    "id": "project8",
-    "name": "dAIgrammatic",
-    "shortDescription": "Agentic AI powered application for creating diagrams",
-    "description": "Developed an agentic AI application that allows users to create diagrams by simply describing them in natural language. The app uses advanced natural language processing to interpret user input and generate corresponding visual diagrams.",
-    "technologies": [
-      "Python",
-      "Flask",
-      "React",
-      "Typescript",
-      "Tailwind CSS",
-      "Gemini API"
-    ],
-    "duration": "1 month",
-    "url": "https://devpost.com/software/daigrammatic?ref_content=my-projects-tab&ref_feature=my_projects",
-    "media": "",
-    "type": "collaborative"
-  },
-  {
-    "id": "project9",
-    "name": "BookTrack",
-    "shortDescription": "AI-powered book recommendation web app",
-    "description": "An AI-powered book recommendation web app that personalizes suggestions based on user-defined prompts. The app delivers a rich discovery experience with enhanced metadata and visual presentation.",
-    "technologies": [
-      "Next.js",
-      "React",
-      "Typescript",
-      "Tailwind CSS",
-      "Perplexity API"
-    ],
-    "duration": "2 months",
-    "url": "https://www.linkedin.com/posts/jesus-aguilar-2657a8205_two-highlights-of-this-semester-a-few-weeks-activity-7326813641192751104-aIhQ",
-    "media": "",
-    "type": "collaborative"
-  },
-  {
-    "id": "project10",
-    "name": "Local Image Finder (LIF)",
-    "shortDescription": "Cross-platform desktop image search application",
-    "description": "A privacy-first, cross-platform desktop image search application that performs on-device semantic search using natural language or image queries to organize and retrieve local images efficiently.",
-    "technologies": ["Python", "Flask", "Electron.js", "Chromadb"],
-    "duration": "2 months",
-    "url": "https://www.linkedin.com/posts/quy-hoang-nguyen_semanticsearch-ai-productivity-activity-7323267080001069056-cbhr",
-    "media": "",
-    "type": "collaborative"
-  },
-  {
-    "id": "project11",
-    "name": "Web development course",
-    "shortDescription": "Created a web development course for beginners using Github actions",
-    "description": "Developed a comprehensive web development course for beginners, focusing on key concepts and practical skills using GitHub actions.",
-    "technologies": ["GitHub", "Markdown"],
-    "duration": "1 month",
-    "url": "https://github.com/ak-asu/web-dev-skill",
+    "id": "project14",
+    "name": "SEO analyzer",
+    "shortDescription": "Web application for analyzing SEO performance",
+    "description": "Developed a web application that analyzes the SEO performance of websites, providing insights and recommendations for improvement. The app includes features for keyword analysis, backlink tracking, and on-page optimization.",
+    "technologies": ["React", "Typescript", "Tailwind CSS"],
+    "duration": "1 week",
+    "url": "https://seoanalyzerpro.netlify.app/",
     "media": "",
     "type": "personal"
   },
@@ -145,6 +147,17 @@
     "type": "personal"
   },
   {
+    "id": "project16",
+    "name": "Utilix",
+    "shortDescription": "A collection of utility tools",
+    "description": "Developed a web application that provides a suite of general purpose utility tools for basic everyday tasks.",
+    "technologies": ["React", "Typescript", "Tailwind CSS"],
+    "duration": "1 week",
+    "url": "https://utilixpro.vercel.app/",
+    "media": "",
+    "type": "personal"
+  },
+  {
     "id": "project13",
     "name": "Cryptogak",
     "shortDescription": "Cross-platform command-line utility for string encryption",
@@ -156,13 +169,35 @@
     "type": "personal"
   },
   {
-    "id": "project14",
-    "name": "SEO analyzer",
-    "shortDescription": "Web application for analyzing SEO performance",
-    "description": "Developed a web application that analyzes the SEO performance of websites, providing insights and recommendations for improvement. The app includes features for keyword analysis, backlink tracking, and on-page optimization.",
-    "technologies": ["React", "Typescript", "Tailwind CSS"],
-    "duration": "1 week",
-    "url": "https://seoanalyzerpro.netlify.app/",
+    "id": "project4",
+    "name": "Basic language parser",
+    "shortDescription": "Simple language parser for basic syntax",
+    "description": "Developed a basic language parser that can interpret and execute simple commands in a custom scripting language. The parser supports variable assignments, arithmetic operations, and conditional statements.",
+    "technologies": ["C++"],
+    "duration": "1 month",
+    "url": "https://github.com/ak-asu/basicparser",
+    "media": "",
+    "type": "personal"
+  },
+  {
+    "id": "project11",
+    "name": "Web development course",
+    "shortDescription": "Created a web development course for beginners using Github actions",
+    "description": "Developed a comprehensive web development course for beginners, focusing on key concepts and practical skills using GitHub actions.",
+    "technologies": ["Markdown", "Github Actions", "Github Workflows"],
+    "duration": "1 month",
+    "url": "https://github.com/ak-asu/web-dev-skill",
+    "media": "",
+    "type": "personal"
+  },
+  {
+    "id": "project7",
+    "name": "Gesture Controlled Hologram Pong",
+    "shortDescription": "Pong game with 3D hologram display and gesture controls",
+    "description": "Created an innovative pong game using Unity, with OpenCV Python code to detect player hand gestures for control. Formed a 3D hologram display using an upside-down truncated acrylic square prism placed on an LED screen, creating an immersive gaming experience.",
+    "technologies": ["Unity", "Python", "OpenCV", "C#"],
+    "duration": "2 months",
+    "url": "",
     "media": "",
     "type": "personal"
   },
@@ -175,6 +210,39 @@
     "duration": "2 months",
     "url": "https://play.google.com/store/apps/dev?id=7580092972636663435",
     "media": "https://www.youtube.com/watch?v=dTi1PRMUCjQ",
+    "type": "personal"
+  },
+  {
+    "id": "project20",
+    "name": "Arduino projects",
+    "shortDescription": "A collection of projects built with Arduino",
+    "description": "Developed a series of interactive projects using Arduino, showcasing its capabilities for building hardware-based applications.",
+    "technologies": ["Arduino", "C++", "Electronics"],
+    "duration": "2 weeks",
+    "url": "https://github.com/ak-asu/Arduino",
+    "media": "",
+    "type": "personal"
+  },
+  {
+    "id": "project2",
+    "name": "Multiplayer Bluetooth Tic-Tac-Toe game",
+    "shortDescription": "Multiplayer Tic-Tac-Toe game over Bluetooth",
+    "description": "Led a team to create a Bluetooth-enabled Tic Tac Toe application using Android Jetpack Compose, exceeding requirements and achieving an exceptional score of 125/120. The app features a simple and intuitive UI, score tracking, and the ability to play multiple rounds.",
+    "technologies": ["Kotlin", "Jetpack Compose"],
+    "duration": "2 months",
+    "url": "https://github.com/ak-asu/Tic-Tac-Toe",
+    "media": "https://www.youtube.com/watch?v=HLWJYrPlGiY",
+    "type": "collaborative"
+  },
+  {
+    "id": "project19",
+    "name": "Aptitude",
+    "shortDescription": "An interactive mathematical quiz game",
+    "description": "Aptitude is an interactive mathematical quiz game built as a Confluence space page. The app creates an engaging, time-pressured environment for users to test and improve their arithmetic skills.",
+    "technologies": ["Javascript", "@forge/react", "React"],
+    "duration": "1 day",
+    "url": "https://github.com/ak-asu/SmallProjects/tree/main/forgequest",
+    "media": "https://devpost.com/software/aptitude-slb37n",
     "type": "personal"
   }
 ]
