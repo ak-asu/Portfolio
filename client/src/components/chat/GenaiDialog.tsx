@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { X, Key, AlertTriangle, Cpu, Zap } from "lucide-react";
-import { ensureLocalLLMReady, isWebGPUSupported } from "@/lib/webllm";
+import { isWebGPUSupported } from "@/lib/webllm";
+import { toggleLocal, getProvider } from "@/lib/ai";
 
 interface GenaiDialogProps {
   isOpen: boolean;
   onSubmitApiKey: (apiKey: string) => void;
-  onUseLocal: () => void;
+  onUseLocal: (statusMessage: string) => void; // receives status text after toggle
   onClose: () => void;
 }
 
@@ -52,24 +53,31 @@ export const GenaiDialog: React.FC<GenaiDialogProps> = ({
       return;
     }
     try {
+      if (localStatus === "ready") {
+        // Disable
+        const resp = await toggleLocal();
+        setLocalStatus("idle");
+        setLocalMessage("Local AI disabled.");
+        onUseLocal(resp.content || "Local AI disabled.");
+        return;
+      }
       setLocalStatus("checking");
-      setLocalMessage(
-        "Preparing local AI model (this may take a while on first run)...",
-      );
-      setProgress(0);
-      // Patch ensureLocalLLMReady to accept a progress callback
-      const ok = await ensureLocalLLMReady(undefined, (p: number) =>
-        setProgress(p),
-      );
+      setLocalMessage("Loading local AI model (may take many minutes first time)...");
       setProgress(null);
-      if (ok) {
+      const resp = await toggleLocal();
+      if (resp.success && getProvider() === "local") {
         setLocalStatus("ready");
-        setLocalMessage("Local AI is ready to use.");
-        onUseLocal();
+        setLocalMessage("Local AI is ready. Click again to disable.");
+        onUseLocal(resp.content);
         onClose();
-      } else {
+      } else if (!resp.success) {
         setLocalStatus("error");
-        setLocalMessage("Failed to prepare the local AI model. Check your network connection, browser cache, and available disk space.");
+        setLocalMessage(resp.content);
+      } else {
+        // Fallback case
+        setLocalStatus("idle");
+        setLocalMessage("Local AI disabled.");
+        onUseLocal(resp.content);
       }
     } catch {
       setLocalStatus("error");
@@ -176,11 +184,9 @@ export const GenaiDialog: React.FC<GenaiDialogProps> = ({
             className="w-full px-4 py-2 border border-border rounded-md hover:bg-muted transition-colors disabled:opacity-60"
           >
             {localStatus === "checking"
-              ? progress !== null
-                ? `Loading model... ${Math.round(progress * 100)}%`
-                : "Checking & preparing..."
+              ? "Preparing..."
               : localStatus === "ready"
-                ? "Local AI ready"
+                ? "Disable local AI"
                 : localStatus === "unsupported"
                   ? "WebGPU not available"
                   : "Enable local AI"}

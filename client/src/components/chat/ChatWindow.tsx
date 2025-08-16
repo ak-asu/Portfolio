@@ -5,14 +5,8 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { audioManager } from "@/lib/audio";
 import { getSimulatedResponse, Message } from "./utils";
-import { isApiKeySet, setGeminiApiKey, sendMessageToGemini } from "@/lib/genai";
-import {
-  sendMessageToLLM,
-  isWebGPUSupported,
-  ensureLocalLLMReady,
-  probeWebGPU,
-} from "@/lib/webllm";
-import { useToast } from "@/hooks/use-toast";
+import { clearLocalLLMCache } from "@/lib/webllm"; // only for unload cleanup
+import { enableGemini, getProvider, sendChat, AIProvider, getHistory } from "@/lib/ai";
 import ChatHeader from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
@@ -24,7 +18,7 @@ const initialMessages: Message[] = [
   {
     id: "1",
     content:
-      "Hello! I'm Aakash's portfolio assistant. I can answer questions about his skills, projects, education, and experience. To enable AI-powered responses, please provide your Gemini API key when prompted. Without it, I'll use basic pre-defined responses.",
+      "Hi! I'm Aakash's portfolio assistant. Ask about skills, projects, education, or experience. Enable AI with a Gemini API key or load a local WebLLM. Local model load can slow this tab and responses, taking several minutes (even ~10) on the first download.",
     sender: "bot",
     timestamp: new Date(),
   },
@@ -38,60 +32,35 @@ export const ChatWindow: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
   const [aiEnabled, setAiEnabled] = useState(false);
-  const [provider, setProvider] = useState<"gemini" | "local" | "none">("none");
+  const [provider, setProvider] = useState<AIProvider>("none");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { soundEnabled } = useSelector((state: RootState) => state.mode);
-  const { toast } = useToast();
 
   // Check if API key is set on component mount
   useEffect(() => {
-    const keySet = isApiKeySet();
-    setAiEnabled(keySet || isWebGPUSupported());
-    setProvider(keySet ? "gemini" : isWebGPUSupported() ? "local" : "none");
-    // Auto-attempt local LLM load if WebGPU seems available and no Gemini key
-    (async () => {
-      if (!keySet && isWebGPUSupported()) {
-        const canUse = await probeWebGPU();
-        if (!canUse) {
-          toast({
-            title: "WebGPU Not Available",
-            description:
-              "WebGPU is detected but no adapter is available. Enable GPU acceleration in browser settings and restart your browser.",
-            variant: "destructive",
-          });
-          return;
-        }
-        toast({
-          title: "Preparing Local AI",
-          description:
-            "Downloading and initializing the local model. This may take a few minutes on first load.",
-        });
-        const ok = await ensureLocalLLMReady(undefined);
-        if (ok) {
-          setAiEnabled(true);
-          setProvider("local");
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: generateUniqueId(),
-              content:
-                "Local AI ready. Running a model in your browser with WebGPU.",
-              sender: "bot",
-              timestamp: new Date(),
-            },
-          ]);
-        } else {
-          toast({
-            title: "Local AI Not Ready",
-            description:
-              "Model did not load. Enable GPU acceleration, ensure a compatible browser, or use Gemini.",
-            variant: "destructive",
-          });
-        }
+    // Initialize from gateway state (history may exist if preserved in memory during hot reload)
+    const existingProvider = getProvider();
+    setProvider(existingProvider);
+    setAiEnabled(existingProvider === "gemini" || existingProvider === "local");
+    if (getHistory().length > 0) {
+      // append any prior history after initial message (avoid duplicating first message)
+      const prior = getHistory().map((h, idx) => ({
+        id: `rehydrated-${idx}`,
+        content: h.content,
+        sender: h.role,
+        timestamp: new Date(h.ts),
+      }));
+      if (prior.length) {
+        setMessages((prev) => [prev[0], ...prior.slice(1)]); // keep first existing message, replace rest
       }
-    })();
+    }
+    const handleUnload = () => {
+      clearLocalLLMCache();
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
 
   // Scroll to bottom when messages change
@@ -137,39 +106,40 @@ export const ChatWindow: React.FC = () => {
     setShowApiKeyDialog(true);
   };
 
-  const handleApiKeySubmit = (apiKey: string) => {
-    setGeminiApiKey(apiKey);
-    setAiEnabled(true);
-    setProvider("gemini");
+  const handleApiKeySubmit = async (apiKey: string) => {
+    const resp = await enableGemini(apiKey);
+    setAiEnabled(resp.success);
+    setProvider(getProvider());
     setShowApiKeyDialog(false);
-
-    // Add confirmation message
     const confirmationMessage: Message = {
       id: generateUniqueId(),
-      content: "API key set. Using Gemini for AI responses.",
+      content: resp.content,
       sender: "bot",
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, confirmationMessage]);
   };
 
-  const handleUseLocal = async () => {
-    const ok = await ensureLocalLLMReady();
-    if (ok) {
-      setAiEnabled(true);
-      setProvider("local");
-      const confirmationMessage: Message = {
-        id: generateUniqueId(),
-        content: "Local AI ready. Running a model in your browser with WebGPU.",
-        sender: "bot",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, confirmationMessage]);
+  const handleLocalStatus = async (statusMessage: string) => {
+    // Provider already updated inside toggleLocal; just reflect state
+    const current = getProvider();
+    setProvider(current);
+    setAiEnabled(current === "gemini" || current === "local");
+    if (statusMessage) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: generateUniqueId(),
+          content: statusMessage,
+          sender: "bot",
+          timestamp: new Date(),
+        },
+      ]);
     }
   };
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isTyping) return; // block multiple concurrent sends
 
     if (soundEnabled) {
       audioManager.playSoundEffect("message");
@@ -190,19 +160,8 @@ export const ChatWindow: React.FC = () => {
     try {
       let botResponse: Message;
 
-      if (aiEnabled && provider === "gemini") {
-        const response = await sendMessageToGemini(userMessageText);
-        botResponse = {
-          id: generateUniqueId(),
-          content: response.success
-            ? response.content
-            : `⚠️ ${response.content}`,
-          sender: "bot",
-          timestamp: new Date(),
-        };
-      } else if (aiEnabled && provider === "local") {
-        // Prefer local when enabled and no Gemini key provided
-        const response = await sendMessageToLLM(userMessageText);
+  if (aiEnabled && (provider === "gemini" || provider === "local")) {
+        const response = await sendChat(userMessageText);
         botResponse = {
           id: generateUniqueId(),
           content: response.success
@@ -249,7 +208,7 @@ export const ChatWindow: React.FC = () => {
       <GenaiDialog
         isOpen={showApiKeyDialog}
         onSubmitApiKey={handleApiKeySubmit}
-        onUseLocal={handleUseLocal}
+        onUseLocal={handleLocalStatus}
         onClose={() => setShowApiKeyDialog(false)}
       />
       <AnimatePresence>
@@ -269,7 +228,7 @@ export const ChatWindow: React.FC = () => {
               isTyping={isTyping}
               isMinimized={isMinimized}
               aiEnabled={aiEnabled}
-              provider={provider}
+              provider={provider === "regex" ? "none" : provider}
               minimizeChat={minimizeChat}
               closeChat={toggleChat}
               onToggleAI={handleToggleAI}
@@ -294,6 +253,7 @@ export const ChatWindow: React.FC = () => {
                   setInputValue={setInputValue}
                   handleSendMessage={handleSendMessage}
                   inputRef={inputRef as React.RefObject<HTMLTextAreaElement>}
+                  isTyping={isTyping}
                 />
               </>
             )}

@@ -15,6 +15,7 @@ interface ChatInputProps {
   setInputValue: (value: string) => void;
   handleSendMessage: () => void;
   inputRef: RefObject<HTMLTextAreaElement>;
+  isTyping?: boolean;
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({
@@ -22,6 +23,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   setInputValue,
   handleSendMessage,
   inputRef,
+  isTyping = false,
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -51,7 +53,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               <Button
                 size="icon"
                 onClick={handleSendMessage}
-                disabled={!inputValue.trim()}
+                disabled={!inputValue.trim() || isTyping}
                 className={cn(
                   "h-10 w-10 rounded-full shrink-0 transition-colors",
                   "bg-palette-teal hover:bg-palette-teal/90",
@@ -61,7 +63,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                 <Send className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="top">Send message</TooltipContent>
+            <TooltipContent side="top">
+              {isTyping ? "Waiting for current response" : "Send message"}
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
