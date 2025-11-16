@@ -53,15 +53,31 @@ function ThemeWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+function AppLayout() {
+  return (
+    <>
+      <a
+        href="#main-content"
+        className="skip-link bg-primary text-primary-foreground rounded focus:outline-none focus:ring-2 focus:ring-ring"
+      >
+        Skip to main content
+      </a>
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <Navbar />
+        <main id="main-content">
+          <Home />
+        </main>
+      </div>
+    </>
+  );
+}
+
 function App() {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ThemeWrapper>
-          <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-            <Navbar />
-            <Home />
-          </div>
+          <AppLayout />
         </ThemeWrapper>
       </QueryClientProvider>
     </Provider>
