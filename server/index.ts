@@ -62,6 +62,42 @@ function startServer() {
   // Minimal middleware needed
   app.use(express.json());
 
+  // Security headers middleware
+  app.use((req, res, next) => {
+    // Prevent MIME type sniffing
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+
+    // Prevent clickjacking
+    res.setHeader('X-Frame-Options', 'DENY');
+
+    // Enable XSS protection
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+
+    // Referrer policy
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+    // Permissions policy
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+    // Content Security Policy
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; " +
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; " +
+      "style-src 'self' 'unsafe-inline'; " +
+      "img-src 'self' data: https:; " +
+      "font-src 'self' data:; " +
+      "connect-src 'self' https://generativelanguage.googleapis.com https://*.googleapis.com; " +
+      "media-src 'self' blob:; " +
+      "worker-src 'self' blob:; " +
+      "frame-ancestors 'none'; " +
+      "base-uri 'self'; " +
+      "form-action 'self'"
+    );
+
+    next();
+  });
+
   // Set environment explicitly
   app.set("env", NODE_ENV);
 
