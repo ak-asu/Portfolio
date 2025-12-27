@@ -55,100 +55,9 @@ export const GamesSection = () => {
 
       {/* Main Arcade Cabinet */}
       <div className="relative z-10 flex flex-col items-center max-w-2xl w-full">
-        {/* Arcade Header */}
-        <motion.div
-          className="iron-panel px-8 py-4 mb-6 flex items-center gap-4"
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Gamepad2
-            className="w-6 h-6 text-arc-blue"
-            style={{ filter: "drop-shadow(0 0 8px hsl(195 100% 50%))" }}
-          />
-          <h2 className="font-orbitron text-2xl md:text-3xl gold-text uppercase tracking-wider">
-            Games Arcade
-          </h2>
-          <div
-            className="w-2 h-2 rounded-full bg-arc-blue animate-pulse"
-            style={{ boxShadow: "0 0 10px hsl(195 100% 50%)" }}
-          />
-        </motion.div>
-
-        {/* Game Navigation */}
-        <motion.div
-          className="flex items-center gap-4 mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <motion.button
-            onClick={prevGame}
-            onMouseEnter={playHover}
-            className="iron-panel p-3 hover:bg-iron-red/50 transition-colors"
-            whileHover={{
-              scale: 1.1,
-              boxShadow: "0 0 20px hsl(195 100% 50% / 0.4)",
-            }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronLeft className="w-6 h-6 text-iron-gold" />
-          </motion.button>
-
-          <div className="iron-panel px-6 py-3 min-w-[200px] text-center">
-            <div
-              className="font-orbitron text-lg text-arc-blue uppercase tracking-wider"
-              style={{ textShadow: "0 0 10px hsl(195 100% 50%)" }}
-            >
-              {games[activeGameIndex].name}
-            </div>
-            <div className="text-xs text-muted-foreground mt-1">
-              {games[activeGameIndex].description}
-            </div>
-          </div>
-
-          <motion.button
-            onClick={nextGame}
-            onMouseEnter={playHover}
-            className="iron-panel p-3 hover:bg-iron-red/50 transition-colors"
-            whileHover={{
-              scale: 1.1,
-              boxShadow: "0 0 20px hsl(195 100% 50% / 0.4)",
-            }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronRight className="w-6 h-6 text-iron-gold" />
-          </motion.button>
-        </motion.div>
-
-        {/* Game Dots Indicator */}
-        <div className="flex gap-2 mb-6">
-          {games.map((game, index) => (
-            <motion.button
-              key={game.id}
-              onClick={() => {
-                playClick();
-                setActiveGameIndex(index);
-              }}
-              onMouseEnter={playHover}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === activeGameIndex
-                  ? "bg-arc-blue"
-                  : "bg-iron-gold/40 hover:bg-iron-gold"
-              }`}
-              style={
-                index === activeGameIndex
-                  ? { boxShadow: "0 0 10px hsl(195 100% 50%)" }
-                  : {}
-              }
-              whileHover={{ scale: 1.2 }}
-            />
-          ))}
-        </div>
-
         {/* Game Cabinet Frame */}
         <motion.div
-          className="relative w-full"
+          className="relative w-full mb-4"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
@@ -223,6 +132,51 @@ export const GamesSection = () => {
               />
             ))}
           </div>
+        </motion.div>
+        {/* Game Navigation */}
+        <motion.div
+          className="flex items-center gap-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <motion.button
+            onClick={prevGame}
+            onMouseEnter={playHover}
+            className="iron-panel p-3 hover:bg-iron-red/50 transition-colors"
+            whileHover={{
+              scale: 1.1,
+              boxShadow: "0 0 20px hsl(195 100% 50% / 0.4)",
+            }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <ChevronLeft className="w-6 h-6 text-iron-gold" />
+          </motion.button>
+
+          <div className="iron-panel px-6 py-3 min-w-[200px] text-center">
+            <div
+              className="font-orbitron text-lg text-arc-blue uppercase tracking-wider"
+              style={{ textShadow: "0 0 10px hsl(195 100% 50%)" }}
+            >
+              {games[activeGameIndex].name}
+            </div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {games[activeGameIndex].description}
+            </div>
+          </div>
+
+          <motion.button
+            onClick={nextGame}
+            onMouseEnter={playHover}
+            className="iron-panel p-3 hover:bg-iron-red/50 transition-colors"
+            whileHover={{
+              scale: 1.1,
+              boxShadow: "0 0 20px hsl(195 100% 50% / 0.4)",
+            }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <ChevronRight className="w-6 h-6 text-iron-gold" />
+          </motion.button>
         </motion.div>
       </div>
     </section>

@@ -89,13 +89,13 @@ export const HeroSection = () => {
         />
       </motion.div>
 
-      {/* Large "IRON MAN" Background Text */}
+      {/* Large "DEVELOPER" Background Text */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none"
         style={{ x: bgX, y: bgY }}
       >
         <h1 className="font-orbitron text-[15vw] font-black text-iron-gold/5 select-none tracking-wider">
-          IRON MAN
+          DEVELOPER
         </h1>
       </motion.div>
 
@@ -109,7 +109,7 @@ export const HeroSection = () => {
       >
         <motion.img
           src={heroImage}
-          alt="Iron Man Mark 42"
+          alt="Hero Portrait"
           className="max-h-[70vh] w-auto object-contain drop-shadow-2xl"
           animate={{ y: [0, -15, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -139,8 +139,8 @@ export const HeroSection = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
         >
-          I'm <span className="text-foreground font-semibold">Tony Stark</span>{" "}
-          AKA
+          I'm{" "}
+          <span className="text-foreground font-semibold">Aakash Khepar</span>
         </motion.p>
         <motion.p
           className="text-arc-blue text-2xl md:text-3xl font-rajdhani italic font-bold"
@@ -149,7 +149,7 @@ export const HeroSection = () => {
           transition={{ delay: 1.2 }}
           style={{ textShadow: "0 0 20px hsl(195 100% 50% / 0.5)" }}
         >
-          Iron Man
+          Full-Stack Developer
         </motion.p>
       </motion.div>
 
@@ -164,7 +164,7 @@ export const HeroSection = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
       >
-        {/* Identity Verified Badge */}
+        {/* ASU Student Badge */}
         <motion.div
           className="flex items-center gap-2 px-4 py-2 glass-panel rounded-full"
           initial={{ opacity: 0 }}
@@ -172,7 +172,7 @@ export const HeroSection = () => {
           transition={{ delay: 1.4 }}
         >
           <span className="text-iron-gold text-xs font-orbitron uppercase">
-            Identity Verified
+            ASU Graduate Student
           </span>
           <div className="w-5 h-5 rounded-full bg-arc-blue/20 border border-arc-blue flex items-center justify-center">
             <svg
@@ -213,10 +213,10 @@ export const HeroSection = () => {
           transition={{ delay: 1.8 }}
         >
           <p className="text-foreground text-xl md:text-2xl font-rajdhani">
-            Digital Designer
+            Software Engineer
           </p>
           <p className="text-iron-gold text-lg md:text-xl font-rajdhani">
-            & Illustrator
+            & AI/ML Enthusiast
           </p>
         </motion.div>
       </motion.div>

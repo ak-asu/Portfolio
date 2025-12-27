@@ -37,55 +37,55 @@ const getJarvisResponse = async (
 
   // Context-aware responses based on portfolio content
   if (lowerMessage.includes("skill") || lowerMessage.includes("tech")) {
-    return "Sir, I've analyzed the skill matrix. The primary proficiencies include React, TypeScript, and various modern web technologies. Shall I elaborate on any specific domain?";
+    return "I've analyzed the skill matrix. Primary proficiencies include Python, React, Django, and various modern web technologies. The expertise spans full-stack development with a focus on AI/ML applications. Shall I elaborate on any specific domain?";
   }
   if (lowerMessage.includes("project")) {
-    return "I've catalogued several notable projects in the database, sir. Each demonstrates a unique application of technical expertise. Would you like me to highlight a particular initiative?";
+    return "I've catalogued several notable projects including LocalScholar (Privacy-First AI Assistant), VisionForge (Deep Learning IDE), and NMTSA Education LMS. Each demonstrates unique technical expertise and innovation. Would you like me to highlight a particular project?";
   }
   if (lowerMessage.includes("experience") || lowerMessage.includes("work")) {
-    return "The professional timeline indicates substantial experience across multiple organizations. I can provide detailed analysis of any specific role upon request, sir.";
+    return "The professional timeline includes experience at Fractal as a Full-Stack Developer and Backend Developer, as well as the current Graduate Student Assistant role at ASU. I can provide detailed analysis of any specific role upon request.";
   }
   if (
     lowerMessage.includes("contact") ||
     lowerMessage.includes("hire") ||
     lowerMessage.includes("reach")
   ) {
-    return "Certainly, sir. The 'Let's Talk' interface is available in the navigation bar. Alternatively, I can facilitate a direct communication channel if you prefer.";
+    return "Certainly. The 'Let's Talk' interface is available in the navigation bar. You can reach out via the contact form or directly at akhepar@asu.edu. I can facilitate a direct communication channel if you prefer.";
   }
   if (
     lowerMessage.includes("hello") ||
     lowerMessage.includes("hi") ||
     lowerMessage.includes("hey")
   ) {
-    return "Good day, sir. I am JARVIS, your personal portfolio assistant. How may I assist you in exploring this digital domain?";
+    return "Hello! I'm your AI portfolio assistant. How may I assist you in exploring Aakash's professional journey and technical capabilities?";
   }
   if (
     lowerMessage.includes("who are you") ||
     lowerMessage.includes("what are you")
   ) {
-    return "I am JARVIS - Just A Rather Very Intelligent System. I serve as the AI interface for this portfolio, designed to assist visitors in navigating and understanding the professional capabilities on display.";
+    return "I'm an AI assistant designed to help you navigate this portfolio. I can provide information about Aakash's skills, projects, experience, education, and achievements. Feel free to ask me anything!";
   }
   if (lowerMessage.includes("game")) {
-    return "Ah, the recreational subroutines. We have Tic-Tac-Toe and Color Tap available for your entertainment, sir. Shall I navigate you to the Games section?";
+    return "The portfolio includes interactive games like Tic-Tac-Toe and Color Tap for entertainment. Shall I navigate you to the Games section?";
   }
   if (
     lowerMessage.includes("education") ||
     lowerMessage.includes("study") ||
     lowerMessage.includes("degree")
   ) {
-    return "The educational credentials are quite impressive, sir. I can provide a comprehensive overview of the academic achievements if you wish to proceed to that section.";
+    return "Educational credentials include a Master of Science in Computer Science from Arizona State University (2024-2026) and a Bachelor in Technology - Engineering Physics from IIT Roorkee (2017-2021). I can provide more details if you'd like.";
   }
   if (lowerMessage.includes("achievement")) {
-    return "The achievement vault contains several notable accomplishments. Shall I unlock the display for your perusal, sir?";
+    return "Notable achievements include 1st Place at HackASU 2025 (Claude Developer Tools Track), 2nd Place at Opportunity Hack 2025, SoDA LLM Workshop Winner, and JEE Advanced 2017 Rank 3006. Shall I reveal more accomplishments?";
   }
 
   // Default responses with some variety
   const defaultResponses = [
-    "Acknowledged, sir. I'm processing your inquiry. Is there a specific aspect of the portfolio you'd like me to analyze?",
-    "Interesting query, sir. While I compile the relevant data, perhaps you'd like to explore the Skills or Projects section?",
-    "I'm at your service, sir. Feel free to ask about skills, projects, experience, or any other aspect of this portfolio.",
-    "Processing, sir. My systems are fully operational and ready to assist with any portfolio-related inquiries.",
-    "Indeed, sir. The portfolio contains extensive information. How may I direct your attention today?",
+    "I'm processing your inquiry. Is there a specific aspect of the portfolio you'd like me to analyze?",
+    "Interesting question! While I compile the relevant data, perhaps you'd like to explore the Skills or Projects section?",
+    "I'm here to help! Feel free to ask about skills, projects, experience, education, or achievements.",
+    "Processing your request. My systems are ready to assist with any portfolio-related inquiries.",
+    "The portfolio contains extensive information about Aakash's work and expertise. How may I help you explore it today?",
   ];
 
   return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];

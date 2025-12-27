@@ -4,48 +4,36 @@ import { motion } from "framer-motion";
 import { useState, useRef } from "react";
 import * as THREE from "three";
 import { useAudioSystem } from "@/hooks/useAudioSystem";
+import workDataRaw from "@/data/work.json";
 
-const workData = [
-  {
-    id: 1,
-    role: "Senior Software Engineer",
-    company: "Stark Industries",
-    location: "New York, NY",
-    period: "2018 - Present",
-    highlights: [
-      "Led development of Jarvis AI integration",
-      "Optimized armor OS performance by 40%",
-      "Collaborated with Avengers on threat response systems",
-    ],
-    active: true,
-  },
-  {
-    id: 2,
-    role: "Software Developer",
-    company: "Hammer Tech",
-    location: "Los Angeles, CA",
-    period: "2015 - 2018",
-    highlights: [
-      "Developed core defense algorithms",
-      "Improved CI/CD pipeline efficiency by 60%",
-      "Mentored junior developers on best practices",
-    ],
-    active: false,
-  },
-  {
-    id: 3,
-    role: "Junior Engineer",
-    company: "Advanced Idea Mechanics",
-    location: "Boston, MA",
-    period: "2013 - 2015",
-    highlights: [
-      "Built automated testing frameworks",
-      "Contributed to neural network research",
-      "Received innovation award for UI improvements",
-    ],
-    active: false,
-  },
-];
+// Format date to readable period
+const formatPeriod = (startDate: string, endDate: string) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const startMonth = start.toLocaleString("en-US", { month: "short" });
+  const startYear = start.getFullYear();
+  const endMonth = end.toLocaleString("en-US", { month: "short" });
+  const endYear = end.getFullYear();
+
+  const isPresent = new Date(endDate) > new Date();
+  return `${startMonth} ${startYear} - ${isPresent ? "Present" : `${endMonth} ${endYear}`}`;
+};
+
+// Check if position is currently active
+const isCurrentlyActive = (endDate: string) => {
+  return new Date(endDate) > new Date();
+};
+
+// Transform work data to match component structure
+const workData = workDataRaw.map((work, index) => ({
+  id: index + 1,
+  role: work.position,
+  company: work.company,
+  location: work.location,
+  period: formatPeriod(work.startDate, work.endDate),
+  highlights: work.description,
+  active: isCurrentlyActive(work.endDate),
+}));
 
 // Projector ball component on the edges
 const ProjectorBall = ({
@@ -395,22 +383,6 @@ export const WorkSection = () => {
             "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 191, 255, 0.03) 2px, rgba(0, 191, 255, 0.03) 4px)",
         }}
       />
-
-      {/* Header */}
-      <motion.div
-        className="relative z-10 text-center pt-24 pb-4"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <div className="inline-block iron-panel px-8 py-4">
-          <h2 className="font-orbitron text-2xl md:text-3xl font-bold arc-text tracking-wider">
-            WORK EXPERIENCE
-          </h2>
-          <p className="font-orbitron text-xs text-iron-gold/70 mt-1 uppercase tracking-widest">
-            Select Node • Drag Hologram to Rotate
-          </p>
-        </div>
-      </motion.div>
 
       {/* 3D Canvas */}
       <div className="flex-1 relative z-10 cursor-grab">

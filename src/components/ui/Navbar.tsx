@@ -104,23 +104,6 @@ export const Navbar = () => {
             )}
           </motion.button>
         ))}
-
-        {/* Separator */}
-        <div className="w-px h-6 bg-iron-gold/30 mx-2" />
-
-        {/* Contact CTA */}
-        <motion.button
-          className="btn-iron text-xs py-2 px-4"
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0 0 20px hsl(195 100% 50% / 0.4)",
-          }}
-          whileTap={{ scale: 0.95 }}
-          onClick={playClick}
-          onMouseEnter={playHover}
-        >
-          Let's Talk!
-        </motion.button>
       </div>
     </motion.nav>
   );

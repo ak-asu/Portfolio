@@ -12,82 +12,103 @@ interface TerminalLine {
 // Portfolio data for commands
 const portfolioData = {
   about: {
-    name: "Tony Stark",
-    title: "Genius, Billionaire, Playboy, Philanthropist",
+    name: "Aakash Khepar",
+    title: "Full-Stack Developer & Computer Science Graduate Student",
     summary:
-      "Full-stack developer with a passion for building innovative web applications. Specializing in React, TypeScript, and modern web technologies. Creator of the Iron Man Mark 42 Portfolio.",
-    location: "Malibu, California",
-    email: "tony@starkindustries.com",
+      "Full-Stack Developer with experience in React, Python, Django, and modern web technologies. Currently pursuing MS in Computer Science at Arizona State University. Passionate about AI/ML applications and building innovative solutions.",
+    location: "Tempe, Arizona",
+    email: "akhepar@asu.edu",
   },
   skills: [
     {
+      category: "Languages",
+      items: ["Python", "JavaScript", "Dart", "HTML", "CSS"],
+    },
+    {
       category: "Frontend",
+      items: ["React.JS", "Next.JS", "Tailwind CSS", "HTML", "CSS"],
+    },
+    {
+      category: "Backend & Frameworks",
+      items: ["Django", "Flask", "FastAPI", "Node.JS", "Express.JS"],
+    },
+    {
+      category: "Databases",
+      items: ["MongoDB", "PostgreSQL", "Supabase", "Redis"],
+    },
+    {
+      category: "Tools & DevOps",
+      items: ["Docker", "Kubernetes", "Jenkins", "GitHub", "Azure"],
+    },
+    {
+      category: "Other",
       items: [
-        "React",
-        "TypeScript",
-        "Next.js",
-        "Tailwind CSS",
-        "Framer Motion",
+        "Flutter",
+        "Langchain",
+        "Streamlit",
+        "Firebase",
+        "Celery",
+        "RabbitMQ",
       ],
-    },
-    {
-      category: "Backend",
-      items: ["Node.js", "Python", "PostgreSQL", "MongoDB", "GraphQL"],
-    },
-    {
-      category: "DevOps",
-      items: ["Docker", "AWS", "Kubernetes", "CI/CD", "Terraform"],
-    },
-    {
-      category: "Tools",
-      items: ["Git", "VS Code", "Figma", "Jira", "Webpack"],
     },
   ],
   projects: [
     {
-      name: "Arc Reactor UI",
-      description: "A futuristic UI component library",
-      tech: "React, TypeScript, Framer Motion",
+      name: "LocalScholar",
+      description: "Privacy-First AI Assistant Chrome Extension",
+      tech: "TypeScript, React, Chrome Built-in AI, Gemini Nano",
     },
     {
-      name: "J.A.R.V.I.S. Dashboard",
-      description: "AI-powered home automation system",
-      tech: "Next.js, TensorFlow, Python",
+      name: "VisionForge",
+      description:
+        "Full-stack deep learning IDE with drag-and-drop neural network design",
+      tech: "Django, React, PyTorch, TensorFlow",
     },
     {
-      name: "Mark 42 Portfolio",
-      description: "This portfolio you're looking at",
-      tech: "React, Tailwind, Three.js",
+      name: "NMTSA - Education LMS",
+      description: "Accessibility-first LMS for autism-friendly learning",
+      tech: "Django, JavaScript, SQLite, Python, AI",
     },
     {
-      name: "Stark Industries API",
-      description: "Enterprise-grade REST API platform",
-      tech: "Node.js, Express, PostgreSQL",
+      name: "ResumeBotX",
+      description: "AI-powered resume assistant with job tracking",
+      tech: "Python, FastAPI, React, Gemini API, Autogen",
     },
   ],
   education: [
     {
-      degree: "Ph.D. in Electrical Engineering",
-      institution: "MIT",
-      year: "2008",
+      degree: "Master of Science in Computer Science",
+      institution: "Arizona State University",
+      year: "2024 - 2026",
     },
-    { degree: "M.S. in Physics", institution: "MIT", year: "2006" },
-    { degree: "B.S. in Computer Science", institution: "MIT", year: "2004" },
+    {
+      degree: "Bachelor in Technology - Engineering Physics",
+      institution: "Indian Institute of Technology, Roorkee",
+      year: "2017 - 2021",
+    },
   ],
   work: [
     {
-      role: "CEO & Lead Engineer",
-      company: "Stark Industries",
-      period: "2008 - Present",
+      role: "Graduate Student Assistant",
+      company: "ASU",
+      period: "Aug 2025 - Dec 2025",
     },
-    { role: "Senior Developer", company: "Stark Tech", period: "2006 - 2008" },
-    { role: "Research Intern", company: "MIT Labs", period: "2004 - 2006" },
+    {
+      role: "Full-stack Developer",
+      company: "Fractal",
+      period: "Mar 2023 - Jul 2024",
+    },
+    {
+      role: "Backend Developer",
+      company: "Fractal",
+      period: "Jul 2021 - Mar 2022",
+    },
   ],
   achievements: [
-    "Forbes 30 Under 30 - Technology",
-    "Best Innovation Award - Tech Summit 2023",
-    "Open Source Contributor of the Year",
-    "1M+ Downloads on NPM packages",
+    "1st Place - Claude Developer Tools Track, HackASU 2025",
+    "2nd Place & Best Polish Product - Opportunity Hack 2025",
+    "SoDA LLM Workshop Winner at ASU",
+    "JEE Advanced 2017 - Rank 3006",
   ],
 };
 

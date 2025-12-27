@@ -9,67 +9,57 @@ import {
   GitBranch,
 } from "lucide-react";
 import { useAudioSystem } from "@/hooks/useAudioSystem";
+import skillsDataRaw from "@/data/skills.json";
 
-// Skills data
-const skillsData = [
-  {
-    name: "Python",
-    icon: Code,
-    category: "backend",
-    color: "hsl(195 100% 50%)",
-  },
-  {
-    name: "Docker",
-    icon: Cloud,
-    category: "tools",
-    color: "hsl(195 100% 50%)",
-  },
-  { name: "AWS", icon: Cloud, category: "tools", color: "hsl(44 98% 39%)" },
-  { name: "Git", icon: GitBranch, category: "tools", color: "hsl(0 100% 24%)" },
-  {
-    name: "Figma",
-    icon: Palette,
-    category: "frontend",
-    color: "hsl(330 80% 50%)",
-  },
-  {
-    name: "React",
-    icon: Code,
-    category: "frontend",
-    color: "hsl(195 100% 50%)",
-  },
-  {
-    name: "TypeScript",
-    icon: Code,
-    category: "frontend",
-    color: "hsl(210 80% 50%)",
-  },
-  {
-    name: "Node.js",
-    icon: Terminal,
-    category: "backend",
-    color: "hsl(120 40% 45%)",
-  },
-  {
-    name: "PostgreSQL",
-    icon: Database,
-    category: "backend",
-    color: "hsl(210 60% 45%)",
-  },
-  { name: "Vue", icon: Code, category: "frontend", color: "hsl(153 47% 49%)" },
-  {
-    name: "MongoDB",
-    icon: Database,
-    category: "backend",
-    color: "hsl(120 50% 35%)",
-  },
-  {
-    name: "Kubernetes",
-    icon: Cloud,
-    category: "tools",
-    color: "hsl(210 80% 50%)",
-  },
-];
+// Icon mapping based on category
+const getIconForCategory = (category: string) => {
+  const iconMap: Record<string, any> = {
+    Languages: Code,
+    "Front-End": Code,
+    Frameworks: Terminal,
+    Databases: Database,
+    Tools: GitBranch,
+    OS: Terminal,
+    Cloud: Cloud,
+  };
+  return iconMap[category] || Code;
+};
+
+// Category color mapping
+const getCategoryColor = (category: string) => {
+  const colorMap: Record<string, string> = {
+    Languages: "hsl(195 100% 50%)",
+    "Front-End": "hsl(280 80% 60%)",
+    Frameworks: "hsl(44 98% 39%)",
+    Databases: "hsl(120 50% 35%)",
+    Tools: "hsl(0 100% 24%)",
+    OS: "hsl(210 60% 45%)",
+    Cloud: "hsl(30 100% 50%)",
+  };
+  return colorMap[category] || "hsl(195 100% 50%)";
+};
+
+// Map category to filter type
+const mapCategoryToFilter = (category: string): string => {
+  const categoryMap: Record<string, string> = {
+    Languages: "backend",
+    "Front-End": "frontend",
+    Frameworks: "backend",
+    Databases: "backend",
+    Tools: "tools",
+    OS: "tools",
+    Cloud: "tools",
+  };
+  return categoryMap[category] || "tools";
+};
+
+// Transform skills data to match component structure
+const skillsData = skillsDataRaw.map((skill) => ({
+  name: skill.name,
+  icon: getIconForCategory(skill.category),
+  category: mapCategoryToFilter(skill.category),
+  color: getCategoryColor(skill.category),
+}));
 
 type Category = "all" | "frontend" | "backend" | "tools";
 
@@ -372,25 +362,6 @@ export const SkillsSection = () => {
             ))}
           </motion.div>
         </div>
-
-        {/* Status Bar */}
-        <motion.div
-          className="flex items-center justify-center mt-12"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-        >
-          <div className="iron-panel px-6 py-2 flex items-center gap-3">
-            <div
-              className="w-2 h-2 rounded-full bg-arc-blue animate-pulse"
-              style={{ boxShadow: "0 0 10px hsl(195 100% 50%)" }}
-            />
-            <span className="font-orbitron text-xs text-arc-blue uppercase tracking-wider">
-              System Online // J.A.R.V.I.S. Connected
-            </span>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

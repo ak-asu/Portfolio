@@ -2,43 +2,19 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { ExternalLink, Github, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAudioSystem } from "@/hooks/useAudioSystem";
+import projectsDataRaw from "@/data/projects.json";
 
-// Sample projects data
-const projectsData = [
-  {
-    id: 1,
-    title: "Quantum Odyssey",
-    subtitle: "VR Game - Project 01",
-    description:
-      "Immersive VR game developed for Oculus Quest, featuring advanced physics, procedural generation, and hand tracking. Explore alien worlds and solve puzzles in this ambitious space adventure.",
-    tech: ["Unity", "C#", "Oculus SDK", "Vulkan", "Blender"],
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    liveUrl: "#",
-    repoUrl: "#",
-  },
-  {
-    id: 2,
-    title: "Neural Canvas",
-    subtitle: "AI Art Platform - Project 02",
-    description:
-      "An AI-powered creative platform that transforms text descriptions into stunning visual artwork using state-of-the-art diffusion models and neural networks.",
-    tech: ["Python", "PyTorch", "React", "FastAPI", "AWS"],
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    liveUrl: "#",
-    repoUrl: "#",
-  },
-  {
-    id: 3,
-    title: "CryptoVault",
-    subtitle: "DeFi Dashboard - Project 03",
-    description:
-      "Comprehensive cryptocurrency portfolio tracker and DeFi dashboard with real-time analytics, cross-chain support, and automated yield optimization strategies.",
-    tech: ["TypeScript", "Next.js", "Web3.js", "GraphQL", "Solidity"],
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    liveUrl: "#",
-    repoUrl: "#",
-  },
-];
+// Transform projects data to match component structure
+const projectsData = projectsDataRaw.map((project, index) => ({
+  id: index + 1,
+  title: project.name,
+  subtitle: `${project.type.charAt(0).toUpperCase() + project.type.slice(1)} Project`,
+  description: project.description,
+  tech: project.technologies,
+  videoUrl: project.media ? project.media : "",
+  liveUrl: project.url || "#",
+  repoUrl: project.url || "#",
+}));
 
 export const ProjectsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

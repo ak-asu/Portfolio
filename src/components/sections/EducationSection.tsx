@@ -1,44 +1,49 @@
 import { motion } from "framer-motion";
 import { ArcReactorIcon } from "@/components/ui/ArcReactor";
+import educationDataRaw from "@/data/education.json";
 
-const educationData = [
-  {
-    id: 1,
-    degree: "Master of Science in Computer Science",
-    institution: "MIT",
-    period: "Sept 2018 - May 2020",
-    score: "GPA: 3.9/4.0",
-    description:
-      "Specialization in Artificial Intelligence and Machine Learning. Thesis on Quantum Computing Applications.",
-  },
-  {
-    id: 2,
-    degree: "Bachelor of Engineering in Software Engineering",
-    institution: "Stanford University",
-    period: "Sept 2014 - May 2018",
-    score: "GPA: 3.8/4.0",
-    description:
-      "Minor in Mathematics. Senior Project: Autonomous Drone Navigation System.",
-  },
-  {
-    id: 3,
-    degree: "Certificate in Data Science",
-    institution: "Google",
-    period: "Jan 2021 - June 2021",
-    score: "Score: 95%",
-    description:
-      "Comprehensive program covering Python, Machine Learning, and Data Visualization.",
-  },
-  {
-    id: 4,
-    degree: "Online Course: Advanced Cybersecurity",
-    institution: "Coursera",
-    period: "July 2021 - Sept 2021",
-    score: "Certificate Earned",
-    description:
-      "Focus on Network Security, Ethical Hacking, and Cryptography.",
-  },
-];
+// Format period from start and end years
+const formatPeriod = (startYear: number, endYear: number) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const currentYear = new Date().getFullYear();
+  const isOngoing = endYear >= currentYear;
+
+  return `${months[7]} ${startYear} - ${isOngoing ? "Present" : `${months[4]} ${endYear}`}`;
+};
+
+// Format subjects into description
+const formatDescription = (
+  subjects: Array<{ name: string; grade: string }>,
+) => {
+  if (!subjects || subjects.length === 0)
+    return "Comprehensive program in Computer Science.";
+
+  const courseList = subjects.map((s) => `${s.name} (${s.grade})`).join(", ");
+  return `Key Courses: ${courseList}`;
+};
+
+// Transform education data to match component structure
+const educationData = educationDataRaw.map((edu, index) => ({
+  id: index + 1,
+  degree: `${edu.degree} in ${edu.field}`,
+  institution: edu.institution,
+  period: formatPeriod(edu.startDate, edu.endDate),
+  score: `GPA: ${edu.gpa}/4.0`,
+  description: formatDescription(edu.subjects),
+}));
 
 const EducationCard = ({
   education,

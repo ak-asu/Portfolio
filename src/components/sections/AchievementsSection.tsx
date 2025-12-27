@@ -3,45 +3,39 @@ import { useState } from "react";
 import { Award, Trophy, Shield, FileText, Brain, Code } from "lucide-react";
 import { ArcReactor } from "@/components/ui/ArcReactor";
 import { useAudioSystem } from "@/hooks/useAudioSystem";
+import achievementsDataRaw from "@/data/achievements.json";
 
-const achievementsData = [
-  {
-    id: 1,
-    title: "Open Source Contributor - Top 1%",
-    icon: Code,
-    color: "hsl(195 100% 50%)",
-  },
-  {
-    id: 2,
-    title: "AWS Certified Solutions Architect - Professional",
-    icon: Shield,
-    color: "hsl(30 100% 50%)",
-  },
-  {
-    id: 3,
-    title: "First Place - Global AI Hackathon 2024",
-    icon: Trophy,
-    color: "hsl(44 98% 50%)",
-  },
-  {
-    id: 4,
-    title: "Outstanding UI Interactions Award",
-    icon: Award,
-    color: "hsl(280 80% 60%)",
-  },
-  {
-    id: 5,
-    title: "GitHub Community Star",
-    icon: Brain,
-    color: "hsl(195 100% 50%)",
-  },
-  {
-    id: 6,
-    title: "Patent Holder - Advanced UI Interactions",
-    icon: FileText,
-    color: "hsl(44 98% 50%)",
-  },
-];
+// Icon mapping based on achievement type
+const getIconForType = (type: string) => {
+  const iconMap: Record<string, any> = {
+    recognition: Trophy,
+    certification: Shield,
+    course: FileText,
+    workshop: Brain,
+    hackathon: Award,
+  };
+  return iconMap[type] || Award;
+};
+
+// Color mapping based on achievement type
+const getColorForType = (type: string) => {
+  const colorMap: Record<string, string> = {
+    recognition: "hsl(44 98% 50%)",
+    certification: "hsl(30 100% 50%)",
+    course: "hsl(195 100% 50%)",
+    workshop: "hsl(280 80% 60%)",
+    hackathon: "hsl(120 60% 50%)",
+  };
+  return colorMap[type] || "hsl(195 100% 50%)";
+};
+
+// Transform achievements data to match component structure
+const achievementsData = achievementsDataRaw.map((achievement, index) => ({
+  id: index + 1,
+  title: achievement.title,
+  icon: getIconForType(achievement.type),
+  color: getColorForType(achievement.type),
+}));
 
 export const AchievementsSection = () => {
   const [isRevealed, setIsRevealed] = useState(false);
