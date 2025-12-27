@@ -35,83 +35,6 @@ const workData = workDataRaw.map((work, index) => ({
   active: isCurrentlyActive(work.endDate),
 }));
 
-// Projector ball component on the edges
-const ProjectorBall = ({
-  position,
-  isSelected,
-  onClick,
-  index,
-}: {
-  position: [number, number, number];
-  isSelected: boolean;
-  onClick: () => void;
-  index: number;
-}) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const glowRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHovered] = useState(false);
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      const pulse = Math.sin(state.clock.elapsedTime * 2 + index) * 0.05;
-      meshRef.current.scale.setScalar(
-        isSelected ? 1.3 + pulse : hovered ? 1.15 : 1,
-      );
-    }
-    if (glowRef.current) {
-      glowRef.current.rotation.z = state.clock.elapsedTime;
-    }
-  });
-
-  return (
-    <group position={position}>
-      {/* Outer glow ring */}
-      <mesh ref={glowRef} rotation={[0, Math.PI / 2, 0]}>
-        <torusGeometry args={[0.5, 0.02, 8, 32]} />
-        <meshBasicMaterial
-          color={isSelected ? "#00BFFF" : "#C49102"}
-          transparent
-          opacity={isSelected ? 0.8 : 0.4}
-        />
-      </mesh>
-
-      {/* Main ball */}
-      <mesh
-        ref={meshRef}
-        onClick={onClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-      >
-        <sphereGeometry args={[0.35, 32, 32]} />
-        <meshStandardMaterial
-          color={isSelected ? "#00BFFF" : "#1a1a2e"}
-          emissive={isSelected ? "#00BFFF" : hovered ? "#C49102" : "#00BFFF"}
-          emissiveIntensity={isSelected ? 1.2 : hovered ? 0.6 : 0.3}
-          metalness={0.9}
-          roughness={0.1}
-        />
-      </mesh>
-
-      {/* Inner core glow */}
-      <Sphere args={[0.15, 16, 16]}>
-        <meshBasicMaterial
-          color={isSelected ? "#00BFFF" : "#C49102"}
-          transparent
-          opacity={isSelected ? 1 : 0.6}
-        />
-      </Sphere>
-
-      {/* Energy beam to center when selected */}
-      {isSelected && (
-        <mesh position={[2.5, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.02, 0.08, 5, 8]} />
-          <meshBasicMaterial color="#00BFFF" transparent opacity={0.4} />
-        </mesh>
-      )}
-    </group>
-  );
-};
-
 // Interactive 3D Hologram Card
 const HologramCard = ({
   work,
@@ -171,96 +94,41 @@ const HologramCard = ({
       onPointerLeave={handlePointerUp}
       onPointerMove={handlePointerMove}
     >
-      {/* Main card body */}
-      <RoundedBox args={[4, 2.8, 0.1]} radius={0.1} smoothness={4}>
-        <meshStandardMaterial
-          color="#0a1628"
-          transparent
-          opacity={0.85}
-          metalness={0.5}
-          roughness={0.3}
-        />
-      </RoundedBox>
-
-      {/* Glowing border frame */}
-      <mesh position={[0, 0, 0.06]}>
-        <planeGeometry args={[4.1, 2.9]} />
-        <meshBasicMaterial
-          color="#00BFFF"
-          transparent
-          opacity={0.1}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-
-      {/* Edge glow lines */}
-      {/* Top */}
-      <mesh position={[0, 1.4, 0.06]}>
-        <boxGeometry args={[4, 0.02, 0.02]} />
-        <meshBasicMaterial color="#00BFFF" />
-      </mesh>
-      {/* Bottom */}
-      <mesh position={[0, -1.4, 0.06]}>
-        <boxGeometry args={[4, 0.02, 0.02]} />
-        <meshBasicMaterial color="#C49102" />
-      </mesh>
-      {/* Left */}
-      <mesh position={[-2, 0, 0.06]}>
-        <boxGeometry args={[0.02, 2.8, 0.02]} />
-        <meshBasicMaterial color="#00BFFF" />
-      </mesh>
-      {/* Right */}
-      <mesh position={[2, 0, 0.06]}>
-        <boxGeometry args={[0.02, 2.8, 0.02]} />
-        <meshBasicMaterial color="#00BFFF" />
-      </mesh>
-
-      {/* Corner accents */}
-      {[
-        [-1.9, 1.3],
-        [1.9, 1.3],
-        [-1.9, -1.3],
-        [1.9, -1.3],
-      ].map(([x, y], i) => (
-        <Sphere key={i} args={[0.05, 16, 16]} position={[x, y, 0.08]}>
-          <meshBasicMaterial color={i < 2 ? "#00BFFF" : "#C49102"} />
-        </Sphere>
-      ))}
-
       {/* Content via Html */}
       <Html
-        position={[0, 0, 0.1]}
+        position={[0, 0.25, 0.1]}
         transform
         occlude
         style={{
-          width: "380px",
+          width: "320px",
+          height: "200px",
           pointerEvents: "none",
         }}
       >
         <div
           className="text-center select-none"
-          style={{ transform: "scale(0.9)" }}
+          style={{ transform: "scale(0.75)" }}
         >
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-1.5">
             <div className="text-left">
-              <h3 className="font-orbitron text-lg text-foreground leading-tight">
+              <h3 className="font-orbitron text-base text-foreground leading-tight">
                 {work.role}
               </h3>
-              <p className="font-rajdhani text-iron-gold text-sm">
+              <p className="font-rajdhani text-iron-gold text-xs mt-0.5">
                 {work.company}
               </p>
-              <p className="font-rajdhani text-foreground/50 text-xs">
+              <p className="font-rajdhani text-foreground/50 text-[10px]">
                 {work.location}
               </p>
             </div>
             <div className="text-right">
-              <p className="font-orbitron text-arc-blue text-xs">
+              <p className="font-orbitron text-arc-blue text-[10px]">
                 {work.period}
               </p>
               {work.active && (
-                <div className="flex items-center gap-1 mt-1 px-2 py-0.5 bg-arc-blue/20 border border-arc-blue/50 rounded-full">
-                  <div className="w-1.5 h-1.5 rounded-full bg-arc-blue animate-pulse" />
-                  <span className="font-orbitron text-[10px] text-arc-blue">
+                <div className="flex items-center gap-1 mt-1 px-1.5 py-0.5 bg-arc-blue/20 border border-arc-blue/50 rounded-full">
+                  <div className="w-1 h-1 rounded-full bg-arc-blue animate-pulse" />
+                  <span className="font-orbitron text-[8px] text-arc-blue">
                     ACTIVE
                   </span>
                 </div>
@@ -268,57 +136,35 @@ const HologramCard = ({
             </div>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-arc-blue/50 to-transparent my-2" />
+          <div className="h-px bg-gradient-to-r from-transparent via-arc-blue/50 to-transparent my-1.5" />
 
-          <ul className="space-y-1 text-left">
+          <ul className="space-y-0.5 text-left">
             {work.highlights.map((highlight, index) => (
               <li
                 key={index}
-                className="flex items-start gap-2 text-foreground/80 font-rajdhani text-xs"
+                className="flex items-start gap-1.5 text-foreground/80 font-rajdhani text-[10px] leading-snug"
               >
-                <span className="text-arc-blue">▸</span>
+                <span className="text-arc-blue text-xs">▸</span>
                 <span>{highlight}</span>
               </li>
             ))}
           </ul>
 
-          <p className="mt-3 font-orbitron text-[10px] text-iron-gold/50 uppercase tracking-wider">
+          <p className="mt-2 font-orbitron text-[8px] text-iron-gold/50 uppercase tracking-wider">
             Drag to rotate hologram
           </p>
         </div>
       </Html>
-
-      {/* Hologram scan lines effect */}
-      <mesh position={[0, 0, 0.07]}>
-        <planeGeometry args={[3.9, 2.7]} />
-        <meshBasicMaterial
-          transparent
-          opacity={0.05}
-          color="#00BFFF"
-          side={THREE.DoubleSide}
-        />
-      </mesh>
     </group>
   );
 };
 
-// 3D Scene with edge projectors
+// 3D Scene with hologram
 const WorkScene = ({
-  selectedId,
-  onSelect,
   selectedWork,
 }: {
-  selectedId: number;
-  onSelect: (id: number) => void;
   selectedWork: (typeof workData)[0];
 }) => {
-  // Left side positions only (3 balls)
-  const leftPositions: [number, number, number][] = [
-    [-5, 1.5, 0],
-    [-5, 0, 0],
-    [-5, -1.5, 0],
-  ];
-
   return (
     <Canvas camera={{ position: [0, 0, 7], fov: 50 }}>
       <ambientLight intensity={0.3} />
@@ -333,21 +179,52 @@ const WorkScene = ({
         color="#00BFFF"
       />
 
-      {/* Left side projector balls - only 3 */}
-      {workData.map((work, index) => (
-        <ProjectorBall
-          key={work.id}
-          position={leftPositions[index]}
-          isSelected={selectedId === work.id}
-          onClick={() => onSelect(work.id)}
-          index={index}
-        />
-      ))}
-
       {/* Central 3D Hologram Card */}
       <group position={[0.5, 0, 0]}>
-        <HologramCard work={selectedWork} isActive={selectedId > 0} />
+        <HologramCard work={selectedWork} isActive={true} />
       </group>
+
+      {/* Projection light rays - fan out from selected label to panel center vertical */}
+      {(() => {
+        const selectedIndex = workData.findIndex(
+          (w) => w.id === selectedWork.id,
+        );
+        if (selectedIndex === -1) return null;
+
+        const spacing = workData.length > 1 ? 3 / (workData.length - 1) : 0;
+        const labelY = 1.5 - selectedIndex * spacing;
+        const startX = -3.8; // Just to the right of label
+        const startY = labelY;
+        const endX = 0.5; // Center X of hologram panel
+
+        // Create 10 rays fanning out from single point to center vertical line of panel
+        const numRays = 10;
+        const hologramHeight = 2.4; // Height of hologram card
+        const fanStart = -hologramHeight / 2;
+        const fanEnd = hologramHeight / 2;
+
+        return Array.from({ length: numRays }).map((_, i) => {
+          const endY = fanStart + (i / (numRays - 1)) * (fanEnd - fanStart);
+
+          // Create line geometry
+          const points = [
+            new THREE.Vector3(startX, startY, -0.5),
+            new THREE.Vector3(endX, endY, -0.5),
+          ];
+          const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+          return (
+            <line key={i} geometry={lineGeometry}>
+              <lineBasicMaterial
+                color="#00BFFF"
+                transparent
+                opacity={0.4}
+                linewidth={2}
+              />
+            </line>
+          );
+        });
+      })()}
 
       {/* Grid lines for depth */}
       {Array.from({ length: 11 }).map((_, i) => (
@@ -385,16 +262,12 @@ export const WorkSection = () => {
       />
 
       {/* 3D Canvas */}
-      <div className="flex-1 relative z-10 cursor-grab">
-        <WorkScene
-          selectedId={selectedId}
-          onSelect={handleSelect}
-          selectedWork={selectedWork}
-        />
+      <div className="flex-1 relative z-10">
+        <WorkScene selectedWork={selectedWork} />
       </div>
 
-      {/* Side labels for projector balls */}
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20 space-y-12">
+      {/* Clickable labels on left side */}
+      <div className="absolute left-8 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-3">
         {workData.map((work) => (
           <motion.button
             key={work.id}
@@ -403,34 +276,31 @@ export const WorkSection = () => {
             className={`text-left transition-all duration-300 ${
               selectedId === work.id
                 ? "opacity-100"
-                : "opacity-50 hover:opacity-80"
+                : "opacity-60 hover:opacity-90"
             }`}
             whileHover={{ x: 5 }}
+            whileTap={{ scale: 0.98 }}
           >
             <p
-              className={`font-orbitron text-xs ${selectedId === work.id ? "text-arc-blue" : "text-iron-gold"}`}
+              className={`font-orbitron text-[10px] mb-0.5 ${
+                selectedId === work.id ? "text-arc-blue" : "text-iron-gold"
+              }`}
             >
               {work.period}
             </p>
-            <p className="font-rajdhani text-sm text-foreground/80">
+            <p
+              className={`font-rajdhani text-sm font-medium ${
+                selectedId === work.id
+                  ? "text-foreground"
+                  : "text-foreground/80"
+              }`}
+            >
               {work.company}
             </p>
+            <p className="font-rajdhani text-[10px] text-foreground/50">
+              {work.location}
+            </p>
           </motion.button>
-        ))}
-      </div>
-
-      {/* Navigation dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-4">
-        {workData.map((work) => (
-          <button
-            key={work.id}
-            onClick={() => handleSelect(work.id)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              selectedId === work.id
-                ? "bg-arc-blue scale-125 shadow-[0_0_10px_rgba(0,191,255,0.8)]"
-                : "bg-iron-gold/40 hover:bg-iron-gold/70"
-            }`}
-          />
         ))}
       </div>
     </section>

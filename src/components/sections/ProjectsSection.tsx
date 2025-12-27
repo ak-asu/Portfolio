@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ExternalLink, Github, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  ChevronLeft,
+  ChevronRight,
+  Link,
+} from "lucide-react";
 import { useAudioSystem } from "@/hooks/useAudioSystem";
 import projectsDataRaw from "@/data/projects.json";
 
@@ -18,9 +24,6 @@ const projectsData = projectsDataRaw.map((project, index) => ({
 
 export const ProjectsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayMode, setDisplayMode] = useState<"video" | "description">(
-    "video",
-  );
   const { playClick, playHover, playWhoosh } = useAudioSystem();
 
   const currentProject = projectsData[currentIndex];
@@ -40,7 +43,7 @@ export const ProjectsSection = () => {
   return (
     <section className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-16">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-iron-red-dark/50 via-background to-iron-red-dark/50" />
+      <div className="absolute inset-0 bg-linear-to-b from-iron-red-dark/50 via-background to-iron-red-dark/50" />
 
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-20">
@@ -84,10 +87,13 @@ export const ProjectsSection = () => {
               >
                 {/* Screen Content */}
                 <div className="bg-background/90 p-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {/* Left - Video/Description */}
-                    <div className="relative aspect-video rounded-lg overflow-hidden bg-background border border-arc-blue/30">
-                      {displayMode === "video" ? (
+                  <div
+                    className="grid md:grid-cols-2 gap-6"
+                    style={{ height: "400px" }}
+                  >
+                    {/* Left - Video */}
+                    <div className="relative h-full rounded-lg overflow-hidden bg-background border border-arc-blue/30">
+                      {currentProject.videoUrl ? (
                         <iframe
                           src={currentProject.videoUrl}
                           className="w-full h-full"
@@ -95,66 +101,90 @@ export const ProjectsSection = () => {
                           allowFullScreen
                         />
                       ) : (
-                        <div className="p-4 h-full flex items-center">
-                          <p className="text-foreground/80 font-rajdhani">
-                            {currentProject.description}
-                          </p>
+                        <div className="w-full h-full flex items-center justify-center text-iron-gold/50">
+                          <span className="font-orbitron text-sm">
+                            No preview available
+                          </span>
                         </div>
                       )}
                     </div>
 
                     {/* Right - Project Info */}
-                    <div className="flex flex-col justify-center">
-                      <motion.h3
-                        key={currentProject.id}
-                        className="font-orbitron text-2xl md:text-3xl gold-text mb-2"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                      >
-                        {currentProject.title}
-                      </motion.h3>
-                      <p className="text-iron-gold font-rajdhani text-lg mb-6">
+                    <div className="flex flex-col h-full">
+                      {/* Title with links */}
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <motion.h3
+                          key={currentProject.id}
+                          className="font-orbitron text-2xl md:text-3xl gold-text flex-1"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                        >
+                          {currentProject.title}
+                        </motion.h3>
+
+                        {/* Demo and Repo icon links */}
+                        <div className="flex gap-2 flex-shrink-0">
+                          {currentProject.liveUrl &&
+                            currentProject.liveUrl !== "#" && (
+                              <motion.a
+                                href={currentProject.liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-lg border border-arc-blue/50 bg-arc-blue/10 text-arc-blue hover:bg-arc-blue/20 transition-all"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={playClick}
+                                onMouseEnter={playHover}
+                                title="Live Demo"
+                              >
+                                <ExternalLink size={18} />
+                              </motion.a>
+                            )}
+                          {currentProject.repoUrl &&
+                            currentProject.repoUrl !== "#" && (
+                              <motion.a
+                                href={currentProject.repoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-lg border border-iron-gold/50 bg-iron-gold/10 text-iron-gold hover:bg-iron-gold/20 transition-all"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={playClick}
+                                onMouseEnter={playHover}
+                                title="Repository"
+                              >
+                                <Github size={18} />
+                              </motion.a>
+                            )}
+                        </div>
+                      </div>
+
+                      <p className="text-iron-gold font-rajdhani text-lg mb-4">
                         {currentProject.subtitle}
                       </p>
 
-                      {/* Action Buttons */}
-                      <div className="flex flex-col gap-3">
-                        <motion.a
-                          href={currentProject.liveUrl}
-                          className="btn-iron flex items-center justify-center gap-2"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={playClick}
-                          onMouseEnter={playHover}
-                        >
-                          <ExternalLink size={16} />
-                          Live Demo
-                        </motion.a>
-                        <motion.a
-                          href={currentProject.repoUrl}
-                          className="btn-iron flex items-center justify-center gap-2"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={playClick}
-                          onMouseEnter={playHover}
-                        >
-                          <Github size={16} />
-                          Repository
-                        </motion.a>
+                      {/* Scrollable Description */}
+                      <div
+                        className="overflow-y-auto rounded-lg bg-background/50 border border-iron-gold/20 p-4 mb-4 scrollbar-thin scrollbar-track-iron-red-dark scrollbar-thumb-arc-blue/30"
+                        style={{ height: "180px" }}
+                      >
+                        <p className="text-foreground/80 font-rajdhani text-base leading-relaxed">
+                          {currentProject.description}
+                        </p>
+                      </div>
+
+                      {/* Tech Stack */}
+                      <div className="flex flex-wrap gap-2">
+                        {currentProject.tech.map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-3 py-1 rounded-full bg-iron-red-dark/50 border border-iron-gold/30 text-iron-gold font-orbitron text-xs"
+                          >
+                            {tech}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                  </div>
-
-                  {/* Tech Stack */}
-                  <div className="flex flex-wrap gap-2 mt-6">
-                    {currentProject.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 rounded-full bg-iron-red-dark/50 border border-iron-gold/30 text-iron-gold font-orbitron text-xs"
-                      >
-                        {tech}
-                      </span>
-                    ))}
                   </div>
                 </div>
               </div>
@@ -181,76 +211,6 @@ export const ProjectsSection = () => {
           >
             <ChevronRight size={28} />
           </motion.button>
-        </motion.div>
-
-        {/* Controls Panel */}
-        <motion.div
-          className="mt-6 flex flex-col items-center gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="iron-panel px-6 py-3 flex flex-wrap items-center justify-center gap-4">
-            <span className="font-orbitron text-xs text-iron-gold uppercase">
-              Display Mode
-            </span>
-
-            <button
-              onClick={() => {
-                playClick();
-                prevProject();
-              }}
-              onMouseEnter={playHover}
-              className="btn-iron text-xs py-2"
-            >
-              Previous Project
-            </button>
-
-            {/* Video/Description Toggle */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-iron-red-dark rounded-full border border-iron-gold">
-              <span
-                className={`font-orbitron text-xs uppercase ${displayMode === "video" ? "text-arc-blue" : "text-iron-gold/50"}`}
-              >
-                Video
-              </span>
-              <button
-                onClick={() => {
-                  playClick();
-                  setDisplayMode(
-                    displayMode === "video" ? "description" : "video",
-                  );
-                }}
-                className="w-12 h-6 rounded-full bg-iron-gold/20 border border-iron-gold relative"
-              >
-                <motion.div
-                  className="absolute top-1 w-4 h-4 rounded-full bg-iron-gold"
-                  animate={{ left: displayMode === "video" ? 4 : 24 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                />
-              </button>
-            </div>
-
-            <button
-              onClick={() => {
-                playClick();
-                nextProject();
-              }}
-              onMouseEnter={playHover}
-              className="btn-iron text-xs py-2"
-            >
-              Next Project
-            </button>
-          </div>
-
-          {/* Description Panel */}
-          <div className="iron-panel px-6 py-4 max-w-2xl text-center">
-            <h4 className="font-orbitron text-sm text-arc-blue uppercase mb-2">
-              Description
-            </h4>
-            <p className="text-foreground/80 font-rajdhani">
-              {currentProject.description}
-            </p>
-          </div>
         </motion.div>
       </div>
     </section>

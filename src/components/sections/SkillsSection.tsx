@@ -87,7 +87,7 @@ const MatrixRain = () => {
       ctx.fillStyle = "rgba(10, 15, 25, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "hsl(195 100% 50% / 0.3)";
+      ctx.fillStyle = "hsl(195 100% 50% / 0.5)";
       ctx.font = `${fontSize}px monospace`;
 
       for (let i = 0; i < drops.length; i++) {
@@ -119,7 +119,7 @@ const MatrixRain = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 opacity-40" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 opacity-60" />;
 };
 
 // Skill Badge Component
@@ -138,7 +138,6 @@ const SkillBadge = ({
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
-      whileHover={{ scale: 1.1, zIndex: 10 }}
     >
       {/* Hexagon shape */}
       <div className="relative w-28 h-32 flex flex-col items-center justify-center">
@@ -155,7 +154,7 @@ const SkillBadge = ({
 
         {/* Hexagon border */}
         <div
-          className="absolute inset-[2px] transition-all duration-300"
+          className="absolute inset-[2px] transition-all duration-300 group-hover:brightness-150"
           style={{
             clipPath:
               "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
@@ -177,7 +176,7 @@ const SkillBadge = ({
           <IconComponent
             size={28}
             style={{ color: skill.color }}
-            className="drop-shadow-lg transition-transform duration-300 group-hover:scale-110"
+            className="drop-shadow-lg transition-all duration-300 group-hover:brightness-150"
           />
           <span className="font-orbitron text-xs uppercase text-iron-gold tracking-wide">
             {skill.name}
@@ -197,7 +196,7 @@ const SkillBadge = ({
 export const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = useState<Category>("all");
   const [isPaused, setIsPaused] = useState(false);
-  const [speed, setSpeed] = useState(50);
+  const [currentX, setCurrentX] = useState(0);
   const { playClick, playHover, playToggle } = useAudioSystem();
 
   const categories = [
@@ -317,24 +316,6 @@ export const SkillsSection = () => {
             >
               {isPaused ? "▶" : "❚❚"}
             </button>
-
-            {/* Speed control */}
-            <div className="flex items-center gap-2 ml-4">
-              <span className="text-iron-gold/70 font-orbitron text-xs">
-                THROTTLE
-              </span>
-              <input
-                type="range"
-                min="20"
-                max="100"
-                value={speed}
-                onChange={(e) => setSpeed(Number(e.target.value))}
-                className="w-20 accent-arc-blue"
-              />
-              <span className="text-arc-blue font-orbitron text-xs">
-                {speed}%
-              </span>
-            </div>
           </div>
         </motion.div>
 
@@ -342,13 +323,25 @@ export const SkillsSection = () => {
         <div className="relative overflow-hidden py-8">
           <motion.div
             className="flex gap-6"
-            animate={isPaused ? {} : { x: ["0%", "-33.33%"] }}
+            animate={
+              isPaused ? { x: `${currentX}%` } : { x: ["0%", "-33.33%"] }
+            }
+            initial={{ x: "0%" }}
             transition={{
               x: {
-                duration: 100 - speed + 10,
+                duration: 30,
                 repeat: Infinity,
                 ease: "linear",
+                repeatType: "loop",
               },
+            }}
+            onUpdate={(latest) => {
+              if (typeof latest.x === "string") {
+                const xValue = parseFloat(latest.x);
+                if (!isNaN(xValue)) {
+                  setCurrentX(xValue);
+                }
+              }
             }}
             onHoverStart={() => setIsPaused(true)}
             onHoverEnd={() => setIsPaused(false)}

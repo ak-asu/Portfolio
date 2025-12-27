@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArcReactor } from "@/components/ui/ArcReactor";
+import { Monitor, Layers, Volume2, VolumeX, Sparkles, Zap } from "lucide-react";
+import { useAppStore } from "@/store/useAppStore";
+import { useAudioSystem } from "@/hooks/useAudioSystem";
 
 interface TerminalLine {
   id: string;
@@ -137,6 +140,16 @@ export const Terminal = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+
+  const {
+    viewMode,
+    toggleViewMode,
+    soundEnabled,
+    toggleSound,
+    animationEnabled,
+    toggleAnimation,
+  } = useAppStore();
+  const { playClick, playToggle } = useAudioSystem();
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -437,18 +450,65 @@ export const Terminal = () => {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div
-              className="w-3 h-3 rounded-full bg-iron-gold/50 hover:bg-iron-gold transition-colors cursor-pointer"
-              title="Minimize"
-            />
-            <div
-              className="w-3 h-3 rounded-full bg-arc-blue/50 hover:bg-arc-blue transition-colors cursor-pointer"
-              title="Maximize"
-            />
-            <div
-              className="w-3 h-3 rounded-full bg-iron-red-light/50 hover:bg-iron-red-light transition-colors cursor-pointer"
-              title="Close"
-            />
+            {/* Mode Toggle */}
+            <motion.button
+              onClick={() => {
+                playToggle();
+                toggleViewMode();
+              }}
+              className={`p-1.5 rounded-full transition-all duration-300 ${
+                viewMode === "terminal"
+                  ? "bg-arc-blue/20 text-arc-blue"
+                  : "text-iron-gold/50 hover:text-iron-gold"
+              }`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              title={
+                viewMode === "terminal" ? "Terminal Mode" : "Visual 3D Mode"
+              }
+            >
+              {viewMode === "terminal" ? (
+                <Monitor size={14} />
+              ) : (
+                <Layers size={14} />
+              )}
+            </motion.button>
+
+            {/* Sound Toggle */}
+            <motion.button
+              onClick={() => {
+                playClick();
+                toggleSound();
+              }}
+              className={`p-1.5 rounded-full transition-all duration-300 ${
+                soundEnabled
+                  ? "bg-arc-blue/20 text-arc-blue"
+                  : "text-iron-gold/50 hover:text-iron-gold"
+              }`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              title={soundEnabled ? "Sound ON" : "Sound OFF"}
+            >
+              {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+            </motion.button>
+
+            {/* Animation Toggle */}
+            <motion.button
+              onClick={() => {
+                playClick();
+                toggleAnimation();
+              }}
+              className={`p-1.5 rounded-full transition-all duration-300 ${
+                animationEnabled
+                  ? "bg-arc-blue/20 text-arc-blue"
+                  : "text-iron-gold/50 hover:text-iron-gold"
+              }`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              title={animationEnabled ? "Animations ON" : "Animations OFF"}
+            >
+              {animationEnabled ? <Sparkles size={14} /> : <Zap size={14} />}
+            </motion.button>
           </div>
         </motion.div>
 

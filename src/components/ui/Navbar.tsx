@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useAppStore } from "@/store/useAppStore";
 import { useEffect } from "react";
 import { useAudioSystem } from "@/hooks/useAudioSystem";
+import { Monitor, Layers, Volume2, VolumeX, Sparkles, Zap } from "lucide-react";
 
 type Section =
   | "home"
@@ -23,8 +24,17 @@ const navItems: { id: Section; label: string }[] = [
 ];
 
 export const Navbar = () => {
-  const { activeSection, setActiveSection } = useAppStore();
-  const { playClick, playHover } = useAudioSystem();
+  const {
+    activeSection,
+    setActiveSection,
+    viewMode,
+    toggleViewMode,
+    soundEnabled,
+    toggleSound,
+    animationEnabled,
+    toggleAnimation,
+  } = useAppStore();
+  const { playClick, playHover, playToggle } = useAudioSystem();
 
   // Sync with hash on mount
   useEffect(() => {
@@ -60,50 +70,139 @@ export const Navbar = () => {
         }}
       >
         {/* Logo */}
-        <div className="flex items-center gap-2 px-3 py-1 border-r border-iron-gold/30 mr-2">
+        <a
+          href="#home"
+          className="flex items-center gap-2 px-3 py-1 border-r border-iron-gold/30 mr-2"
+        >
           <div
             className="w-2 h-2 rounded-full bg-arc-blue animate-pulse"
             style={{ boxShadow: "0 0 8px hsl(195 100% 50%)" }}
           />
           <span className="font-orbitron text-sm font-bold text-iron-gold uppercase tracking-wider">
-            IRON MAN
+            Home
           </span>
-        </div>
+        </a>
 
         {/* Nav Items */}
-        {navItems.map((item) => (
-          <motion.button
-            key={item.id}
-            onClick={() => {
-              playClick();
-              setActiveSection(item.id);
-            }}
-            onMouseEnter={playHover}
-            className={`relative px-4 py-2 font-orbitron text-xs uppercase tracking-wider rounded-full transition-all duration-300 ${
-              activeSection === item.id
-                ? "bg-arc-blue/20 text-arc-blue border border-arc-blue/50"
-                : "text-iron-gold hover:text-arc-blue hover:bg-iron-gold/10"
-            }`}
-            style={
-              activeSection === item.id
-                ? {
-                    boxShadow: "0 0 15px hsl(195 100% 50% / 0.3)",
-                  }
-                : {}
-            }
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {item.label}
-            {activeSection === item.id && (
-              <motion.div
-                className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-arc-blue"
-                layoutId="navIndicator"
-                style={{ boxShadow: "0 0 8px hsl(195 100% 50%)" }}
-              />
-            )}
-          </motion.button>
-        ))}
+        {navItems
+          .filter((item) => item.id !== "home")
+          .map((item) => (
+            <motion.button
+              key={item.id}
+              onClick={() => {
+                playClick();
+                setActiveSection(item.id);
+              }}
+              onMouseEnter={playHover}
+              className={`relative px-4 py-2 font-orbitron text-xs uppercase tracking-wider rounded-full transition-all duration-300 ${
+                activeSection === item.id
+                  ? "bg-arc-blue/20 text-arc-blue border border-arc-blue/50"
+                  : "text-iron-gold hover:text-arc-blue hover:bg-iron-gold/10"
+              }`}
+              style={
+                activeSection === item.id
+                  ? {
+                      boxShadow: "0 0 15px hsl(195 100% 50% / 0.3)",
+                    }
+                  : {}
+              }
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {item.label}
+              {activeSection === item.id && (
+                <motion.div
+                  className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-arc-blue"
+                  layoutId="navIndicator"
+                  style={{ boxShadow: "0 0 8px hsl(195 100% 50%)" }}
+                />
+              )}
+            </motion.button>
+          ))}
+
+        <div className="w-px h-6 bg-iron-gold/30 mx-2" />
+
+        {/* Mode Toggle */}
+        <motion.button
+          onClick={() => {
+            playToggle();
+            toggleViewMode();
+          }}
+          onMouseEnter={playHover}
+          className={`relative p-2 rounded-full transition-all duration-300 ${
+            viewMode === "terminal"
+              ? "bg-arc-blue/20 text-arc-blue border border-arc-blue/50"
+              : "text-iron-gold hover:text-arc-blue hover:bg-iron-gold/10"
+          }`}
+          style={
+            viewMode === "terminal"
+              ? {
+                  boxShadow: "0 0 15px hsl(195 100% 50% / 0.3)",
+                }
+              : {}
+          }
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          title={viewMode === "terminal" ? "Terminal Mode" : "Visual 3D Mode"}
+        >
+          {viewMode === "terminal" ? (
+            <Monitor size={16} />
+          ) : (
+            <Layers size={16} />
+          )}
+        </motion.button>
+
+        {/* Sound Toggle */}
+        <motion.button
+          onClick={() => {
+            playClick();
+            toggleSound();
+          }}
+          onMouseEnter={playHover}
+          className={`relative p-2 rounded-full transition-all duration-300 ${
+            soundEnabled
+              ? "bg-arc-blue/20 text-arc-blue border border-arc-blue/50"
+              : "text-iron-gold hover:text-arc-blue hover:bg-iron-gold/10"
+          }`}
+          style={
+            soundEnabled
+              ? {
+                  boxShadow: "0 0 15px hsl(195 100% 50% / 0.3)",
+                }
+              : {}
+          }
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          title={soundEnabled ? "Sound ON" : "Sound OFF"}
+        >
+          {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+        </motion.button>
+
+        {/* Animation Toggle */}
+        <motion.button
+          onClick={() => {
+            playClick();
+            toggleAnimation();
+          }}
+          onMouseEnter={playHover}
+          className={`relative p-2 rounded-full transition-all duration-300 ${
+            animationEnabled
+              ? "bg-arc-blue/20 text-arc-blue border border-arc-blue/50"
+              : "text-iron-gold hover:text-arc-blue hover:bg-iron-gold/10"
+          }`}
+          style={
+            animationEnabled
+              ? {
+                  boxShadow: "0 0 15px hsl(195 100% 50% / 0.3)",
+                }
+              : {}
+          }
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          title={animationEnabled ? "Animations ON" : "Animations OFF"}
+        >
+          {animationEnabled ? <Sparkles size={16} /> : <Zap size={16} />}
+        </motion.button>
       </div>
     </motion.nav>
   );

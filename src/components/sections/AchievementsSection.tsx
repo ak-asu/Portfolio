@@ -85,20 +85,6 @@ export const AchievementsSection = () => {
       </div>
 
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4">
-        {/* Header */}
-        <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0, y: -30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="inline-block iron-panel px-8 py-4">
-            <h2 className="font-orbitron text-3xl md:text-4xl font-bold arc-text tracking-wider">
-              ACHIEVEMENTS UNLOCKED
-            </h2>
-          </div>
-        </motion.div>
-
         {/* Curtain Container */}
         <div className="relative min-h-[500px]">
           {/* Achievements Grid (Behind curtains) */}

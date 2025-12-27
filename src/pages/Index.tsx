@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Navbar } from "@/components/ui/Navbar";
-import { ModeToggle } from "@/components/ui/ModeToggle";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { HudOverlay } from "@/components/ui/HudOverlay";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -41,7 +40,6 @@ const Index = () => {
   if (viewMode === "terminal") {
     return (
       <div className="relative h-screen bg-background overflow-hidden">
-        <ModeToggle />
         <Terminal />
       </div>
     );
@@ -76,9 +74,6 @@ const Index = () => {
 
       {/* Navigation */}
       <Navbar />
-
-      {/* Mode Toggle & Controls */}
-      <ModeToggle />
 
       {/* Active Section with Animation */}
       <AnimatePresence mode="wait">

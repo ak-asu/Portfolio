@@ -189,22 +189,6 @@ export const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* System Online Badge */}
-        <motion.div
-          className="flex items-center gap-2 px-4 py-2 glass-panel rounded-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6 }}
-        >
-          <div
-            className="w-2 h-2 rounded-full bg-arc-blue animate-pulse"
-            style={{ boxShadow: "0 0 10px hsl(195 100% 50%)" }}
-          />
-          <span className="text-arc-blue text-xs font-orbitron uppercase">
-            System Online
-          </span>
-        </motion.div>
-
         {/* Role Text */}
         <motion.div
           className="text-right mt-4"
