@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { useState, useRef } from "react";
 import * as THREE from "three";
 import { useAudioSystem } from "@/hooks/useAudioSystem";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import workDataRaw from "@/data/work.json";
 
 // Format date to readable period
@@ -45,13 +47,15 @@ const HologramCard = ({
 }) => {
   const groupRef = useRef<THREE.Group>(null);
   const { gl } = useThree();
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
   const [isDragging, setIsDragging] = useState(false);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const lastMousePos = useRef({ x: 0, y: 0 });
 
   useFrame(() => {
-    if (groupRef.current && !isDragging) {
-      // Auto-rotate slowly when not dragging
+    if (groupRef.current && !isDragging && !prefersReducedMotion) {
+      // Auto-rotate slowly when not dragging and animations are enabled
       groupRef.current.rotation.y += 0.003;
     }
   });
@@ -96,39 +100,44 @@ const HologramCard = ({
     >
       {/* Content via Html */}
       <Html
-        position={[0, 0.25, 0.1]}
+        position={[0, 0, 0.1]}
         transform
         occlude
         style={{
-          width: "320px",
-          height: "200px",
+          width: isMobile ? "190px" : "380px",
+          height: "36vh",
           pointerEvents: "none",
         }}
       >
         <div
-          className="text-center select-none"
-          style={{ transform: "scale(0.75)" }}
+          className="text-center select-none px-1.5 sm:px-3 py-1.5 sm:py-2 rounded-lg h-full flex flex-col"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0, 100, 24, 0.15) 0%, rgba(0, 0, 0, 0.3) 100%)",
+            border: "2px solid rgba(0, 191, 255, 0.3)",
+            boxShadow: "0 0 20px rgba(0, 191, 255, 0.2)",
+          }}
         >
-          <div className="flex items-center justify-between mb-1.5">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-1 mb-1">
             <div className="text-left">
-              <h3 className="font-orbitron text-base text-foreground leading-tight">
+              <h3 className="font-orbitron text-[7px] sm:text-xs text-foreground leading-tight">
                 {work.role}
               </h3>
-              <p className="font-rajdhani text-iron-gold text-xs mt-0.5">
+              <p className="font-rajdhani text-iron-gold text-[6px] sm:text-[10px] mt-0.5">
                 {work.company}
               </p>
-              <p className="font-rajdhani text-foreground/50 text-[10px]">
+              <p className="font-rajdhani text-foreground/50 text-[5px] sm:text-[8px]">
                 {work.location}
               </p>
             </div>
-            <div className="text-right">
-              <p className="font-orbitron text-arc-blue text-[10px]">
+            <div className="text-left sm:text-right">
+              <p className="font-orbitron text-arc-blue text-[5px] sm:text-[8px]">
                 {work.period}
               </p>
               {work.active && (
-                <div className="flex items-center gap-1 mt-1 px-1.5 py-0.5 bg-arc-blue/20 border border-arc-blue/50 rounded-full">
+                <div className="flex items-center gap-0.5 mt-0.5 px-1 py-0.5 bg-arc-blue/20 border border-arc-blue/50 rounded-full">
                   <div className="w-1 h-1 rounded-full bg-arc-blue animate-pulse" />
-                  <span className="font-orbitron text-[8px] text-arc-blue">
+                  <span className="font-orbitron text-[4px] sm:text-[7px] text-arc-blue">
                     ACTIVE
                   </span>
                 </div>
@@ -136,37 +145,37 @@ const HologramCard = ({
             </div>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-arc-blue/50 to-transparent my-1.5" />
+          <div className="h-px bg-linear-to-r from-transparent via-arc-blue/50 to-transparent my-0.5" />
 
-          <ul className="space-y-0.5 text-left">
+          <ul className="space-y-0.5 text-left flex-1 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-arc-blue/30">
             {work.highlights.map((highlight, index) => (
               <li
                 key={index}
-                className="flex items-start gap-1.5 text-foreground/80 font-rajdhani text-[10px] leading-snug"
+                className="flex items-start gap-1 text-foreground/80 font-rajdhani text-[6px] sm:text-[10px] leading-snug"
               >
-                <span className="text-arc-blue text-xs">▸</span>
+                <span className="text-arc-blue text-[7px] sm:text-[10px] shrink-0">
+                  ▸
+                </span>
                 <span>{highlight}</span>
               </li>
             ))}
           </ul>
-
-          <p className="mt-2 font-orbitron text-[8px] text-iron-gold/50 uppercase tracking-wider">
-            Drag to rotate hologram
-          </p>
         </div>
       </Html>
     </group>
   );
 };
 
-// 3D Scene with hologram
-const WorkScene = ({
+// Scene content component to use hooks
+const SceneContent = ({
   selectedWork,
 }: {
   selectedWork: (typeof workData)[0];
 }) => {
+  const isMobile = useIsMobile();
+
   return (
-    <Canvas camera={{ position: [0, 0, 7], fov: 50 }}>
+    <>
       <ambientLight intensity={0.3} />
       <pointLight position={[0, 0, 5]} intensity={1} color="#00BFFF" />
       <pointLight position={[-5, 0, 3]} intensity={0.8} color="#C49102" />
@@ -180,51 +189,57 @@ const WorkScene = ({
       />
 
       {/* Central 3D Hologram Card */}
-      <group position={[0.5, 0, 0]}>
+      <group
+        position={isMobile ? [0, -0.3, 0] : [0.5, 0, 0]}
+        scale={isMobile ? 1.3 : 1}
+      >
         <HologramCard work={selectedWork} isActive={true} />
       </group>
 
-      {/* Projection light rays - fan out from selected label to panel center vertical */}
-      {(() => {
-        const selectedIndex = workData.findIndex(
-          (w) => w.id === selectedWork.id,
-        );
-        if (selectedIndex === -1) return null;
-
-        const spacing = workData.length > 1 ? 3 / (workData.length - 1) : 0;
-        const labelY = 1.5 - selectedIndex * spacing;
-        const startX = -3.8; // Just to the right of label
-        const startY = labelY;
-        const endX = 0.5; // Center X of hologram panel
-
-        // Create 10 rays fanning out from single point to center vertical line of panel
-        const numRays = 10;
-        const hologramHeight = 2.4; // Height of hologram card
-        const fanStart = -hologramHeight / 2;
-        const fanEnd = hologramHeight / 2;
-
-        return Array.from({ length: numRays }).map((_, i) => {
-          const endY = fanStart + (i / (numRays - 1)) * (fanEnd - fanStart);
-
-          // Create line geometry
-          const points = [
-            new THREE.Vector3(startX, startY, -0.5),
-            new THREE.Vector3(endX, endY, -0.5),
-          ];
-          const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-
-          return (
-            <line key={i} geometry={lineGeometry}>
-              <lineBasicMaterial
-                color="#00BFFF"
-                transparent
-                opacity={0.4}
-                linewidth={2}
-              />
-            </line>
+      {/* Projection light rays - fan out from selected label to panel center vertical - Desktop only */}
+      {!isMobile &&
+        (() => {
+          const selectedIndex = workData.findIndex(
+            (w) => w.id === selectedWork.id,
           );
-        });
-      })()}
+          if (selectedIndex === -1) return null;
+
+          const spacing = workData.length > 1 ? 3 / (workData.length - 1) : 0;
+          const labelY = 1.5 - selectedIndex * spacing;
+          const startX = -3.8; // Just to the right of label
+          const startY = labelY;
+          const endX = 0.5; // Center X of hologram panel
+
+          // Create 10 rays fanning out from single point to center vertical line of panel
+          const numRays = 10;
+          const hologramHeight = 2.4; // Height of hologram card
+          const fanStart = -hologramHeight / 2;
+          const fanEnd = hologramHeight / 2;
+
+          return Array.from({ length: numRays }).map((_, i) => {
+            const endY = fanStart + (i / (numRays - 1)) * (fanEnd - fanStart);
+
+            // Create line geometry
+            const points = [
+              new THREE.Vector3(startX, startY, -0.5),
+              new THREE.Vector3(endX, endY, -0.5),
+            ];
+            const lineGeometry = new THREE.BufferGeometry().setFromPoints(
+              points,
+            );
+
+            return (
+              <line key={i} geometry={lineGeometry}>
+                <lineBasicMaterial
+                  color="#00BFFF"
+                  transparent
+                  opacity={0.4}
+                  linewidth={2}
+                />
+              </line>
+            );
+          });
+        })()}
 
       {/* Grid lines for depth */}
       {Array.from({ length: 11 }).map((_, i) => (
@@ -233,6 +248,22 @@ const WorkScene = ({
           <meshBasicMaterial color="#00BFFF" transparent opacity={0.08} />
         </mesh>
       ))}
+    </>
+  );
+};
+
+// 3D Scene with hologram
+const WorkScene = ({
+  selectedWork,
+}: {
+  selectedWork: (typeof workData)[0];
+}) => {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 7], fov: 50 }}
+      style={{ width: "100%", height: "100%" }}
+    >
+      <SceneContent selectedWork={selectedWork} />
     </Canvas>
   );
 };
@@ -247,10 +278,24 @@ export const WorkSection = () => {
     setSelectedId(id);
   };
 
+  const nextWork = () => {
+    playBeep();
+    const currentIndex = workData.findIndex((w) => w.id === selectedId);
+    const nextIndex = (currentIndex + 1) % workData.length;
+    setSelectedId(workData[nextIndex].id);
+  };
+
+  const prevWork = () => {
+    playBeep();
+    const currentIndex = workData.findIndex((w) => w.id === selectedId);
+    const prevIndex = (currentIndex - 1 + workData.length) % workData.length;
+    setSelectedId(workData[prevIndex].id);
+  };
+
   return (
-    <section className="relative h-screen w-full overflow-hidden flex flex-col">
+    <section className="relative min-h-screen w-full overflow-hidden flex flex-col py-8 sm:py-16 md:py-20">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-arc-blue/5 to-background" />
+      <div className="absolute inset-0 bg-linear-to-b from-background via-arc-blue/5 to-background" />
 
       {/* Scanline overlay */}
       <div
@@ -262,12 +307,12 @@ export const WorkSection = () => {
       />
 
       {/* 3D Canvas */}
-      <div className="flex-1 relative z-10">
+      <div className="relative z-10 p-4 h-[420px] lg:h-[560px] items-center justify-center flex">
         <WorkScene selectedWork={selectedWork} />
       </div>
 
-      {/* Clickable labels on left side */}
-      <div className="absolute left-8 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-3">
+      {/* Clickable labels on left side - Desktop only */}
+      <div className="hidden md:flex absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 flex-col gap-3">
         {workData.map((work) => (
           <motion.button
             key={work.id}
@@ -302,6 +347,58 @@ export const WorkSection = () => {
             </p>
           </motion.button>
         ))}
+      </div>
+
+      {/* Mobile navigation */}
+      <div className="md:hidden absolute bottom-12 left-0 right-0 z-20 flex items-center justify-center gap-4 px-4">
+        <motion.button
+          onClick={prevWork}
+          className="w-10 h-10 flex items-center justify-center border-2 border-arc-blue/50 rounded-lg bg-background/50 text-arc-blue"
+          whileTap={{ scale: 0.95 }}
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </motion.button>
+
+        <div className="flex flex-col items-center gap-1 min-w-37.5">
+          <p className="font-rajdhani text-sm text-foreground font-medium text-center">
+            {selectedWork.company}
+          </p>
+          <p className="font-orbitron text-[10px] text-arc-blue">
+            {selectedWork.period}
+          </p>
+        </div>
+
+        <motion.button
+          onClick={nextWork}
+          className="w-10 h-10 flex items-center justify-center border-2 border-arc-blue/50 rounded-lg bg-background/50 text-arc-blue"
+          whileTap={{ scale: 0.95 }}
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </motion.button>
       </div>
     </section>
   );

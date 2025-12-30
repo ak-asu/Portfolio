@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Award, Trophy, Shield, FileText, Brain, Code } from "lucide-react";
 import { ArcReactor } from "@/components/ui/ArcReactor";
 import { useAudioSystem } from "@/hooks/useAudioSystem";
@@ -39,6 +39,7 @@ const achievementsData = achievementsDataRaw.map((achievement, index) => ({
 
 export const AchievementsSection = () => {
   const [isRevealed, setIsRevealed] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { playPowerUp, playHover } = useAudioSystem();
 
   const handleReveal = () => {
@@ -46,13 +47,108 @@ export const AchievementsSection = () => {
     setIsRevealed(true);
   };
 
+  // Auto-scroll functionality with bidirectional scrolling
+  useEffect(() => {
+    if (!isRevealed || !scrollContainerRef.current) return;
+
+    const scrollContainer = scrollContainerRef.current;
+    let isAutoScrolling = true;
+    let isProgrammaticScroll = false;
+    let lastScrollTop = scrollContainer.scrollTop;
+    let scrollDirection: "down" | "up" = "down"; // Start scrolling down
+
+    // Auto-scroll interval
+    const scrollInterval = setInterval(() => {
+      if (!scrollContainer || !isAutoScrolling) return;
+
+      isProgrammaticScroll = true;
+      const scrollSpeed = 1;
+
+      // Scroll in current direction
+      if (scrollDirection === "down") {
+        scrollContainer.scrollTop += scrollSpeed;
+
+        // Check if reached bottom
+        if (
+          scrollContainer.scrollTop + scrollContainer.clientHeight >=
+          scrollContainer.scrollHeight - 5
+        ) {
+          scrollDirection = "up"; // Reverse direction
+        }
+      } else {
+        scrollContainer.scrollTop -= scrollSpeed;
+
+        // Check if reached top
+        if (scrollContainer.scrollTop <= 5) {
+          scrollDirection = "down"; // Reverse direction
+        }
+      }
+
+      lastScrollTop = scrollContainer.scrollTop;
+
+      // Reset flag after a short delay
+      setTimeout(() => {
+        isProgrammaticScroll = false;
+      }, 10);
+    }, 30);
+
+    // Detect user scroll
+    const handleScroll = () => {
+      if (isProgrammaticScroll) return;
+
+      // User is scrolling manually - pause auto-scroll
+      if (Math.abs(scrollContainer.scrollTop - lastScrollTop) > 0) {
+        isAutoScrolling = false;
+      }
+      lastScrollTop = scrollContainer.scrollTop;
+    };
+
+    // Detect user touch/wheel
+    const handleUserInput = () => {
+      isAutoScrolling = false;
+    };
+
+    // Resume on click outside
+    const handleClickOutside = (event: MouseEvent) => {
+      if (scrollContainer && !scrollContainer.contains(event.target as Node)) {
+        isAutoScrolling = true;
+
+        // Determine direction based on current position
+        const currentScroll = scrollContainer.scrollTop;
+        const maxScroll =
+          scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        const scrollPosition = currentScroll / maxScroll;
+
+        // If in top half, scroll down; if in bottom half, scroll up
+        scrollDirection = scrollPosition < 0.5 ? "down" : "up";
+      }
+    };
+
+    scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
+    scrollContainer.addEventListener("touchstart", handleUserInput, {
+      passive: true,
+    });
+    scrollContainer.addEventListener("wheel", handleUserInput, {
+      passive: true,
+    });
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      clearInterval(scrollInterval);
+      scrollContainer.removeEventListener("scroll", handleScroll);
+      scrollContainer.removeEventListener("touchstart", handleUserInput);
+      scrollContainer.removeEventListener("wheel", handleUserInput);
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isRevealed]);
+
   return (
     <section
       id="achievements"
-      className="relative min-h-screen w-full overflow-hidden py-20 flex items-center justify-center"
+      className="relative min-h-screen w-full overflow-hidden py-8 flex items-center justify-center"
     >
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-iron-red-dark/30 via-background to-iron-red-dark/30" />
+      <div className="absolute inset-0 bg-linear-to-b from-iron-red-dark/30 via-background to-iron-red-dark/30" />
 
       {/* Circuit background */}
       <div className="absolute inset-0 opacity-20">
@@ -84,40 +180,46 @@ export const AchievementsSection = () => {
         </svg>
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6">
         {/* Curtain Container */}
-        <div className="relative min-h-[500px]">
+        <div className="relative min-h-75 sm:min-h-100 md:min-h-125">
           {/* Achievements Grid (Behind curtains) */}
-          <div className="absolute inset-0 grid grid-cols-2 md:grid-cols-3 gap-4 p-8">
-            {achievementsData.map((achievement, index) => {
-              const IconComponent = achievement.icon;
-              return (
-                <motion.div
-                  key={achievement.id}
-                  className="iron-panel p-4 flex flex-col items-center justify-center text-center gap-3"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isRevealed ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                >
-                  <div
-                    className="w-16 h-16 rounded-lg flex items-center justify-center"
-                    style={{
-                      background: `${achievement.color}20`,
-                      border: `2px solid ${achievement.color}`,
-                      boxShadow: `0 0 15px ${achievement.color}40`,
-                    }}
+          <div
+            ref={scrollContainerRef}
+            className="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-iron-red-dark scrollbar-thumb-arc-blue/30 p-4 sm:p-6 md:p-8"
+          >
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3 sm:gap-4">
+              {achievementsData.map((achievement, index) => {
+                const IconComponent = achievement.icon;
+                return (
+                  <motion.div
+                    key={achievement.id}
+                    className="iron-panel p-3 sm:p-4 flex flex-col items-center justify-center text-center gap-2 sm:gap-3 min-h-32 sm:min-h-36 md:min-h-40"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isRevealed ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ delay: 0.5 + index * 0.1 }}
                   >
-                    <IconComponent
-                      size={28}
-                      style={{ color: achievement.color }}
-                    />
-                  </div>
-                  <p className="font-orbitron text-xs text-iron-gold leading-tight">
-                    {achievement.title}
-                  </p>
-                </motion.div>
-              );
-            })}
+                    <div
+                      className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg flex items-center justify-center shrink-0"
+                      style={{
+                        background: `${achievement.color}20`,
+                        border: `2px solid ${achievement.color}`,
+                        boxShadow: `0 0 15px ${achievement.color}40`,
+                      }}
+                    >
+                      <IconComponent
+                        size={28}
+                        style={{ color: achievement.color }}
+                        className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+                      />
+                    </div>
+                    <p className="font-orbitron text-[10px] sm:text-xs text-iron-gold leading-tight line-clamp-3">
+                      {achievement.title}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Curtains */}
@@ -178,7 +280,7 @@ export const AchievementsSection = () => {
                 <motion.button
                   onClick={handleReveal}
                   onMouseEnter={playHover}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-4"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-3 sm:gap-4"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -191,9 +293,9 @@ export const AchievementsSection = () => {
                       ease: "linear",
                     }}
                   >
-                    <ArcReactor size={80} />
+                    <ArcReactor size={60} className="sm:w-20 sm:h-20" />
                   </motion.div>
-                  <span className="font-orbitron text-sm text-arc-blue uppercase tracking-wider px-4 py-2 bg-background/80 rounded-full border border-arc-blue/50">
+                  <span className="font-orbitron text-xs sm:text-sm text-arc-blue uppercase tracking-wider px-3 sm:px-4 py-1.5 sm:py-2 bg-background/80 rounded-full border border-arc-blue/50">
                     Reveal Achievements
                   </span>
                 </motion.button>

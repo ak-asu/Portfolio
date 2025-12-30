@@ -41,7 +41,7 @@ export const ProjectsSection = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-16">
+    <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center py-16 sm:py-20">
       {/* Background */}
       <div className="absolute inset-0 bg-linear-to-b from-iron-red-dark/50 via-background to-iron-red-dark/50" />
 
@@ -51,7 +51,7 @@ export const ProjectsSection = () => {
         <div className="absolute bottom-20 right-20 w-64 h-64 rounded-full bg-arc-blue/20 blur-3xl" />
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-2 sm:px-4">
         {/* Main TV Frame */}
         <motion.div
           className="relative"
@@ -60,7 +60,7 @@ export const ProjectsSection = () => {
         >
           {/* Outer Frame - Gold metallic */}
           <div
-            className="relative p-3 rounded-2xl"
+            className="relative p-2 sm:p-3 rounded-xl sm:rounded-2xl"
             style={{
               background:
                 "linear-gradient(180deg, hsl(44 90% 55%) 0%, hsl(44 98% 39%) 30%, hsl(44 100% 25%) 100%)",
@@ -70,7 +70,7 @@ export const ProjectsSection = () => {
           >
             {/* Inner Frame - Red metallic */}
             <div
-              className="relative p-4 rounded-xl"
+              className="relative p-3 sm:p-4 rounded-lg sm:rounded-xl"
               style={{
                 background:
                   "linear-gradient(180deg, hsl(0 85% 35%) 0%, hsl(0 100% 24%) 50%, hsl(0 100% 15%) 100%)",
@@ -78,7 +78,7 @@ export const ProjectsSection = () => {
             >
               {/* Screen area with arc blue glow */}
               <div
-                className="relative rounded-lg overflow-hidden"
+                className="relative rounded-md sm:rounded-lg overflow-hidden"
                 style={{
                   boxShadow:
                     "0 0 20px hsl(195 100% 50% / 0.3), inset 0 0 30px hsl(195 100% 50% / 0.1)",
@@ -86,13 +86,10 @@ export const ProjectsSection = () => {
                 }}
               >
                 {/* Screen Content */}
-                <div className="bg-background/90 p-6">
-                  <div
-                    className="grid md:grid-cols-2 gap-6"
-                    style={{ height: "400px" }}
-                  >
+                <div className="bg-background/90 p-3 sm:p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {/* Left - Video */}
-                    <div className="relative h-full rounded-lg overflow-hidden bg-background border border-arc-blue/30">
+                    <div className="relative h-48 sm:h-56 md:h-80 lg:h-96 rounded-lg overflow-hidden bg-background border border-arc-blue/30">
                       {currentProject.videoUrl ? (
                         <iframe
                           src={currentProject.videoUrl}
@@ -102,7 +99,7 @@ export const ProjectsSection = () => {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-iron-gold/50">
-                          <span className="font-orbitron text-sm">
+                          <span className="font-orbitron text-xs sm:text-sm">
                             No preview available
                           </span>
                         </div>
@@ -110,12 +107,12 @@ export const ProjectsSection = () => {
                     </div>
 
                     {/* Right - Project Info */}
-                    <div className="flex flex-col h-full">
+                    <div className="flex flex-col">
                       {/* Title with links */}
-                      <div className="flex items-start justify-between gap-3 mb-2">
+                      <div className="flex items-start justify-between gap-2 sm:gap-3 mb-2 shrink-0">
                         <motion.h3
                           key={currentProject.id}
-                          className="font-orbitron text-2xl md:text-3xl gold-text flex-1"
+                          className="font-orbitron text-lg sm:text-2xl md:text-3xl gold-text flex-1"
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                         >
@@ -123,21 +120,24 @@ export const ProjectsSection = () => {
                         </motion.h3>
 
                         {/* Demo and Repo icon links */}
-                        <div className="flex gap-2 flex-shrink-0">
+                        <div className="flex gap-1.5 sm:gap-2 shrink-0">
                           {currentProject.liveUrl &&
                             currentProject.liveUrl !== "#" && (
                               <motion.a
                                 href={currentProject.liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-2 rounded-lg border border-arc-blue/50 bg-arc-blue/10 text-arc-blue hover:bg-arc-blue/20 transition-all"
+                                className="p-1.5 sm:p-2 rounded-lg border border-arc-blue/50 bg-arc-blue/10 text-arc-blue hover:bg-arc-blue/20 transition-all"
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={playClick}
                                 onMouseEnter={playHover}
                                 title="Live Demo"
                               >
-                                <ExternalLink size={18} />
+                                <ExternalLink
+                                  size={16}
+                                  className="sm:w-4.5 sm:h-4.5"
+                                />
                               </motion.a>
                             )}
                           {currentProject.repoUrl &&
@@ -146,39 +146,39 @@ export const ProjectsSection = () => {
                                 href={currentProject.repoUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-2 rounded-lg border border-iron-gold/50 bg-iron-gold/10 text-iron-gold hover:bg-iron-gold/20 transition-all"
+                                className="p-1.5 sm:p-2 rounded-lg border border-iron-gold/50 bg-iron-gold/10 text-iron-gold hover:bg-iron-gold/20 transition-all"
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={playClick}
                                 onMouseEnter={playHover}
                                 title="Repository"
                               >
-                                <Github size={18} />
+                                <Github
+                                  size={16}
+                                  className="sm:w-4.5 sm:h-4.5"
+                                />
                               </motion.a>
                             )}
                         </div>
                       </div>
 
-                      <p className="text-iron-gold font-rajdhani text-lg mb-4">
+                      <p className="text-iron-gold font-rajdhani text-sm sm:text-base md:text-lg mb-3 sm:mb-4 shrink-0">
                         {currentProject.subtitle}
                       </p>
 
                       {/* Scrollable Description */}
-                      <div
-                        className="overflow-y-auto rounded-lg bg-background/50 border border-iron-gold/20 p-4 mb-4 scrollbar-thin scrollbar-track-iron-red-dark scrollbar-thumb-arc-blue/30"
-                        style={{ height: "180px" }}
-                      >
-                        <p className="text-foreground/80 font-rajdhani text-base leading-relaxed">
+                      <div className="overflow-y-auto rounded-lg bg-background/50 border border-iron-gold/20 p-3 sm:p-4 mb-3 sm:mb-4 scrollbar-thin scrollbar-track-iron-red-dark scrollbar-thumb-arc-blue/30 h-24 sm:h-28 md:h-32 lg:h-40">
+                        <p className="text-foreground/80 font-rajdhani text-sm sm:text-base leading-relaxed">
                           {currentProject.description}
                         </p>
                       </div>
 
                       {/* Tech Stack */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2 shrink-0">
                         {currentProject.tech.map((tech) => (
                           <span
                             key={tech}
-                            className="px-3 py-1 rounded-full bg-iron-red-dark/50 border border-iron-gold/30 text-iron-gold font-orbitron text-xs"
+                            className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-iron-red-dark/50 border border-iron-gold/30 text-iron-gold font-orbitron text-[10px] sm:text-xs"
                           >
                             {tech}
                           </span>
@@ -191,25 +191,26 @@ export const ProjectsSection = () => {
             </div>
           </div>
 
-          {/* Navigation Arrows */}
+          {/* Navigation Arrows - Left */}
           <motion.button
             onClick={prevProject}
             onMouseEnter={playHover}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 w-12 h-20 flex items-center justify-center border-2 border-arc-blue/50 rounded-lg bg-background/50 text-arc-blue hover:bg-arc-blue/10 transition-all"
+            className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-16 w-10 h-16 sm:w-12 sm:h-20 flex items-center justify-center border-2 border-arc-blue/50 rounded-lg bg-background/30 md:bg-background/50 backdrop-blur-sm text-arc-blue hover:bg-arc-blue/10 transition-all z-20"
             whileHover={{ scale: 1.1, borderColor: "hsl(195 100% 50%)" }}
             whileTap={{ scale: 0.95 }}
           >
-            <ChevronLeft size={28} />
+            <ChevronLeft size={24} className="sm:w-7 sm:h-7" />
           </motion.button>
 
+          {/* Navigation Arrows - Right */}
           <motion.button
             onClick={nextProject}
             onMouseEnter={playHover}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 w-12 h-20 flex items-center justify-center border-2 border-arc-blue/50 rounded-lg bg-background/50 text-arc-blue hover:bg-arc-blue/10 transition-all"
+            className="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 md:translate-x-16 w-10 h-16 sm:w-12 sm:h-20 flex items-center justify-center border-2 border-arc-blue/50 rounded-lg bg-background/30 md:bg-background/50 backdrop-blur-sm text-arc-blue hover:bg-arc-blue/10 transition-all z-20"
             whileHover={{ scale: 1.1, borderColor: "hsl(195 100% 50%)" }}
             whileTap={{ scale: 0.95 }}
           >
-            <ChevronRight size={28} />
+            <ChevronRight size={24} className="sm:w-7 sm:h-7" />
           </motion.button>
         </motion.div>
       </div>

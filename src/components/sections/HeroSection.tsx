@@ -74,7 +74,7 @@ export const HeroSection = () => {
         </div>
 
         {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-iron-red-dark via-background to-iron-red-dark/50" />
+        <div className="absolute inset-0 bg-linear-to-br from-iron-red-dark via-background to-iron-red-dark/50" />
 
         {/* Decorative swoosh shapes */}
         <motion.div
@@ -110,7 +110,7 @@ export const HeroSection = () => {
         <motion.img
           src={heroImage}
           alt="Hero Portrait"
-          className="max-h-[70vh] w-auto object-contain drop-shadow-2xl"
+          className="max-h-[50vh] sm:max-h-[60vh] md:max-h-[70vh] w-auto object-contain drop-shadow-2xl"
           animate={{ y: [0, -15, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           style={{ filter: "drop-shadow(0 0 30px hsl(195 100% 50% / 0.3))" }}
@@ -119,14 +119,14 @@ export const HeroSection = () => {
 
       {/* Left Text Content */}
       <motion.div
-        className="absolute left-8 md:left-16 lg:left-24 top-1/2 -translate-y-1/2 z-20"
+        className="absolute left-4 sm:left-8 md:left-16 lg:left-24 top-1/2 -translate-y-1/2 z-20"
         style={{ x: textX, y: textY }}
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
       >
         <motion.p
-          className="text-iron-gold text-lg md:text-xl font-rajdhani italic mb-2"
+          className="text-iron-gold text-sm sm:text-lg md:text-xl font-rajdhani italic mb-1 sm:mb-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
@@ -134,7 +134,7 @@ export const HeroSection = () => {
           Hey,
         </motion.p>
         <motion.p
-          className="text-iron-gold text-xl md:text-2xl font-rajdhani italic"
+          className="text-iron-gold text-base sm:text-xl md:text-2xl font-rajdhani italic"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
@@ -143,7 +143,7 @@ export const HeroSection = () => {
           <span className="text-foreground font-semibold">Aakash Khepar</span>
         </motion.p>
         <motion.p
-          className="text-arc-blue text-2xl md:text-3xl font-rajdhani italic font-bold"
+          className="text-arc-blue text-lg sm:text-2xl md:text-3xl font-rajdhani italic font-bold"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
@@ -155,7 +155,7 @@ export const HeroSection = () => {
 
       {/* Right Content - Status Indicators */}
       <motion.div
-        className="absolute right-8 md:right-16 lg:right-24 top-1/2 -translate-y-1/2 z-20 flex flex-col items-end gap-6"
+        className="absolute right-4 sm:right-8 md:right-16 lg:right-24 top-1/2 -translate-y-1/2 z-20 flex flex-col items-end gap-3 sm:gap-6"
         style={{
           x: useTransform(smoothMouseX, [-0.5, 0.5], [-15, 15]),
           y: textY,
@@ -166,17 +166,17 @@ export const HeroSection = () => {
       >
         {/* ASU Student Badge */}
         <motion.div
-          className="flex items-center gap-2 px-4 py-2 glass-panel rounded-full"
+          className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 glass-panel rounded-full"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4 }}
         >
-          <span className="text-iron-gold text-xs font-orbitron uppercase">
+          <span className="text-iron-gold text-[10px] sm:text-xs font-orbitron uppercase whitespace-nowrap">
             ASU Graduate Student
           </span>
-          <div className="w-5 h-5 rounded-full bg-arc-blue/20 border border-arc-blue flex items-center justify-center">
+          <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-arc-blue/20 border border-arc-blue flex items-center justify-center">
             <svg
-              className="w-3 h-3 text-arc-blue"
+              className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-arc-blue"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -191,15 +191,15 @@ export const HeroSection = () => {
 
         {/* Role Text */}
         <motion.div
-          className="text-right mt-4"
+          className="text-right mt-2 sm:mt-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8 }}
         >
-          <p className="text-foreground text-xl md:text-2xl font-rajdhani">
+          <p className="text-foreground text-base sm:text-xl md:text-2xl font-rajdhani">
             Software Engineer
           </p>
-          <p className="text-iron-gold text-lg md:text-xl font-rajdhani">
+          <p className="text-iron-gold text-sm sm:text-lg md:text-xl font-rajdhani">
             & AI/ML Enthusiast
           </p>
         </motion.div>
@@ -207,21 +207,21 @@ export const HeroSection = () => {
 
       {/* Bottom System Status */}
       <motion.div
-        className="absolute bottom-8 left-8 md:left-16 flex items-center gap-3 z-20"
+        className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 md:left-16 flex items-center gap-2 sm:gap-3 z-20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2 }}
       >
-        <div className="w-2 h-2 rounded-full bg-arc-blue animate-pulse" />
-        <span className="text-arc-blue text-xs font-orbitron uppercase tracking-wider">
+        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-arc-blue animate-pulse" />
+        <span className="text-arc-blue text-[10px] sm:text-xs font-orbitron uppercase tracking-wider">
           System Online
         </span>
-        <div className="h-px w-20 bg-gradient-to-r from-arc-blue to-transparent" />
+        <div className="h-px w-10 sm:w-20 bg-linear-to-r from-arc-blue to-transparent" />
       </motion.div>
 
       {/* Floating Arc Reactor Decorations */}
       <motion.div
-        className="absolute bottom-20 right-20 z-0 opacity-30"
+        className="absolute bottom-20 right-20 z-0 opacity-30 hidden sm:block"
         animate={{ rotate: 360 }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       >

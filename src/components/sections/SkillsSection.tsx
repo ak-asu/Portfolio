@@ -134,13 +134,13 @@ const SkillBadge = ({
 
   return (
     <motion.div
-      className="relative group flex-shrink-0"
+      className="relative group shrink-0"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
     >
       {/* Hexagon shape */}
-      <div className="relative w-28 h-32 flex flex-col items-center justify-center">
+      <div className="relative w-20 h-24 sm:w-24 sm:h-28 md:w-28 md:h-32 flex flex-col items-center justify-center">
         {/* Hexagon background */}
         <div
           className="absolute inset-0 transition-all duration-300 group-hover:shadow-arc"
@@ -154,7 +154,7 @@ const SkillBadge = ({
 
         {/* Hexagon border */}
         <div
-          className="absolute inset-[2px] transition-all duration-300 group-hover:brightness-150"
+          className="absolute inset-0.5 transition-all duration-300 group-hover:brightness-150"
           style={{
             clipPath:
               "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
@@ -165,7 +165,7 @@ const SkillBadge = ({
 
         {/* Hexagon inner */}
         <div
-          className="absolute inset-[4px] flex flex-col items-center justify-center gap-2 transition-all duration-300"
+          className="absolute inset-1 flex flex-col items-center justify-center gap-2 transition-all duration-300"
           style={{
             clipPath:
               "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
@@ -176,9 +176,9 @@ const SkillBadge = ({
           <IconComponent
             size={28}
             style={{ color: skill.color }}
-            className="drop-shadow-lg transition-all duration-300 group-hover:brightness-150"
+            className="drop-shadow-lg transition-all duration-300 group-hover:brightness-150 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
           />
-          <span className="font-orbitron text-xs uppercase text-iron-gold tracking-wide">
+          <span className="font-orbitron text-[10px] sm:text-xs uppercase text-iron-gold tracking-wide text-center px-1">
             {skill.name}
           </span>
         </div>
@@ -256,23 +256,23 @@ export const SkillsSection = () => {
       </div>
 
       {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10">
         {/* Header */}
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
           <div className="inline-block">
-            <div className="iron-panel px-8 py-4">
-              <h2 className="font-orbitron text-3xl md:text-4xl font-bold arc-text tracking-wider">
+            <div className="iron-panel px-4 sm:px-8 py-3 sm:py-4">
+              <h2 className="font-orbitron text-2xl sm:text-3xl md:text-4xl font-bold arc-text tracking-wider">
                 CAPABILITIES
               </h2>
-              <p className="font-orbitron text-sm text-iron-gold/70 mt-1 uppercase tracking-widest">
+              <p className="font-orbitron text-xs sm:text-sm text-iron-gold/70 mt-1 uppercase tracking-widest">
                 Mark XLII // Systems Analysis
               </p>
             </div>
@@ -281,13 +281,13 @@ export const SkillsSection = () => {
 
         {/* Filter Controls */}
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-4 mb-12 px-4"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-12 px-2 sm:px-4"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
         >
-          <div className="iron-panel flex items-center gap-2 px-4 py-2">
+          <div className="iron-panel flex flex-wrap items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2">
             {categories.map((cat) => (
               <button
                 key={cat.id}
@@ -296,7 +296,7 @@ export const SkillsSection = () => {
                   setActiveCategory(cat.id);
                 }}
                 onMouseEnter={playHover}
-                className={`px-4 py-2 font-orbitron text-xs uppercase tracking-wider rounded transition-all duration-300 ${
+                className={`px-2 sm:px-4 py-1.5 sm:py-2 font-orbitron text-[10px] sm:text-xs uppercase tracking-wider rounded transition-all duration-300 whitespace-nowrap ${
                   activeCategory === cat.id
                     ? "bg-arc-blue/20 text-arc-blue border border-arc-blue/50 shadow-arc"
                     : "text-iron-gold/70 hover:text-iron-gold"
@@ -312,7 +312,7 @@ export const SkillsSection = () => {
                 playToggle();
                 setIsPaused(!isPaused);
               }}
-              className="ml-4 w-10 h-10 rounded-full border-2 border-iron-gold flex items-center justify-center text-iron-gold hover:border-arc-blue hover:text-arc-blue transition-colors"
+              className="ml-1 sm:ml-4 w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-iron-gold flex items-center justify-center text-iron-gold hover:border-arc-blue hover:text-arc-blue transition-colors text-xs sm:text-sm"
             >
               {isPaused ? "▶" : "❚❚"}
             </button>
@@ -320,9 +320,9 @@ export const SkillsSection = () => {
         </motion.div>
 
         {/* Skills Carousel */}
-        <div className="relative overflow-hidden py-8">
+        <div className="relative overflow-hidden py-4 sm:py-8">
           <motion.div
-            className="flex gap-6"
+            className="flex gap-3 sm:gap-4 md:gap-6"
             animate={
               isPaused ? { x: `${currentX}%` } : { x: ["0%", "-33.33%"] }
             }

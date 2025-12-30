@@ -37,9 +37,9 @@ export const GamesSection = () => {
   const ActiveGame = games[activeGameIndex].component;
 
   return (
-    <section className="relative h-full w-full flex items-center justify-center px-4 py-20 overflow-hidden">
+    <section className="relative min-h-screen w-full flex items-center justify-center px-2 sm:px-4 py-12 sm:py-16 md:py-20 overflow-hidden">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-iron-red-dark/20 to-background" />
+      <div className="absolute inset-0 bg-linear-to-b from-background via-iron-red-dark/20 to-background" />
 
       {/* Decorative Grid */}
       <div
@@ -83,7 +83,7 @@ export const GamesSection = () => {
 
           {/* Screen */}
           <div
-            className="relative rounded-lg p-8 min-h-[450px] flex items-center justify-center scanlines"
+            className="relative rounded-lg p-4 sm:p-6 md:p-8 min-h-75 sm:min-h-87.5 md:min-h-112.5 flex items-center justify-center scanlines"
             style={{
               background:
                 "linear-gradient(180deg, hsl(220 30% 8%), hsl(220 35% 5%))",
@@ -117,11 +117,11 @@ export const GamesSection = () => {
           </div>
 
           {/* Cabinet Bottom Decoration */}
-          <div className="flex justify-center gap-4 mt-4">
+          <div className="flex justify-center gap-3 sm:gap-4 mt-3 sm:mt-4">
             {[...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className="w-4 h-4 rounded-full"
+                className="w-3 h-3 sm:w-4 sm:h-4 rounded-full"
                 style={{
                   background: i === 1 ? "hsl(195 100% 50%)" : "hsl(44 98% 39%)",
                   boxShadow:
@@ -135,7 +135,7 @@ export const GamesSection = () => {
         </motion.div>
         {/* Game Navigation */}
         <motion.div
-          className="flex items-center gap-4"
+          className="flex items-center gap-3 sm:gap-4 mt-4 sm:mt-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -143,24 +143,24 @@ export const GamesSection = () => {
           <motion.button
             onClick={prevGame}
             onMouseEnter={playHover}
-            className="iron-panel p-3 hover:bg-iron-red/50 transition-colors"
+            className="iron-panel p-2 sm:p-3 hover:bg-iron-red/50 transition-colors"
             whileHover={{
               scale: 1.1,
               boxShadow: "0 0 20px hsl(195 100% 50% / 0.4)",
             }}
             whileTap={{ scale: 0.9 }}
           >
-            <ChevronLeft className="w-6 h-6 text-iron-gold" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-iron-gold" />
           </motion.button>
 
-          <div className="iron-panel px-6 py-3 min-w-[200px] text-center">
+          <div className="iron-panel px-4 sm:px-6 py-2 sm:py-3 min-w-37.5 sm:min-w-50 text-center">
             <div
-              className="font-orbitron text-lg text-arc-blue uppercase tracking-wider"
+              className="font-orbitron text-sm sm:text-base md:text-lg text-arc-blue uppercase tracking-wider"
               style={{ textShadow: "0 0 10px hsl(195 100% 50%)" }}
             >
               {games[activeGameIndex].name}
             </div>
-            <div className="text-xs text-muted-foreground mt-1">
+            <div className="text-[10px] sm:text-xs text-muted-foreground mt-1">
               {games[activeGameIndex].description}
             </div>
           </div>
@@ -168,14 +168,14 @@ export const GamesSection = () => {
           <motion.button
             onClick={nextGame}
             onMouseEnter={playHover}
-            className="iron-panel p-3 hover:bg-iron-red/50 transition-colors"
+            className="iron-panel p-2 sm:p-3 hover:bg-iron-red/50 transition-colors"
             whileHover={{
               scale: 1.1,
               boxShadow: "0 0 20px hsl(195 100% 50% / 0.4)",
             }}
             whileTap={{ scale: 0.9 }}
           >
-            <ChevronRight className="w-6 h-6 text-iron-gold" />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-iron-gold" />
           </motion.button>
         </motion.div>
       </div>
