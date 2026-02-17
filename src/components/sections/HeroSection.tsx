@@ -3,9 +3,8 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
-  useAnimation,
 } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import heroImage from "@/assets/hero-ironman.png";
 import { ArcReactor } from "@/components/ui/ArcReactor";
 import { Github, Linkedin, Globe, Code, ChevronDown } from "lucide-react";
@@ -38,55 +37,6 @@ export const HeroSection = () => {
     mouseX.set(x);
     mouseY.set(y);
   };
-
-  // Arrow animation controls
-  const arrowControls = useAnimation();
-
-  useEffect(() => {
-    let mounted = true;
-    // Calculate positions for each icon center
-    // Mobile: icon=32px, gap=9px | Desktop: icon=40px, gap=12px
-    // Positions: icon_center = (icon_width + gap) * index + startOffset
-    const iconWidth = 32; // w-8 = 2rem = 32px (mobile baseline)
-    const gap = 20; // slightly increased from 8px
-    const startOffset = 8; // slightly decreased from 16px
-    const positions = [
-      startOffset, // Icon 0: 14px
-      iconWidth + gap + startOffset, // Icon 1: 55px
-      2 * (iconWidth + gap) + startOffset, // Icon 2: 96px
-      3 * (iconWidth + gap) + startOffset, // Icon 3: 137px
-    ];
-
-    const run = async () => {
-      while (mounted) {
-        for (let i = 0; i < positions.length; i++) {
-          if (!mounted) return;
-          // Move to next icon
-          await arrowControls.start({
-            left: positions[i],
-            transition: { duration: 0.35, ease: "easeInOut" },
-          });
-          if (!mounted) return;
-          // Bounce three times above the icon
-          await arrowControls.start({
-            y: [0, -12, 0, -8, 0],
-            transition: {
-              duration: 0.9,
-              times: [0, 0.25, 0.5, 0.75, 1],
-              repeat: 2,
-              repeatDelay: 0.08,
-            },
-          });
-        }
-      }
-    };
-
-    run();
-    return () => {
-      mounted = false;
-      arrowControls.stop();
-    };
-  }, [arrowControls]);
 
   return (
     <section
@@ -270,17 +220,6 @@ export const HeroSection = () => {
         transition={{ delay: 2 }}
       >
         <div className="relative">
-          <motion.div
-            initial={{ left: 8, y: 0 }}
-            animate={arrowControls}
-            className="absolute -top-8 left-0 w-6 h-6 flex items-center justify-center pointer-events-none z-30"
-          >
-            <ChevronDown
-              className="w-20 h-20 text-arc-blue drop-shadow-[0_8px_24px_rgba(29,78,216,0.25)]"
-              strokeWidth={4}
-            />
-          </motion.div>
-
           <div className="flex items-center gap-2 sm:gap-3">
             <a
               href={contactData.github}

@@ -68,7 +68,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
           <div className="absolute bottom-8 left-8 w-24 h-24 border-l-2 border-b-2 border-iron-red/60" />
           <div className="absolute bottom-8 right-8 w-24 h-24 border-r-2 border-b-2 border-iron-red/60" />
 
-          <div className="flex flex-col items-center gap-8 px-4">
+          <div className="flex flex-col items-center gap-8 px-4 w-full max-w-lg">
             {/* Arc Reactor */}
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
@@ -90,7 +90,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
 
             {/* Boot sequence terminal */}
             <motion.div
-              className="w-full max-w-lg bg-background/80 border border-arc-blue/30 p-4 font-jetbrains text-xs md:text-sm"
+              className="w-full bg-background/80 border border-arc-blue/30 p-4 font-jetbrains text-xs md:text-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
